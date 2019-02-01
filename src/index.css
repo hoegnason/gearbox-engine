@@ -1,0 +1,23 @@
+/*
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+*/
+
+#stage-background {
+  background: url(/assets/flappy-background-day.png) center repeat-x;
+  background-size: 'background-size: auto 100%';
+}
+
+html, body, #root {
+  background: black;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-family: 'Helvetica Neue';
+  font-size: 3vw;
+}
