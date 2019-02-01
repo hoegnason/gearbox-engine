@@ -1,3 +1,10 @@
+# gearbox-engine
+
+
+[![Build Status](https://travis-ci.com/hoegnason/gearbox-engine.svg?token=ysKrYZyzrxh4z4D6yvgL&branch=master)](https://travis-ci.com/hoegnason/gearbox-engine)
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
@@ -2446,4 +2453,3 @@ In the future, we might start automatically compiling incompatible third-party m
 ## Something Missing?
 
 If you have ideas for more “How To” recipes that should be on this page, [let us know](https://github.com/facebookincubator/create-react-app/issues) or [contribute some!](https://github.com/facebookincubator/create-react-app/edit/master/packages/react-scripts/template/README.md)
-# gearbox-engine
