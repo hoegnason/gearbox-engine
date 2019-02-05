@@ -1,0 +1,18 @@
+{
+    "transform": {
+        "^.+\\.(t|j)sx?$": "ts-jest",
+        ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "setupFiles": ["./src/core/shim.js", "./src/setupTests.ts"],
+    "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "node"
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
+}

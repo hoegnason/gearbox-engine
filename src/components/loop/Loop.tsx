@@ -1,6 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import GameLoop from '../core/GameLoop';
+import GameLoop from '../../core/GameLoop';
 
 interface ILoopProps {
     children: any;
@@ -36,7 +36,7 @@ export class Loop extends React.Component<ILoopProps, {}> {
     }
 
     public render() {
-        const defaultStyles = {
+        const defaultStyles: React.CSSProperties = {
             height: '100%',
             width: '100%',
         };
@@ -50,4 +50,4 @@ export class Loop extends React.Component<ILoopProps, {}> {
     }
 }
 
-export default GameLoop;
+export default Loop;

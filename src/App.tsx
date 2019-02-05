@@ -2,7 +2,7 @@ import * as React from 'react';
 import './App.css';
 
 import Level from './components/Level';
-import { Loop } from './components/Loop';
+import { Loop } from './components/loop/Loop';
 import MediaLayer from './components/MediaLayer';
 import World from './components/World';
 

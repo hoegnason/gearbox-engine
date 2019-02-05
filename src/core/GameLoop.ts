@@ -1,6 +1,6 @@
-type GameLoopObserverFunction = () => void;
+export type GameLoopObserverFunction = () => void;
 
-export default class GameLoop {
+export class GameLoop {
 
     private subscribers: GameLoopObserverFunction[];
     private loopID: number | null;
@@ -24,11 +24,15 @@ export default class GameLoop {
         }
     }
 
-    public subscribe(callback: GameLoopObserverFunction) {
+    public subscribe(callback: GameLoopObserverFunction): number {
         return this.subscribers.push(callback);
     }
 
-    public unsubscribe(id: number) {
+    public unsubscribe(id: number): void {
+        if (null == id || isNaN(id) || id < 0) {
+            throw new Error(`(Unable to unsubscribe) Illigal argument: ${id} expexted a legal {number}`);
+        }
+        
         this.subscribers.splice((id - 1), 1);
     }
 
@@ -40,3 +44,5 @@ export default class GameLoop {
         this.loopID = window.requestAnimationFrame(this.loop);
     }
 }
+
+export default GameLoop;
