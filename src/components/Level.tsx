@@ -1,6 +1,7 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
+import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
 import TileMap from './TileMap';
 
 // import { Subscription, timer } from 'rxjs';
@@ -41,7 +42,7 @@ export default class Level extends React.Component<{}, ILevelState> {
     };
 
     private stageX: number;
-    private loopID: number;
+    private gameLoopSubscription: GameLoopSubscription;
 
     // private cameraObs: Subscription;
 
@@ -70,21 +71,21 @@ export default class Level extends React.Component<{}, ILevelState> {
 
     public componentDidMount() {
 
-        this.loopID = this.context.loop.subscribe(() => {
+        this.gameLoopSubscription = this.context.loop.subscribe(() => {
 
             if (null != this.stageX) {
                 // console.log("looping !: stageX"); // tslint:disable-line    
             }
-            
+
 
             // 60 frames per sec!
             const currTime = 1 * Date.now();
 
-            if ((lastLoop + 1000/60) < currTime) {
+            if ((lastLoop + 1000 / 60) < currTime) {
                 birdstate.set(birdstate.get() - 10);
                 const offset = birdstate.get();
-                
-                this.setState({stageX: offset});
+
+                this.setState({ stageX: offset });
                 lastLoop = currTime;
             }
             // console.log("looping !"); // tslint:disable-line
@@ -101,7 +102,7 @@ export default class Level extends React.Component<{}, ILevelState> {
             }
         });
         */
-        
+
         /*
         this.cameraWatcher = autorun(() => {
             const targetX = Math.round(GameStore.stageX * this.context.scale);
@@ -126,9 +127,8 @@ export default class Level extends React.Component<{}, ILevelState> {
     }
     */
 
-   public componentWillUnmount() {
-        // this.cameraObs.unsubscribe();
-        this.context.loop.unsubscribe(this.loopID);
+    public componentWillUnmount() {
+        this.gameLoopSubscription.unsubscribe();
     }
 
     public getWrapperStyles(): React.CSSProperties {
