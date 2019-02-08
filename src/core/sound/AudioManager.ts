@@ -3,38 +3,51 @@ import { SoundEffect } from './SoundEffect';
 export class AudioManager {
 
     public static loadSoundFile(name: string, assetPath: string, loop: boolean): void {
-        AudioManager._soundEffects[name] = new SoundEffect(assetPath, loop);
+        
+        AudioManager._soundEffects.set(name, new SoundEffect(assetPath, loop));
     }
 
     public static playSound(name: string): void {
-        if (AudioManager._soundEffects[name] !== undefined) {
-            AudioManager._soundEffects[name].play();
+
+        const soundEffect = AudioManager._soundEffects.get(name);
+
+        if (null != soundEffect) {
+            soundEffect.play();
         }
     }
 
     public static pauseSound(name: string): void {
-        if (AudioManager._soundEffects[name] !== undefined) {
-            AudioManager._soundEffects[name].pause();
-        }
-    }
 
-    public static pauseAll(): void {
-        for (let sfx in AudioManager._soundEffects) {
-            AudioManager._soundEffects[sfx].pause();
+        const soundEffect = AudioManager._soundEffects.get(name);
+
+        if (null != soundEffect) {
+            soundEffect.pause();
         }
     }
 
     public static stopSound(name: string): void {
-        if (AudioManager._soundEffects[name] !== undefined) {
-            AudioManager._soundEffects[name].stop();
+
+        const soundEffect = AudioManager._soundEffects.get(name);
+        
+        if (null != soundEffect) {
+            soundEffect.stop();
         }
+    }
+
+    public static pauseAll(): void {
+
+        this._soundEffects.forEach((soundEffect: SoundEffect) => {
+            soundEffect.pause();
+        });
     }
 
     public static stopAll(): void {
-        for (let sfx in AudioManager._soundEffects) {
-            AudioManager._soundEffects[sfx].stop();
-        }
+
+        this._soundEffects.forEach((soundEffect: SoundEffect) => {
+            soundEffect.stop();
+        });
     }
 
-    private static _soundEffects: { [name: string]: SoundEffect } = {};
+    // tslint:disable-next-line
+    private static _soundEffects = new Map<string, SoundEffect>();
 }

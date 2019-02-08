@@ -1,8 +1,9 @@
 export class SoundEffect {
 
-    private _player: HTMLAudioElement;
-
     public assetPath: string;
+
+    // tslint:disable-next-line
+    private _player: HTMLAudioElement;
 
     public constructor(assetPath: string, loop: boolean) {
         this._player = new Audio(assetPath);
@@ -17,14 +18,22 @@ export class SoundEffect {
         this._player.loop = value;
     }
 
-    public destroy(): void {
-        this._player = undefined;
-    }
+    /*
+     * TODO: find out if it is necessary to have a deconstructor
+     *
+     * public destroy(): void {
+     *    this._player = undefined;
+     * }
+     *
+     */
 
+    // TODO: check if it should be a Promise (public play(): Promise<void>)
     public play(): void {
+        
         if (!this._player.paused) {
             this.stop();
         }
+        
         this._player.play();
     }
 
