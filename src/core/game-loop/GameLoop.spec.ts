@@ -1,4 +1,9 @@
 import { GameLoop } from './GameLoop';
+import { GameLoopSubscription } from './GameLoopSubscription';
+
+function timeout(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 describe('game loop', () => {
 
@@ -11,16 +16,20 @@ describe('game loop', () => {
     });
 
     test('Ticks sould be greater than 0 after the GameLoop is started', async () => {
-        const subscription = gameLoop.subscribe(() => {
+        
+        expect(ticks).toBe(0);
+        
+        const subscription: GameLoopSubscription = gameLoop.subscribe(() => {
             ticks = ticks + 1;
         });
 
         gameLoop.start();
+        await timeout(250);
         gameLoop.stop();
 
-        gameLoop.unsubscribe(subscription);
+        subscription.unsubscribe();
 
-        expect(ticks).toBeGreaterThan(0);
+        expect(ticks).toBeGreaterThan(1);
     });
 
     test('Ticks sould be equal to 0 when the GameLoop is not started', async () => {
@@ -29,19 +38,6 @@ describe('game loop', () => {
         });
 
         expect(ticks).toBe(0);
-    });
-
-    test('Expect ticker function to be called once', async () => {
-        const ticker = jest.fn(() => {
-            ticks = ticks + 1;
-        });
-
-        gameLoop.subscribe(ticker);
-
-        gameLoop.start();
-        gameLoop.stop();
-
-        expect(ticker).toBeCalledTimes(1);
     });
 
     test('Expect ticker function not have been called', async () => {
@@ -66,12 +62,4 @@ describe('game loop', () => {
 
         gameLoop.stop();
     });
-
-    test('Should throw error when unsubing without a valid id', async () => {
-
-        expect(() => {
-            gameLoop.unsubscribe(-1);
-        }).toThrow();
-    });
-
 });
