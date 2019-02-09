@@ -1,4 +1,5 @@
 import { CollisionDection, IRect } from './collision-detection';
+import { IVector } from './vector';
 
 export interface IBody extends IRect {
     dynamic: boolean;
@@ -7,11 +8,6 @@ export interface IBody extends IRect {
 };
 
 export interface IPoint {
-    x: number;
-    y: number;
-}
-
-export interface IVector {
     x: number;
     y: number;
 }
