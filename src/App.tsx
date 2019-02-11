@@ -6,6 +6,7 @@ import Body from './components/body/Body';
 import Level from './components/Level';
 import { Loop } from './components/loop/Loop';
 import MediaLayer from './components/MediaLayer';
+import Pipe from './components/pipe/Pipe';
 import World from './components/World';
 
 // import logo from './logo.svg';
@@ -35,6 +36,7 @@ class App extends React.Component {
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>
               <Level />
+              <Pipe x={500} />
               <Bird />
               <Body dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
             </World>

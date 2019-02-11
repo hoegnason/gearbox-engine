@@ -5,6 +5,7 @@ import { IBody, PhysicsEngine } from 'src/core/physics/physics-engine';
 export interface IBodyProps extends IBody {
     children?: object;
     style?: object;
+    onCollision?: () => { /* */ };
 };
 
 export class Body extends React.Component<IBodyProps, IBodyProps> {
@@ -35,7 +36,7 @@ export class Body extends React.Component<IBodyProps, IBodyProps> {
 
     public componentWillReceiveProps(props: IBodyProps) {
         if (null != props && null == this.body) {
-            this.body = {...props};
+            this.body = { ...props };
             (this.context.engine as PhysicsEngine).addBody(this.body);
         }
 

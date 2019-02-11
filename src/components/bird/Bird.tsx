@@ -49,7 +49,7 @@ export class Bird extends React.Component {
 
                 if (SPACE === event.which) {
                     if (null != this.body && null != this.body.body) {
-                        this.body.body.velocity.y = -25;
+                        this.body.body.velocity.y = -15;
                     }
                 }
             });
@@ -67,7 +67,7 @@ export class Bird extends React.Component {
         return (
             <div>
                 <Body ref={b => { this.body = b; }} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} />
-                <div style={{ ...this.getStyles(), backgroundColor: 'red', width: '300px', height: '300px' }} />
+                <div style={{ ...this.getStyles(), backgroundColor: 'red', width: '25px', height: '25px' }} />
             </div>
         );
     }
