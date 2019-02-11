@@ -1,12 +1,12 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
+import { PhysicsEngine } from 'src/core/physics/physics-engine';
+
 
 type physicsCallback = () => {};
 
 export interface IWorldProps {
     gravity: object;
-    engine: object;
-    onCollision: physicsCallback;
     onInit: (opts: any) => {};
     onUpdate: physicsCallback;
 }
@@ -19,7 +19,7 @@ export interface IWorldState {
 // const engine = () =>  { /* */ };
 
 export default class World extends React.Component<IWorldProps> {
-    
+
     public static propTypes = {
         children: PropTypes.any,
         gravity: PropTypes.shape({
@@ -70,8 +70,7 @@ export default class World extends React.Component<IWorldProps> {
         });
         */
 
-        this.engine = {};
-
+        this.engine = new PhysicsEngine();
         this.loop = this.loop.bind(this);
     }
 
@@ -95,7 +94,7 @@ export default class World extends React.Component<IWorldProps> {
 
     public componentWillUnmount() {
         this.context.loop.unsubscribe(this.loopID);
-        
+
         /*
         Events.off(this.engine, 'afterUpdate', this.props.onUpdate);
         Events.off(this.engine, 'collisionStart', this.props.onCollision);
@@ -130,6 +129,9 @@ export default class World extends React.Component<IWorldProps> {
         );
         */
         if (null != this.lastTime && currTime > this.lastTime) {
+
+            this.engine.tick();
+
             this.lastTime = currTime;
         }
         this.lastTime = currTime;

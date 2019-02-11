@@ -1,5 +1,7 @@
+import { GameLoopSubscription } from '../game-loop/GameLoopSubscription';
 import { CollisionDection, IRect } from './collision-detection';
-import { IVector } from './vector';
+import PhysicsLoop from './physics-loop';
+import { IVector, Vector } from './vector';
 
 export interface IBody extends IRect {
     dynamic: boolean;
@@ -23,26 +25,81 @@ export interface IBodyCollision {
 
 export class PhysicsEngine {
 
+    private loop: PhysicsLoop;
+
+    private world: IBody[];
+
     private collisionDection: CollisionDection;
     private gravity: IVector;
 
     constructor(options?: IPhysicsEngineOptions) {
         this.collisionDection = new CollisionDection();
-        this.gravity = {x: 0, y: 1};
+        this.gravity = { x: 0, y: 1 };
+
+        this.world = [];
+        this.loop = new PhysicsLoop();
     }
 
-    public tick(bodies: IBody[]) {     
-        const staticBodies = bodies.filter((body: IBody) => !body.dynamic);
-        const dynamicBodies = bodies.filter((body: IBody) => body.dynamic);
+    public subscribe(callback: () => {}): GameLoopSubscription {
+
+        return this.loop.subscribe(callback);
+    }
+
+    public addBody(body: IBody): void {
+        this.world.push(body);
+    }
+
+    public removeBody(body: IBody): void {
+
+
+        // tslint:disable-next-line
+        console.log('Removing body', body);
+
+        this.world.filter((targetBody: IBody, index: number) => {
+
+            if (JSON.stringify(body) === JSON.stringify(targetBody)) {
+
+                // tslint:disable-next-line
+                console.log('Found body', body, targetBody);
+
+                this.world.splice(index, 1);
+            }
+        });
+    }
+
+    public tick() {
+
+        // tslint:disable-next-line
+        console.log(this.world);
+
+        const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
+        const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
         this.applyGravity(dynamicBodies);
-        this.checkCollisions(staticBodies, dynamicBodies);
+        this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
+        this.applyVelocity(dynamicBodies);
+
+
+        // Notify subscribers
+        this.loop.loop();
+    }
+
+    private applyVelocity(dynamicBodies: IBody[]) {
+
+        dynamicBodies.forEach((body: IBody) => {
+            const res = Vector.add(body, body.velocity);
+            body.x = res.x;
+            body.y = res.y;
+        })
     }
 
     private applyGravity(dynamicBodies: IBody[]) {
+
         dynamicBodies.forEach((body: IBody) => {
-            body.velocity.x = body.velocity.x + this.gravity.x;
-            body.velocity.y = body.velocity.y + this.gravity.y;
+
+            const res = Vector.add(body.velocity, this.gravity);
+            body.velocity.x = res.x;
+            body.velocity.y = res.y;
         });
     }
 
@@ -57,12 +114,28 @@ export class PhysicsEngine {
                     const colided = this.collisionDection.rectOnRect(staticBody, dynamicBody);
 
                     if (colided) {
-                        collisions.push({bodyA: dynamicBody, bodyB: staticBody});
+                        collisions.push({ bodyA: dynamicBody, bodyB: staticBody });
                     }
                 });
             });
         }
 
+        // tslint:disable-next-line
+        console.log('collisions:', collisions);
+
         return collisions;
+    }
+
+    private resolveCollisions(collisions: IBodyCollision[]): void {
+        /* */
+
+        collisions.forEach((collision: IBodyCollision) => {
+
+            collision.bodyA.velocity.x = 0;
+            collision.bodyA.velocity.y = 0;
+
+            collision.bodyB.velocity.x = 0;
+            collision.bodyB.velocity.y = 0;
+        });
     }
 }
