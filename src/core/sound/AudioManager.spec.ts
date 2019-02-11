@@ -1,68 +1,89 @@
-import { AudioManager } from './AudioManager';
-import { SoundEffect } from './SoundEffect';
+import { AudioManager } from "./AudioManager";
+import { SoundEffect } from "./SoundEffect";
 
 function timeout(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 const loadSomeSounds = () => {
-    AudioManager.loadSoundFile('ping', 'assets/sound/ping.ogg', false);
-    AudioManager.loadSoundFile('pong', 'assets/sound/ping.ogg', false);
-    AudioManager.loadSoundFile('ding', 'assets/sound/ping.ogg', false);
-    AudioManager.loadSoundFile('dong', 'assets/sound/ping.ogg', false);    
+  AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
+  AudioManager.loadSoundFile("pong", "assets/sound/ping.ogg", false);
+  AudioManager.loadSoundFile("ding", "assets/sound/ping.ogg", false);
+  AudioManager.loadSoundFile("dong", "assets/sound/ping.ogg", false);
 };
 
-describe('AudioManager', () => {
+describe("AudioManager", () => {
+  // TODO: check if it is better to use https://stackoverflow.com/questions/47426434/cannot-mock-react-native-sound-with-jest
 
-    // TODO: check if it is better to use https://stackoverflow.com/questions/47426434/cannot-mock-react-native-sound-with-jest
+  const mgr = AudioManager as any;
 
-    const mgr = (AudioManager as any);
+  beforeEach(() => {
+    mgr._soundEffects.clear();
+  });
 
-    beforeEach(() => {
+  test("Load a sound and play it", async () => {
+    AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
+    AudioManager.playSound("ping");
 
-        mgr._soundEffects.clear();
+    const ping = mgr._soundEffects.get("ping");
+    expect(ping._player.paused).toBe(false);
+
+    await timeout(250);
+
+    AudioManager.pauseSound("ping");
+
+    expect(ping._player.paused).toBe(true);
+  });
+
+  test("Pause all sounds", async () => {
+    loadSomeSounds();
+
+    mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      soundEffect.play();
     });
 
-    test('Load a sound and play it', async () => {
-        AudioManager.loadSoundFile('ping', 'assets/sound/ping.ogg', false);
-        AudioManager.playSound('ping');
+    await timeout(250);
 
-        const ping = mgr._soundEffects.get('ping');
-        expect(ping._player.paused).toBe(false);
-
-        await timeout(250);
-
-        AudioManager.pauseSound('ping');
-        
-        expect(ping._player.paused).toBe(true);
+    mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      const audio = soundEffect as any;
+      expect(audio._player.paused).toBe(false);
     });
 
-    test('Stop a sound', async () => {
-        AudioManager.stopSound('ping');
+    AudioManager.pauseAll();
+
+    await timeout(250);
+
+    mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      const audio = soundEffect as any;
+      expect(audio._player.paused).toBe(true);
+    });
+  });
+
+  test("Stop a sound", async () => {
+    AudioManager.stopSound("ping");
+  });
+
+  test("Stop all sounds", async () => {
+    loadSomeSounds();
+
+    mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      soundEffect.play();
     });
 
-    test('Stop all sounds', async () => {
+    await timeout(250);
 
-        loadSomeSounds();
-
-        mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
-            soundEffect.play();
-        });
-
-        await timeout(250);
-
-        mgr._soundEffects.forEach((soundEffect: SoundEffect) =>  {
-            const audio = (soundEffect as any);
-            expect(audio._player.paused).toBe(false);
-        })
-
-        AudioManager.stopAll();
-
-        await timeout(250);
-
-        mgr._soundEffects.forEach((soundEffect: SoundEffect) =>  {
-            const audio = (soundEffect as any);
-            expect(audio._player.paused).toBe(true);
-        })
+    mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      const audio = soundEffect as any;
+      expect(audio._player.stopAll).toBe(false);
     });
+
+    AudioManager.stopAll();
+
+    await timeout(250);
+
+    mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      const audio = soundEffect as any;
+      expect(audio._player.stopAll).toBe(true);
+    });
+  });
 });
