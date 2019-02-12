@@ -13,4 +13,10 @@ export class Console {
 
         this.messages.push({date: new Date(), body: inputtext});
     }
+
+    public getLog(): string[] {
+        return this.messages.map((stamp, text) => {
+            return stamp + ": " + text;
+        });
+    }
 };

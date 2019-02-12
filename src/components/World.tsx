@@ -1,6 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { Console } from 'src/core/Console';
+import { Console } from 'src/components/MediaLayer/Console';
 
 type physicsCallback = () => {};
 

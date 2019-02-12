@@ -4,7 +4,7 @@ import './App.css';
  import Level from './components/Level';
 import { Loop } from './components/loop/Loop';
 
-import MediaLayer from './components/MediaLayer';
+import MediaLayer from './components/MediaLayer/MediaLayer';
 
 import World from './components/World';
 
