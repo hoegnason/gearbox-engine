@@ -1,3 +1,5 @@
+import { GameLoopSubscription } from './GameLoopSubscription';
+
 export type GameLoopObserverFunction = () => void;
 
 export class GameLoop {
@@ -18,20 +20,31 @@ export class GameLoop {
     }
 
     public stop() {
-        if (!this.loopID) {
+        if (this.loopID) {
             window.cancelAnimationFrame(Number(this.loopID));
             this.loopID = null;
         }
     }
 
-    public subscribe(callback: GameLoopObserverFunction): number {
-        return this.subscribers.push(callback);
+    public subscribe(callback: GameLoopObserverFunction): GameLoopSubscription {
+        
+        const unsubID = this.subscribers.push(callback);
+        
+        const unsub = () => {
+            this.unsubscribe(unsubID);
+        };
+
+        return new GameLoopSubscription(unsub);
     }
 
-    public unsubscribe(id: number): void {
-        if (null == id || isNaN(id) || id < 0) {
-            throw new Error(`(Unable to unsubscribe) Illigal argument: ${id} expexted a legal {number}`);
-        }
+    private unsubscribe(id: number): void {
+
+        /* TODO: Add some checks!
+         * 
+         * if (null == id || isNaN(id) || id < 0) {
+         *     throw new Error(`(Unable to unsubscribe) Illigal argument: ${id} expexted a legal {number}`);
+         * }
+         */
         
         this.subscribers.splice((id - 1), 1);
     }
