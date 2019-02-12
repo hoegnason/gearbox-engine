@@ -1,10 +1,13 @@
 import * as React from 'react';
 import './App.css';
 
-import Level from './components/Level';
+ import Level from './components/Level';
 import { Loop } from './components/loop/Loop';
+
 import MediaLayer from './components/MediaLayer';
+
 import World from './components/World';
+
 
 // import logo from './logo.svg';
 
@@ -17,7 +20,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <Loop style={ {width: 1920, height: 1080, margin: '0 auto'} /* {width: 600, height: 400, margin: '0 auto'} */ }>
+        <Loop style={{ width: 1920, height: 1080, margin: '0 auto' } /* {width: 600, height: 400, margin: '0 auto'} */}>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World engine={{}}>
               <Level />

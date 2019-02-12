@@ -1,5 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
+import { Console } from 'src/core/Console';
 
 type physicsCallback = () => {};
 
@@ -44,6 +45,7 @@ export default class World extends React.Component<IWorldProps> {
     };
 
     public static contextTypes = {
+        console: PropTypes.object,
         loop: PropTypes.object,
         scale: PropTypes.number
     };
@@ -86,6 +88,7 @@ export default class World extends React.Component<IWorldProps> {
     public componentDidMount() {
         this.loopID = this.context.loop.subscribe(this.loop);
         this.props.onInit(this.engine);
+        (this.context.console as Console).Log('Yolo sweg!');
 
         /*
         Events.on(this.engine, 'afterUpdate', this.props.onUpdate);

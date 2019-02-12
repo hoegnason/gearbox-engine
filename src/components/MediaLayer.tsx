@@ -2,6 +2,8 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 // import { Dimensions } from 'src/core/Dimensions';
 
+import { Console } from '../core/Console';
+
 interface IMediaLayerProps {
     children: any;
     style?: any;
@@ -23,15 +25,20 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
     };
 
     public static contextTypes = {
-        loop: PropTypes.object,
+        console: PropTypes.object,
+        loop: PropTypes.object
     }
 
     public static childContextTypes = {
+        console: PropTypes.object,
         loop: PropTypes.object,
-        scale: PropTypes.number
+        scale: PropTypes.number      
     };
 
+    public console: Console;
+
     private container: any;
+
 
     constructor(props: IMediaLayerProps) {
         super(props);
@@ -44,6 +51,8 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
         };
 
         this.setDimensions = this.setDimensions.bind(this);
+
+        this.console = new Console();
     }
 
     public componentDidMount() {
@@ -57,6 +66,7 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
 
     public getChildContext() {
         return {
+            console: this.console,
             loop: this.context.loop,
             scale: this.getScale().scale
         };
