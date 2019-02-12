@@ -75,7 +75,7 @@ describe("AudioManager", () => {
     mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
       const audio = soundEffect as any;
       expect(audio._player.paused).toBe(false);
-      // expect(audio._player.currentTime).toBeGreaterThan(0);
+      //expect(audio._player.currentTime).toBeGreaterThan(0);
     });
 
     AudioManager.stopAll();
