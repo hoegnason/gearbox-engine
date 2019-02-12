@@ -1,15 +1,10 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import GameLoop from 'src/core/game-loop/GameLoop';
 import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
 import Body from '../body/Body';
 
-
-interface IPosition {
-    x: number;
-    y: number;
-}
+let that: Bird;
 
 export class Bird extends React.Component {
 
@@ -23,22 +18,23 @@ export class Bird extends React.Component {
 
     public body: any;
 
-    public position: IPosition;
-
     private subscription: GameLoopSubscription;
 
     constructor(props: any) {
         super(props);
     }
 
+
     public componentDidMount() {
-        this.subscription = (this.context.loop as GameLoop).subscribe(() => {
+
+        /*
+        this.subscription = (this.context.engine.loop as GameLoop).subscribe(() => {
             if (null != this.body && null != this.body.body && null != this.body.body.x && null != this.body.body.y) {
 
-                this.position = { x: this.body.body.x, y: this.body.body.y };
                 this.forceUpdate();
             }
         });
+        */
 
         const SPACE = 32;
 
@@ -56,6 +52,8 @@ export class Bird extends React.Component {
 
             doc.addEventListener('keydown', processKey);
         }
+
+        that = this;
     }
 
     public componentWillUnmount() {
@@ -66,10 +64,20 @@ export class Bird extends React.Component {
 
         return (
             <div>
-                <Body ref={b => { this.body = b; }} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} />
-                <div style={{ ...this.getStyles(), backgroundColor: 'red', width: '25px', height: '25px' }} />
+                <Body ref={b => { this.body = b; }} onUpdate={this.doUpdate} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} />
+                <div style={{ ...this.getStyles(), backgroundColor: 'red', width: 25 * this.context.scale, height: 25 * this.context.scale }} />
             </div>
         );
+    }
+
+    
+    private doUpdate(): void {
+
+        console.log('Updated called!', that); // tslint:disable-line
+
+        if (null != that.forceUpdate) {
+            that.forceUpdate();
+        }
     }
 
     private getStyles(): React.CSSProperties {

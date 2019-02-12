@@ -5,19 +5,16 @@ import { IBody, PhysicsEngine } from 'src/core/physics/physics-engine';
 export interface IBodyProps extends IBody {
     children?: object;
     style?: object;
-    onCollision?: () => { /* */ };
 };
 
 export class Body extends React.Component<IBodyProps, IBodyProps> {
-
-    public static displayName = 'Body';
 
     public static contextTypes = {
         engine: PropTypes.object,
         loop: PropTypes.object,
         scale: PropTypes.number
     };
-
+  
     public static childContextTypes = {
         body: PropTypes.object
     };
@@ -54,14 +51,29 @@ export class Body extends React.Component<IBodyProps, IBodyProps> {
 
     public render() {
         const defaultStyles: React.CSSProperties = {
+            
             height: '100%',
             width: '100%',
+            zIndex: 999999
         };
         const styles = { ...defaultStyles, ...this.props.style };
 
+        const bodyStyles: React.CSSProperties = {
+            backgroundColor: 'rgba(0, 255, 0, 0.3)',
+            height: (this.props.height * this.context.scale),
+            width: (this.props.width * this.context.scale),
+            zIndex: 999999,
+        };
+
+        if (null != this.body) {
+            bodyStyles.position = 'absolute';
+            bodyStyles.transform = `translate(${this.body.x * this.context.scale}px, ${this.body.y * this.context.scale}px)`;
+            bodyStyles.transformOrigin = 'left top';
+        }
+
         return (
             <div style={styles}>
-                {this.props.children}
+                <div style={bodyStyles} />
             </div>
         );
     }

@@ -7,6 +7,9 @@ export interface IBody extends IRect {
     dynamic: boolean;
     velocity: IVector;
     colided: boolean;
+    shouldUpdate?: boolean;
+    onCollision?: (colidedWith: IBody) => void;
+    onUpdate?: () => void;
 };
 
 export interface IPoint {
@@ -76,6 +79,13 @@ export class PhysicsEngine {
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
         this.applyGravity(dynamicBodies);
+        
+        dynamicBodies.forEach((body: IBody) => {
+            if (null != body.shouldUpdate && body.shouldUpdate && null != body.onUpdate) {
+                body.onUpdate();
+            }
+        })
+
         this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
         this.applyVelocity(dynamicBodies);
 
@@ -90,6 +100,8 @@ export class PhysicsEngine {
             const res = Vector.add(body, body.velocity);
             body.x = res.x;
             body.y = res.y;
+
+            body.shouldUpdate = true;
         })
     }
 
@@ -100,6 +112,8 @@ export class PhysicsEngine {
             const res = Vector.add(body.velocity, this.gravity);
             body.velocity.x = res.x;
             body.velocity.y = res.y;
+
+            body.shouldUpdate = true;
         });
     }
 
@@ -136,6 +150,15 @@ export class PhysicsEngine {
 
             collision.bodyB.velocity.x = 0;
             collision.bodyB.velocity.y = 0;
+
+            if (null != collision.bodyA.onCollision) {
+
+                collision.bodyA.onCollision(collision.bodyB);
+            }
+
+            if (null != collision.bodyB.onCollision) {
+                collision.bodyB.onCollision(collision.bodyA);
+            }
         });
     }
 }
