@@ -1,6 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import GameLoop from '../../core/GameLoop';
+import GameLoop from '../../core/game-loop/GameLoop';
 
 interface ILoopProps {
     children: any;
