@@ -25,6 +25,13 @@ export class AudioManager {
         }
     }
 
+    public static pauseAll(): void {
+
+        this._soundEffects.forEach((soundEffect: SoundEffect) => {
+            soundEffect.pause();
+        });
+    }
+
     public static stopSound(name: string): void {
 
         const soundEffect = AudioManager._soundEffects.get(name);
@@ -32,13 +39,6 @@ export class AudioManager {
         if (null != soundEffect) {
             soundEffect.stop();
         }
-    }
-
-    public static pauseAll(): void {
-
-        this._soundEffects.forEach((soundEffect: SoundEffect) => {
-            soundEffect.pause();
-        });
     }
 
     public static stopAll(): void {
