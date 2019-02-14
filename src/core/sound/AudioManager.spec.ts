@@ -1,4 +1,3 @@
-import { string } from "prop-types";
 import { AudioManager } from "./AudioManager";
 import { SoundEffect } from "./SoundEffect";
 
@@ -22,17 +21,21 @@ describe("AudioManager", () => {
     mgr._soundEffects.clear();
   });
 
-  test("Test that name value is of type string", () => {
-    AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
-    // AudioManager.playSound("ping");
+  // Loop
+  test("Test loop functionality", async () => {
+    AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", true);
+    AudioManager.playSound("ping");
 
-    const value = mgr._soundEffects.get("ping");
+    await timeout(250);
 
-    //expect(value).toBeInstanceOf(string);
-    expect(typeof value).toBeInstanceOf(string);
-    //expect(value).toEqual(string);
+    mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      const audio = soundEffect as any;
+      audio.loop = false;
+      expect(audio.loop).toBe(false);
+    });
   });
 
+  // Load a sound
   test("Load a sound and play it", async () => {
     AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
     AudioManager.playSound("ping");
@@ -47,11 +50,30 @@ describe("AudioManager", () => {
     expect(ping._player.paused).toBe(true);
   });
 
+  // Play
+  test("Play", async () => {
+    AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", true);
+    AudioManager.playSound("ping");
+
+    mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      const audio = soundEffect as any;
+      expect(audio._player.paused).toBe(false);
+
+      const spy = jest.spyOn(audio, "stop");
+      audio.play();
+      audio.play();
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+
+  // Pause all
   test("Pause all sounds", async () => {
     loadSomeSounds();
 
     mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
+      const spy = jest.spyOn(soundEffect, "play");
       soundEffect.play();
+      expect(spy).toHaveBeenCalled();
     });
 
     await timeout(250);
@@ -71,6 +93,7 @@ describe("AudioManager", () => {
     });
   });
 
+  // Stop
   test("Stop a sound", async () => {
     AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
     AudioManager.playSound("ping");
@@ -87,6 +110,7 @@ describe("AudioManager", () => {
     expect(ping._player.currentTime).toBe(0);
   });
 
+  // Stop all
   test("Stop all sounds", async () => {
     loadSomeSounds();
 
