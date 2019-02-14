@@ -120,7 +120,23 @@ export default class World extends React.Component<IWorldProps> {
             width: '100%'
         };
 
-        return <div style={defaultStyles}>{this.props.children}</div>;
+        const consoleStyle: React.CSSProperties = {
+            alignContent: 'left',
+            backgroundColor: 'gray',
+            height: '25%',
+            left: 0,
+            overflow: 'scroll',
+            position: 'absolute',
+            scale: "50%",
+            top: 0,
+            width: '20%'
+        }
+
+        const showConsole = (this.context.console as Console).getLog().map((text, key) => {
+            return <div key = {key} style= {{textAlign: 'left', fontSize: '20px'}}>{text}</div>
+        });
+
+        return <div style={defaultStyles}>{this.props.children}<div style = {consoleStyle}>{showConsole}</div></div>;
     }
 
     private loop() {
