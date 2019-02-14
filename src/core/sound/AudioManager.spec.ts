@@ -1,3 +1,4 @@
+import { string } from "prop-types";
 import { AudioManager } from "./AudioManager";
 import { SoundEffect } from "./SoundEffect";
 
@@ -19,6 +20,17 @@ describe("AudioManager", () => {
 
   beforeEach(() => {
     mgr._soundEffects.clear();
+  });
+
+  test("Test that name value is of type string", () => {
+    AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
+    // AudioManager.playSound("ping");
+
+    const value = mgr._soundEffects.get("ping");
+
+    //expect(value).toBeInstanceOf(string);
+    expect(typeof value).toBeInstanceOf(string);
+    //expect(value).toEqual(string);
   });
 
   test("Load a sound and play it", async () => {
@@ -60,7 +72,19 @@ describe("AudioManager", () => {
   });
 
   test("Stop a sound", async () => {
+    AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
+    AudioManager.playSound("ping");
+
+    const ping = mgr._soundEffects.get("ping");
+    expect(ping._player.paused).toBe(false);
+    expect(ping._player.currentTime).toBeGreaterThan(0);
+
+    await timeout(250);
+
     AudioManager.stopSound("ping");
+
+    expect(ping._player.paused).toBe(true);
+    expect(ping._player.currentTime).toBe(0);
   });
 
   test("Stop all sounds", async () => {
@@ -75,7 +99,7 @@ describe("AudioManager", () => {
     mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
       const audio = soundEffect as any;
       expect(audio._player.paused).toBe(false);
-      //expect(audio._player.currentTime).toBeGreaterThan(0);
+      expect(audio._player.currentTime).toBeGreaterThan(0);
     });
 
     AudioManager.stopAll();
@@ -85,7 +109,7 @@ describe("AudioManager", () => {
     mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
       const audio = soundEffect as any;
       expect(audio._player.paused).toBe(true);
-      // expect(audio._player.currentTime).toBe(0);
+      expect(audio._player.currentTime).toBe(0);
     });
   });
 });
