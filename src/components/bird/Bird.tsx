@@ -3,6 +3,9 @@ import * as React from 'react';
 
 import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
 import Body from '../body/Body';
+// import { Console } from '../MediaLayer/Console';
+
+
 
 let that: Bird;
 
@@ -11,6 +14,7 @@ export class Bird extends React.Component {
     public static displayName = 'Body';
 
     public static contextTypes = {
+        Log: PropTypes.func,
         engine: PropTypes.object,
         loop: PropTypes.object,
         scale: PropTypes.number
@@ -46,6 +50,8 @@ export class Bird extends React.Component {
                 if (SPACE === event.which) {
                     if (null != this.body && null != this.body.body) {
                         this.body.body.velocity.y = -15;
+                        this.context.Log("Jump!!")
+                        // (this.context.console as Console).Log('Jump!!');
                     }
                 }
             });
@@ -73,7 +79,8 @@ export class Bird extends React.Component {
     
     private doUpdate(): void {
 
-        console.log('Updated called!', that); // tslint:disable-line
+        // console.log('Updated called!', that); // tslint:disable-line
+        
 
         if (null != that.forceUpdate) {
             that.forceUpdate();

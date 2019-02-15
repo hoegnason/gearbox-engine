@@ -25,12 +25,12 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
     };
 
     public static contextTypes = {
-        console: PropTypes.object,
+        // console: PropTypes.object,
         loop: PropTypes.object
     }
 
     public static childContextTypes = {
-        console: PropTypes.object,
+        // console: PropTypes.object,
         loop: PropTypes.object,
         scale: PropTypes.number      
     };
@@ -52,7 +52,7 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
 
         this.setDimensions = this.setDimensions.bind(this);
 
-        this.console = new Console();
+        // this.console = new Console();
     }
 
     public componentDidMount() {
@@ -66,7 +66,7 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
 
     public getChildContext() {
         return {
-            console: this.console,
+            // console: this.console,
             loop: this.context.loop,
             scale: this.getScale().scale
         };

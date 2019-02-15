@@ -1,3 +1,4 @@
+import * as PropTypes from 'prop-types';
 import { GameLoopSubscription } from '../game-loop/GameLoopSubscription';
 import { CollisionDection, IRect } from './collision-detection';
 import PhysicsLoop from './physics-loop';
@@ -28,12 +29,17 @@ export interface IBodyCollision {
 
 export class PhysicsEngine {
 
+    public static contextTypes = {
+        Log: PropTypes.func
+    };
+
     private loop: PhysicsLoop;
 
     private world: IBody[];
 
     private collisionDection: CollisionDection;
     private gravity: IVector;
+    
 
     constructor(options?: IPhysicsEngineOptions) {
         this.collisionDection = new CollisionDection();
@@ -56,14 +62,14 @@ export class PhysicsEngine {
 
 
         // tslint:disable-next-line
-        console.log('Removing body', body);
+        // console.log('Removing body', body);
 
         this.world.filter((targetBody: IBody, index: number) => {
 
             if (JSON.stringify(body) === JSON.stringify(targetBody)) {
 
                 // tslint:disable-next-line
-                console.log('Found body', body, targetBody);
+                // console.log('Found body', body, targetBody);
 
                 this.world.splice(index, 1);
             }
@@ -73,7 +79,7 @@ export class PhysicsEngine {
     public tick() {
 
         // tslint:disable-next-line
-        console.log(this.world);
+        // console.log(this.world);
 
         const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
@@ -135,7 +141,7 @@ export class PhysicsEngine {
         }
 
         // tslint:disable-next-line
-        console.log('collisions:', collisions);
+        // console.log('collisions:', collisions);
 
         return collisions;
     }

@@ -37,6 +37,7 @@ export default class Level extends React.Component<{}, ILevelState> {
 
 
     public static contextTypes = {
+        Log: PropTypes.func,
         loop: PropTypes.object,
         scale: PropTypes.number
     };
@@ -74,6 +75,7 @@ export default class Level extends React.Component<{}, ILevelState> {
         this.gameLoopSubscription = this.context.loop.subscribe(() => {
 
             if (null != this.stageX) {
+                // this.context.Log("looping !: stageX");
                 // console.log("looping !: stageX"); // tslint:disable-line    
             }
 
@@ -88,6 +90,7 @@ export default class Level extends React.Component<{}, ILevelState> {
                 this.setState({ stageX: offset });
                 lastLoop = currTime;
             }
+            // this.context.Log("looping !");
             // console.log("looping !"); // tslint:disable-line
         });
 

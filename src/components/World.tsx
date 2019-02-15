@@ -19,9 +19,14 @@ export interface IWorldState {
     engine: object;
 }
 
+export interface IMessage {
+    body: string[];
+    timestamp: Date[];
+}
+
 // const engine = () =>  { /* */ };
 
-export default class World extends React.Component<IWorldProps> {
+export default class World extends React.Component<IWorldProps, IMessage> {
 
     public static propTypes = {
         children: PropTypes.any,
@@ -47,12 +52,14 @@ export default class World extends React.Component<IWorldProps> {
     };
 
     public static contextTypes = {
-        console: PropTypes.object,
+        Log: PropTypes.func,
+        // console: PropTypes.object,
         loop: PropTypes.object,
-        scale: PropTypes.number
+        scale: PropTypes.number,        
     };
 
     public static childContextTypes = {
+        Log: PropTypes.func,
         engine: PropTypes.object
     };
 
@@ -76,6 +83,13 @@ export default class World extends React.Component<IWorldProps> {
 
         this.engine = new PhysicsEngine();
         this.loop = this.loop.bind(this);
+
+        this.Log = this.Log.bind(this);
+
+        this.state = {
+            body: [],
+            timestamp: []    
+        }
     }
 
     public componentWillReceiveProps(nextProps: IWorldProps) {
@@ -89,8 +103,9 @@ export default class World extends React.Component<IWorldProps> {
     public componentDidMount() {
         this.loopID = this.context.loop.subscribe(this.loop);
         this.props.onInit(this.engine);
-        (this.context.console as Console).Log('Yolo sweg!'); // Testing console
-
+        this.Log('Yolo sweg!');
+        // (this.context.console as Console).Log('Yolo sweg!'); // Testing console
+        
         /*
         Events.on(this.engine, 'afterUpdate', this.props.onUpdate);
         Events.on(this.engine, 'collisionStart', this.props.onCollision);
@@ -108,8 +123,16 @@ export default class World extends React.Component<IWorldProps> {
 
     public getChildContext() {
         return {
+            Log: this.Log,
             engine: this.engine,
         };
+    }
+
+    public Log(text: string){
+        this.setState(prevState => ({
+            body: [...prevState.body, text],
+            timestamp: [...prevState.timestamp, new Date()]
+        }));
     }
 
     public render() {
@@ -121,23 +144,10 @@ export default class World extends React.Component<IWorldProps> {
             width: '100%'
         };
 
-        const consoleStyle: React.CSSProperties = {
-            alignContent: 'left',
-            backgroundColor: 'gray',
-            height: '25%',
-            left: 0,
-            overflow: 'scroll',
-            position: 'absolute',
-            scale: "50%",
-            top: 0,
-            width: '20%'
-        }
+        
 
-        const showConsole = (this.context.console as Console).getLog().map((text, key) => {
-            return <div key = {key} style= {{textAlign: 'left', fontSize: '20px'}}>{text}</div>
-        });
-
-        return <div style={defaultStyles}>{this.props.children}<div style = {consoleStyle}>{showConsole}</div></div>;
+        return <div style={defaultStyles}>{this.props.children}{this.Log}<div>
+        <Console body={this.state.body} timestamp={this.state.timestamp}/></div></div>;
     }
 
     private loop() {
@@ -157,4 +167,6 @@ export default class World extends React.Component<IWorldProps> {
         }
         this.lastTime = currTime;
     }
+
+
 }
