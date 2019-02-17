@@ -80,7 +80,7 @@ export class Bird extends React.Component {
     private doUpdate(): void {
 
         // console.log('Updated called!', that); // tslint:disable-line
-        
+
 
         if (null != that.forceUpdate) {
             that.forceUpdate();

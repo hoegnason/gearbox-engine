@@ -32,17 +32,22 @@ export class Console extends React.Component<any> {
             verticalAlign: 'bottom',
             width: '20%'
         }
-        const showConsole = this.props.body.map((text: any, key: number) => {
-            return <div key={key} style = 
-            {{maxHeight: '200px', overflow: 'auto', verticalAlign: 'bottom', fontSize: '20px', textAlign: 'left'}}>{text}</div>
-        })
-        /*const showConsole = this.props.messages.map((text, key) => {
-            return <div key = { key } style = {{ textAlign: 'left', fontSize: '20px' }
-        }> { text } < /div>
-        });*/
+        if (this.props.body != null) {
+            const showConsole = this.props.body.map((text: any, key: number) => {
+                return <div key={key} style=
+                    {{ maxHeight: '200px', overflow: 'auto', verticalAlign: 'bottom', fontSize: '20px', textAlign: 'left' }}>{text}</div>
+            })
 
-    return(
-            <div style= {consoleStyle}>{showConsole}</div>
-        );
-      };
+            /*const showConsole = this.props.messages.map((text, key) => {
+                return <div key = { key } style = {{ textAlign: 'left', fontSize: '20px' }
+            }> { text } < /div>
+            });*/
+
+            return (
+                <div style={consoleStyle}>{showConsole}</div>
+            );
+        }
+        else{return null;}
+            
+    };
 };

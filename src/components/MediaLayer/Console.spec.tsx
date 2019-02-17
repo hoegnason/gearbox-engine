@@ -1,31 +1,55 @@
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
+import * as PropTypes from 'prop-types';
 import * as React from 'react';
+// import World from '../World';
 import { Console } from './Console';
-
 
 describe('Console functionality', async () => {
     
-    it('Console should log', async () => {
+    it('Should display log', async () => {
 
-      const spy = jest.spyOn(global.console, 'log')
-      
-      const logger = new Console();
+      jest.mock('./Console', () => ({
+        Console: 'mockConsole'
+      }));
 
-      const now = new Date();
-      logger.Log("Hetta er ein test");
+      const logger = shallow(<Console />);
+      expect(logger.find("div").length).toEqual(0);
 
-      expect(spy).toHaveBeenCalledWith(now,"Hetta er ein test");
+      // const world = shallow(<World/>);
+      // expect(world.find('mockConsole').length).toEqual(1);
 
-      logger.Log("Aftur ein test");
-      const ConsoleDisplayer = (props: any, context: any) => {
-        const log = logger.getLog().map((text, key) =>{
-          return <div key={key}>{text}</div>});
+      const logger2 = shallow(<Console body={["test"]} timestamp={""}/>);
 
-        return <div>{log}</div>;       
+      expect(logger2.find("div").length).toEqual(2);
+    });
+
+    it('should pass Log function to children', async () => {
+  
+      jest.mock('../loop/Loop', () => ({
+        loop: 'mockLoop'
+      }));
+
+      // Defines react stateless component that can accept a GameLoop object trough context
+      const Client = (props: any, context: any) => {
+  
+        const world = context.Log as any;
+        world("Hetta er ein test");
+
+        return <div>This is a test!</div>
       }
+  
+      Client.contextTypes = {
+        Log: PropTypes.func,
+      }
+      
+      /* 
+      // Call passed Log() function
+      const wrapper = mount(<World><Client /></World>);
 
-      const wrapper = mount(<ConsoleDisplayer />);
+      const wrappedLog = (wrapper.instance() as any);
+      const spy2 = jest.spyOn(wrappedLog, 'Log');
+      wrappedLog.Log("Aftur ein test");
 
-      expect(wrapper.find('div').length).toEqual(3);
+      expect(spy2).toHaveBeenCalled();*/
     });
   });

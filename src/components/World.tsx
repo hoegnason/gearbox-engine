@@ -110,6 +110,7 @@ export default class World extends React.Component<IWorldProps, IMessage> {
         Events.on(this.engine, 'afterUpdate', this.props.onUpdate);
         Events.on(this.engine, 'collisionStart', this.props.onCollision);
         */
+        
     }
 
     public componentWillUnmount() {
