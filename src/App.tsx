@@ -9,31 +9,14 @@ import MediaLayer from './components/MediaLayer/MediaLayer';
 import Pipe from './components/pipe/Pipe';
 import World from './components/World';
 
-
-// import logo from './logo.svg';
-
-// const engine = () => { /* */ };
-
 class App extends React.Component {
-
-  private body: any;
-
-  public componentDidMount() {
-    setInterval(() => {
-
-      if (null != this.body && null != this.body.body) {
-        // tslint:disable-next-line
-        console.log(this.body.body);
-      }
-    }, 1000);
-  }
 
   public render() {
     const stageBackground: React.CSSProperties = { background: 'url(assets/flappy-background-day.png) center repeat-x', backgroundSize: 'auto 100%', margin: '0 auto' };
 
     return (
       <div className="App">
-        <Loop style={{ width: 1920, height: 1080, margin: '0 auto' } /* {width: 600, height: 400, margin: '0 auto'} */}>
+        <Loop style={{ width: 1920, height: 1080, margin: '0 auto' }}>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>
               <Level />

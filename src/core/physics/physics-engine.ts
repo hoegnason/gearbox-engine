@@ -1,7 +1,5 @@
 import * as PropTypes from 'prop-types';
-import { GameLoopSubscription } from '../game-loop/GameLoopSubscription';
 import { CollisionDection, IRect } from './collision-detection';
-import PhysicsLoop from './physics-loop';
 import { IVector, Vector } from './vector';
 
 export interface IBody extends IRect {
@@ -33,8 +31,6 @@ export class PhysicsEngine {
         Log: PropTypes.func
     };
 
-    private loop: PhysicsLoop;
-
     private world: IBody[];
 
     private collisionDection: CollisionDection;
@@ -46,12 +42,6 @@ export class PhysicsEngine {
         this.gravity = { x: 0, y: 1 };
 
         this.world = [];
-        this.loop = new PhysicsLoop();
-    }
-
-    public subscribe(callback: () => {}): GameLoopSubscription {
-
-        return this.loop.subscribe(callback);
     }
 
     public addBody(body: IBody): void {
@@ -78,9 +68,6 @@ export class PhysicsEngine {
 
     public tick() {
 
-        // tslint:disable-next-line
-        // console.log(this.world);
-
         const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
@@ -94,10 +81,6 @@ export class PhysicsEngine {
 
         this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
         this.applyVelocity(dynamicBodies);
-
-
-        // Notify subscribers
-        this.loop.loop();
     }
 
     private applyVelocity(dynamicBodies: IBody[]) {
@@ -140,14 +123,10 @@ export class PhysicsEngine {
             });
         }
 
-        // tslint:disable-next-line
-        // console.log('collisions:', collisions);
-
         return collisions;
     }
 
     private resolveCollisions(collisions: IBodyCollision[]): void {
-        /* */
 
         collisions.forEach((collision: IBodyCollision) => {
 

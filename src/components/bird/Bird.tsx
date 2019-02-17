@@ -3,15 +3,12 @@ import * as React from 'react';
 
 import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
 import Body from '../body/Body';
-// import { Console } from '../MediaLayer/Console';
-
-
 
 let that: Bird;
 
 export class Bird extends React.Component {
 
-    public static displayName = 'Body';
+    public static displayName = 'Bird';
 
     public static contextTypes = {
         Log: PropTypes.func,
@@ -30,15 +27,6 @@ export class Bird extends React.Component {
 
 
     public componentDidMount() {
-
-        /*
-        this.subscription = (this.context.engine.loop as GameLoop).subscribe(() => {
-            if (null != this.body && null != this.body.body && null != this.body.body.x && null != this.body.body.y) {
-
-                this.forceUpdate();
-            }
-        });
-        */
 
         const SPACE = 32;
 
@@ -78,9 +66,6 @@ export class Bird extends React.Component {
 
     
     private doUpdate(): void {
-
-        // console.log('Updated called!', that); // tslint:disable-line
-        
 
         if (null != that.forceUpdate) {
             that.forceUpdate();

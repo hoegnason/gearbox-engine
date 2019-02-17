@@ -1,31 +1,16 @@
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
+
 import { Console } from './Console';
 
 
-describe('Console functionality', async () => {
-    
-    it('Console should log', async () => {
+describe('Console', () => {
 
-      const spy = jest.spyOn(global.console, 'log')
-      
-      const logger = new Console();
+  const body = ['This is a test'];
+  const date = [new Date()];
 
-      const now = new Date();
-      logger.Log("Hetta er ein test");
-
-      expect(spy).toHaveBeenCalledWith(now,"Hetta er ein test");
-
-      logger.Log("Aftur ein test");
-      const ConsoleDisplayer = (props: any, context: any) => {
-        const log = logger.getLog().map((text, key) =>{
-          return <div key={key}>{text}</div>});
-
-        return <div>{log}</div>;       
-      }
-
-      const wrapper = mount(<ConsoleDisplayer />);
-
-      expect(wrapper.find('div').length).toEqual(3);
-    });
+  it('should render a <div />', () => {
+    const wrapper = shallow(<Console body={body} date={date} />);
+    expect(wrapper.find('div').length).toEqual(2); // wrapper div pluss one log div
   });
+});

@@ -4,10 +4,6 @@ import * as React from 'react';
 import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
 import TileMap from './TileMap';
 
-// import { Subscription, timer } from 'rxjs';
-
-// import GameStore from './stores/game-store';
-
 export interface ILevelState {
     stageX: number;
 }
@@ -37,17 +33,12 @@ export default class Level extends React.Component<{}, ILevelState> {
 
 
     public static contextTypes = {
-        Log: PropTypes.func,
         loop: PropTypes.object,
         scale: PropTypes.number
     };
 
     private stageX: number;
     private gameLoopSubscription: GameLoopSubscription;
-
-    // private cameraObs: Subscription;
-
-    // private cameraWatcher: any
 
     constructor(props: any) {
         super(props);
@@ -57,17 +48,6 @@ export default class Level extends React.Component<{}, ILevelState> {
         this.state = {
             stageX: 0,
         };
-
-        /*
-        setInterval(() => {
-            if (null != this.stageX) {
-                birdstate.set(birdstate.get() - 5); 
-                const offset = birdstate.get();
-                
-                this.setState({stageX: offset});
-            }
-        }, 1000/60);
-        */
     }
 
     public componentDidMount() {
@@ -90,45 +70,8 @@ export default class Level extends React.Component<{}, ILevelState> {
                 this.setState({ stageX: offset });
                 lastLoop = currTime;
             }
-            // this.context.Log("looping !");
-            // console.log("looping !"); // tslint:disable-line
-        });
-
-        /*
-        this.cameraObs = timer(0, 1000/60).subscribe((t: number) => {
-
-            if (null != this.stageX) {
-                birdstate.set(birdstate.get() - 5); 
-                const offset = birdstate.get();
-                
-                this.setState({stageX: offset});
-            }
-        });
-        */
-
-        /*
-        this.cameraWatcher = autorun(() => {
-            const targetX = Math.round(GameStore.stageX * this.context.scale);
-            this.setState({
-                stageX: targetX,
-            });
-        });
-        */
-    }
-
-    /*
-    public componentWillReceiveProps(nextProps: any, nextContext: ILevelContext) {
-        const targetX = Math.round(GameStore.stageX * nextContext.scale);
-        this.setState({
-            stageX: targetX,
         });
     }
-
-    /*
-    public componentWillUnmount() {
-        this.cameraWatcher();
-    }
-    */
 
     public componentWillUnmount() {
         this.gameLoopSubscription.unsubscribe();
@@ -146,29 +89,12 @@ export default class Level extends React.Component<{}, ILevelState> {
 
         // tslint:disable-next-line
 
-        const boardwalktileStyle: React.CSSProperties = { top: Math.floor(64 * this.context.scale) };
-        // const buildingsStyle: React.CSSProperties = { top: Math.floor(-63 * this.context.scale) };
+        const grassTileStyle: React.CSSProperties = { top: Math.floor(64 * this.context.scale) };
 
         return (
             <div style={this.getWrapperStyles()}>
-                { /*
                 <TileMap
-                    style={boardwalktileStyle}
-                    src="assets/boardwalktile.png"
-                    tileSize={128}
-                    columns={24}
-                    rows={4}
-                    layers={[
-                        [
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                        ],
-                    ]}
-                /> */}
-                <TileMap
-                    style={boardwalktileStyle}
+                    style={grassTileStyle}
                     src="assets/grass.png"
                     tileSize={128}
                     columns={24}
@@ -182,16 +108,6 @@ export default class Level extends React.Component<{}, ILevelState> {
                         ],
                     ]}
                 />
-                { /* 
-                <TileMap
-                    style={buildingsStyle}
-                    src="assets/buildings.png"
-                    rows={1}
-                    columns={6}
-                    tileSize={512}
-                    layers={[[1, 2, 3, 4, 5, 6]]}
-                />
-                */ }
             </div>
         );
     }
