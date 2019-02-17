@@ -7,14 +7,6 @@ export class SoundEffect {
   public constructor(assetPath: string, loop: boolean) {
     this._player = new Audio(assetPath);
     this._player.loop = loop;
-
-    /*
-    // Throw exception
-    // tslint:disable-next-line
-    if (this._player.duration == NaN ) {
-      throw this._player.duration;
-    }
-    */
   }
 
   public get loop(): boolean {

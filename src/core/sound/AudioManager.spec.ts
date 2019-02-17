@@ -13,7 +13,6 @@ const loadSomeSounds = () => {
 };
 
 describe("AudioManager", () => {
-  // TODO: check if it is better to use https://stackoverflow.com/questions/47426434/cannot-mock-react-native-sound-with-jest
 
   const mgr = AudioManager as any;
 
@@ -21,8 +20,16 @@ describe("AudioManager", () => {
     mgr._soundEffects.clear();
   });
 
-  // Loop
-  test("Test loop functionality", async () => {
+  test('Should init AudioManager', () => {
+
+    // Test that we cant init AudioManager
+    const audioManager = new AudioManager();
+
+    const test = audioManager instanceof AudioManager;
+    expect(test).toBe(true);
+  });
+
+  test("Should loop sound", async () => {
     AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", true);
     AudioManager.playSound("ping");
 
@@ -35,8 +42,7 @@ describe("AudioManager", () => {
     });
   });
 
-  // Load a sound
-  test("Load a sound and play it", async () => {
+  test("Should load a sound and play it", async () => {
     AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
     AudioManager.playSound("ping");
 
@@ -50,8 +56,23 @@ describe("AudioManager", () => {
     expect(ping._player.paused).toBe(true);
   });
 
-  // Play
-  test("Play", async () => {
+  test("Should load a sound, play it and stop", async () => {
+    AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
+    AudioManager.playSound("ping");
+
+    const ping = mgr._soundEffects.get("ping");
+    expect(ping._player.paused).toBe(false);
+    expect(ping._player.currentTime).toBeGreaterThan(0);
+
+    await timeout(250);
+
+    AudioManager.stopSound("ping");
+
+    expect(ping._player.paused).toBe(true);
+    expect(ping._player.currentTime).toBe(0);
+  });
+
+  test("Should play a sound", async () => {
     AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", true);
     AudioManager.playSound("ping");
 
@@ -66,8 +87,7 @@ describe("AudioManager", () => {
     });
   });
 
-  // Pause all
-  test("Pause all sounds", async () => {
+  test("Should pause all sounds", async () => {
     loadSomeSounds();
 
     mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
@@ -93,8 +113,7 @@ describe("AudioManager", () => {
     });
   });
 
-  // Stop
-  test("Stop a sound", async () => {
+  test("Should stop a sound", async () => {
     AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
     AudioManager.playSound("ping");
 
@@ -110,8 +129,7 @@ describe("AudioManager", () => {
     expect(ping._player.currentTime).toBe(0);
   });
 
-  // Stop all
-  test("Stop all sounds", async () => {
+  test("Should stop all sounds", async () => {
     loadSomeSounds();
 
     mgr._soundEffects.forEach((soundEffect: SoundEffect) => {
