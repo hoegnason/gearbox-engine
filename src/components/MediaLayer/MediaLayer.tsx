@@ -1,6 +1,5 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-// import { Dimensions } from 'src/core/Dimensions';
 
 interface IMediaLayerProps {
     children: any;
@@ -23,15 +22,16 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
     };
 
     public static contextTypes = {
-        loop: PropTypes.object,
+        loop: PropTypes.object
     }
 
     public static childContextTypes = {
         loop: PropTypes.object,
-        scale: PropTypes.number
+        scale: PropTypes.number      
     };
 
     private container: any;
+
 
     constructor(props: IMediaLayerProps) {
         super(props);
