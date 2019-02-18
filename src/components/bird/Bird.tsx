@@ -1,6 +1,8 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
+import { keyboardObs } from '../../core/hid/keyboardSubject';
+
 import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
 import Body from '../body/Body';
 
@@ -32,19 +34,49 @@ export class Bird extends React.Component {
 
         const doc = document.querySelector('body');
 
-        if (null != doc) {
-            const processKey = ((event: any) => {
 
-                if (SPACE === event.which) {
-                    if (null != this.body && null != this.body.body) {
-                        this.body.body.velocity.y = -15;
-                        this.context.Log("Jump!!")
-                        // (this.context.console as Console).Log('Jump!!');
-                    }
+
+        if (null != doc) {
+
+            const jump = () => {
+                if (null != this.body && null != this.body.body) {
+                    this.body.body.velocity.y = -15;
+                    this.context.Log("Jump!!")
+                    // (this.context.console as Console).Log('Jump!!');
+                }
+            };
+
+            const processKey = (key: number) => {
+
+                /*
+                if (SPACE === key) {
+                    jump();
+                }
+                */
+            }
+
+            const processKeyboardEvent = ((event: any) => {
+
+                if (null != event && null != event.which) {
+                    processKey(event.which);
                 }
             });
 
-            doc.addEventListener('keydown', processKey);
+            const processTouch = (event: any) => {
+
+                if (null != event) {
+                    processKey(SPACE);
+                }
+            }
+
+            doc.addEventListener('keydown', processKeyboardEvent);
+            doc.addEventListener('touchstart', processTouch);
+
+            keyboardObs.subscribe((key: number) => {
+                if (SPACE === key) {
+                    jump();
+                }
+            })
         }
 
         that = this;
@@ -64,7 +96,7 @@ export class Bird extends React.Component {
         );
     }
 
-    
+
     private doUpdate(): void {
 
         if (null != that.forceUpdate) {
