@@ -9,6 +9,8 @@ import MediaLayer from './components/MediaLayer/MediaLayer';
 import Pipe from './components/pipe/Pipe';
 import World from './components/World/World';
 
+import Menu from './components/menu/Menu';
+
 class App extends React.Component {
 
   public render() {
@@ -19,6 +21,7 @@ class App extends React.Component {
         <Loop style={{ width: 1920, height: 1080, margin: '0 auto' }}>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>
+              <Menu/>
               <Level />
               <Pipe x={500} />
               <Bird />
