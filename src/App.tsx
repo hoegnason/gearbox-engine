@@ -7,7 +7,7 @@ import Level from './components/Level';
 import { Loop } from './components/loop/Loop';
 import MediaLayer from './components/MediaLayer/MediaLayer';
 import Pipe from './components/pipe/Pipe';
-import World from './components/World';
+import World from './components/World/World';
 
 class App extends React.Component {
 
