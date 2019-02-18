@@ -1,10 +1,10 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { PhysicsEngine } from '../core/physics/physics-engine';
-import { Console } from './MediaLayer/Console';
+import { PhysicsEngine } from '../../core/physics/physics-engine';
+import { Console } from './Console';
 
-import GameLoop from '../core/game-loop/GameLoop';
-import { GameLoopSubscription } from '../core/game-loop/GameLoopSubscription';
+import GameLoop from '../../core/game-loop/GameLoop';
+import { GameLoopSubscription } from '../../core/game-loop/GameLoopSubscription';
 
 
 interface IWorldProps {
