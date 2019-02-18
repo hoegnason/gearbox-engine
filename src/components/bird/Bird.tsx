@@ -5,7 +5,6 @@ import { GameLoopSubscription } from "src/core/game-loop/GameLoopSubscription";
 import { AudioManager } from "../../core/sound/AudioManager";
 import Body from "../body/Body";
 
-
 let that: Bird;
 
 export class Bird extends React.Component {
@@ -19,6 +18,7 @@ export class Bird extends React.Component {
   };
 
   public body: any;
+  private colided = false;
 
   private subscription: GameLoopSubscription;
 
@@ -29,6 +29,7 @@ export class Bird extends React.Component {
   public componentDidMount() {
     const SPACE = 32;
     AudioManager.loadSoundFile("die", "assets/sound/sfx_die.wav", false);
+    AudioManager.loadSoundFile("hit", "assets/sound/sfx_hit.wav", false);
 
     const doc = document.querySelector("body");
 
@@ -62,6 +63,7 @@ export class Bird extends React.Component {
             this.body = b;
           }}
           onUpdate={this.doUpdate}
+          onCollision={this.onCollision}
           dynamic={true}
           x={1}
           y={1}
@@ -85,6 +87,13 @@ export class Bird extends React.Component {
   private doUpdate(): void {
     if (null != that.forceUpdate) {
       that.forceUpdate();
+    }
+  }
+
+  private onCollision(): void {
+    if (!that.colided) {
+      AudioManager.playSound("hit");
+      that.colided = true;
     }
   }
 
