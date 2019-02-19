@@ -81,6 +81,9 @@ export class PhysicsEngine {
 
         this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
         this.applyVelocity(dynamicBodies);
+
+        // MovePipes: Seta velocity á allar staticBodies aka (dynamicBodies = false);
+        this.applyVelocity(staticBodies);
     }
 
     private applyVelocity(dynamicBodies: IBody[]) {

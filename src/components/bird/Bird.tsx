@@ -61,6 +61,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
         this.subscription.unsubscribe();
     }
 
+    // MovePipes: sett velocity til (x: 0, y: 0) - áðrenn var x: 5
     public render() {
         return (
             <div>
@@ -71,11 +72,11 @@ export class Bird extends React.Component<IBirdProps, {}> {
                     onUpdate={this.doUpdate}
                     onCollision={this.onCollision}
                     dynamic={true}
-                    x={1}
+                    x={500}
                     y={1}
                     width={25}
                     height={25}
-                    velocity={{ x: 5, y: 0 }}
+                    velocity={{ x: 0, y: 0 }}
                     colided={false}
                 />
                 <div
