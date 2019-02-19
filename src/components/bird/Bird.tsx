@@ -28,8 +28,9 @@ export class Bird extends React.Component {
 
   public componentDidMount() {
     const SPACE = 32;
-    AudioManager.loadSoundFile("wing", "assets/sound/sfx_wing.wav", false);
-    AudioManager.loadSoundFile("hit", "assets/sound/sfx_hit.wav", false);
+    AudioManager.loadSoundFile('wing', "assets/sound/sfx_wing.wav", false);
+    AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
+    AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
 
     const doc = document.querySelector("body");
 
@@ -40,7 +41,6 @@ export class Bird extends React.Component {
             this.body.body.velocity.y = -15;
             this.context.Log("Jump!!");
             AudioManager.playSound("wing");
-            // (this.context.console as Console).Log('Jump!!');
           }
         }
       };
@@ -92,7 +92,12 @@ export class Bird extends React.Component {
 
   private onCollision(): void {
     if (!that.colided) {
-      AudioManager.playSound("hit");
+      AudioManager.playSound('hit');
+
+      setTimeout(() => {
+        AudioManager.playSound('die');
+      }, 1000);
+
       that.colided = true;
     }
   }
@@ -101,8 +106,7 @@ export class Bird extends React.Component {
     if (null != this.body && null != this.body.body) {
       return {
         position: "absolute",
-        transform: `translate(${this.body.body.x * this.context.scale}px, ${this
-          .body.body.y * this.context.scale}px)`,
+        transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
         transformOrigin: "left top"
       };
     }
