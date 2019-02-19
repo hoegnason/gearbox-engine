@@ -1,9 +1,8 @@
 import * as React from 'react';
 import './App.css';
 
-import Bird from './components/bird/Bird';
 import Body from './components/body/Body';
-import Level from './components/Level';
+import GameState from './components/GameState/GameState';
 import { Loop } from './components/loop/Loop';
 import MediaLayer from './components/MediaLayer/MediaLayer';
 import Pipe from './components/pipe/Pipe';
@@ -19,10 +18,10 @@ class App extends React.Component {
         <Loop style={{ width: 1920, height: 1080, margin: '0 auto' }}>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>
-              <Level />
-              <Pipe x={500} />
-              <Bird />
-              <Body dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+              <GameState>
+                <Pipe x={500} />
+                <Body dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+              </GameState>
             </World>
           </MediaLayer>
         </Loop>

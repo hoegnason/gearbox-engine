@@ -2,10 +2,15 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
 import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
+import { IGameStateState } from './GameState/GameState';
 import TileMap from './TileMap';
 
 export interface ILevelState {
     stageX: number;
+}
+
+export interface ILevelProps {
+    gameState: IGameStateState;
 }
 
 export interface ILevelContext {
@@ -13,23 +18,9 @@ export interface ILevelContext {
     loop: object;
 }
 
-export class BirdState {
-    private static xOffset: number = 0;
-
-    public get(): number {
-        return BirdState.xOffset;
-    }
-
-    public set(x: number) {
-        BirdState.xOffset = x;
-    }
-};
-
-const birdstate = new BirdState();
-
 let lastLoop = 0;
 
-export default class Level extends React.Component<{}, ILevelState> {
+export default class Level extends React.Component<ILevelProps, ILevelState> {
 
 
     public static contextTypes = {
@@ -64,10 +55,10 @@ export default class Level extends React.Component<{}, ILevelState> {
             const currTime = 1 * Date.now();
 
             if ((lastLoop + 1000 / 60) < currTime) {
-                birdstate.set(birdstate.get() - 10);
-                const offset = birdstate.get();
+                if(null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.x) {
+                    this.props.gameState.updateState({x: this.props.gameState.x - 10});
+                }
 
-                this.setState({ stageX: offset });
                 lastLoop = currTime;
             }
         });
@@ -80,7 +71,7 @@ export default class Level extends React.Component<{}, ILevelState> {
     public getWrapperStyles(): React.CSSProperties {
         return {
             position: 'absolute',
-            transform: `translate(${this.state.stageX}px, 0px) translateZ(0)`,
+            transform: `translate(${this.props.gameState.x}px, 0px) translateZ(0)`,
             transformOrigin: 'top left',
         };
     }

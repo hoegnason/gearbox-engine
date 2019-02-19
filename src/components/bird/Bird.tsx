@@ -4,9 +4,15 @@ import * as React from 'react';
 import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
 import Body from '../body/Body';
 
+import { IGameStateState } from '../GameState/GameState';
+
 let that: Bird;
 
-export class Bird extends React.Component {
+interface IBirdProps {
+    gameState: IGameStateState;
+}
+
+export class Bird extends React.Component<IBirdProps, {}> {
 
     public static displayName = 'Bird';
 
@@ -64,7 +70,7 @@ export class Bird extends React.Component {
         );
     }
 
-    
+
     private doUpdate(): void {
 
         if (null != that.forceUpdate) {
@@ -74,12 +80,16 @@ export class Bird extends React.Component {
 
     private getStyles(): React.CSSProperties {
 
+        // if (null != this.body && null != this.body.body) {
         if (null != this.body && null != this.body.body) {
-            return {
-                position: 'absolute',
-                transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
-                transformOrigin: 'left top',
-            };
+            if (null != this.props.gameState && null != this.props.gameState.x) {
+                return {
+                    position: 'absolute',
+                    // transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
+                    transform: `translate(${this.props.gameState.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
+                    transformOrigin: 'left top',
+                };
+            }
         }
 
         return {};

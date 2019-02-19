@@ -1,10 +1,13 @@
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-interface IGameStateState {
-    gameOver: boolean;
-    x: number;
-    y: number;
+import Bird from '../bird/Bird';
+import Level from '../Level';
+
+export interface IGameStateState {
+    scrollSpeed?: number;
+    gameOver?: boolean;
+    updateState?: (gameState: IGameStateState) => void;
+    x?: number;
 }
 
 interface IGameStateProps {
@@ -13,40 +16,28 @@ interface IGameStateProps {
 
 export class GameState extends React.Component<IGameStateProps, IGameStateState> {
 
-    public static childContextTypes = {
-        updateState: PropTypes.func,
-        x: PropTypes.number,
-        y: PropTypes.number
-    };
-
     constructor(props: any) {
         super(props);
+
+        const updater = this.updateState.bind(this);
+
         this.state = {
             gameOver: false,
+            scrollSpeed: -5,
+            updateState: updater,
             x: 0,
-            y: 0
+            
         }
 
     }
 
-    public getChildContext() {
-        return {
-            updateState: this.updateState,
-            x: this.state.x,
-            y: this.state.y
-        };
-    }
-
-    public updateState(GameOver: boolean, newX: number, newY: number){
-        this.setState({
-            gameOver: GameOver,
-            x: newX,
-            y: newY
-        });
+    public updateState(state: IGameStateState){
+        this.setState(state);
     }
 
     public render(){
-        return <div>{this.props.children}</div>
+
+        return <div><Bird gameState={this.state} /><Level gameState={this.state }/></div>
     }
 
 }
