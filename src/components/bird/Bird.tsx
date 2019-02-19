@@ -1,8 +1,9 @@
-import * as PropTypes from 'prop-types';
-import * as React from 'react';
+import * as PropTypes from "prop-types";
+import * as React from "react";
 
-import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
-import Body from '../body/Body';
+import { GameLoopSubscription } from "src/core/game-loop/GameLoopSubscription";
+import { AudioManager } from "../../core/sound/AudioManager";
+import Body from "../body/Body";
 
 import { IGameStateState } from '../GameState/GameState';
 
@@ -13,8 +14,7 @@ interface IBirdProps {
 }
 
 export class Bird extends React.Component<IBirdProps, {}> {
-
-    public static displayName = 'Bird';
+    public static displayName = "Bird";
 
     public static contextTypes = {
         Log: PropTypes.func,
@@ -24,6 +24,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
     };
 
     public body: any;
+    private colided = false;
 
     private subscription: GameLoopSubscription;
 
@@ -31,26 +32,26 @@ export class Bird extends React.Component<IBirdProps, {}> {
         super(props);
     }
 
-
     public componentDidMount() {
-
         const SPACE = 32;
+        AudioManager.loadSoundFile('wing', "assets/sound/sfx_wing.wav", false);
+        AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
+        AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
 
-        const doc = document.querySelector('body');
+        const doc = document.querySelector("body");
 
         if (null != doc) {
-            const processKey = ((event: any) => {
-
+            const processKey = (event: any) => {
                 if (SPACE === event.which) {
                     if (null != this.body && null != this.body.body) {
                         this.body.body.velocity.y = -15;
-                        this.context.Log("Jump!!")
-                        // (this.context.console as Console).Log('Jump!!');
+                        this.context.Log("Jump!!");
+                        AudioManager.playSound("wing");
                     }
                 }
-            });
+            };
 
-            doc.addEventListener('keydown', processKey);
+            doc.addEventListener("keydown", processKey);
         }
 
         that = this;
@@ -61,23 +62,51 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
 
     public render() {
-
         return (
             <div>
-                <Body ref={b => { this.body = b; }} onUpdate={this.doUpdate} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} />
-                <div style={{ ...this.getStyles(), backgroundColor: 'red', width: 25 * this.context.scale, height: 25 * this.context.scale }} />
+                <Body
+                    ref={b => {
+                        this.body = b;
+                    }}
+                    onUpdate={this.doUpdate}
+                    onCollision={this.onCollision}
+                    dynamic={true}
+                    x={1}
+                    y={1}
+                    width={25}
+                    height={25}
+                    velocity={{ x: 5, y: 0 }}
+                    colided={false}
+                />
+                <div
+                    style={{
+                        ...this.getStyles(),
+                        backgroundColor: "red",
+                        height: 25 * this.context.scale,
+                        width: 25 * this.context.scale
+                    }}
+                />
             </div>
         );
     }
 
-
     private doUpdate(): void {
-
         if (null != that.forceUpdate) {
             that.forceUpdate();
         }
     }
 
+    private onCollision(): void {
+        if (!that.colided) {
+            AudioManager.playSound('hit');
+
+            setTimeout(() => {
+                AudioManager.playSound('die');
+            }, 1000);
+
+            that.colided = true;
+        }
+    }
     private getStyles(): React.CSSProperties {
 
         // if (null != this.body && null != this.body.body) {
@@ -86,7 +115,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
                 return {
                     position: 'absolute',
                     // transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
-                    transform: `translate(${this.props.gameState.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
+                    transform: `translate(${ 50 * this.context.scale}px, ${50 * this.context.scale}px)`,
                     transformOrigin: 'left top',
                 };
             }
@@ -95,5 +124,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
         return {};
     }
 }
+
 
 export default Bird;
