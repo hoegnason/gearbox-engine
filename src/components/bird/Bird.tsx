@@ -28,7 +28,7 @@ export class Bird extends React.Component {
 
   public componentDidMount() {
     const SPACE = 32;
-    AudioManager.loadSoundFile("die", "assets/sound/sfx_die.wav", false);
+    AudioManager.loadSoundFile("wing", "assets/sound/sfx_wing.wav", false);
     AudioManager.loadSoundFile("hit", "assets/sound/sfx_hit.wav", false);
 
     const doc = document.querySelector("body");
@@ -39,7 +39,7 @@ export class Bird extends React.Component {
           if (null != this.body && null != this.body.body) {
             this.body.body.velocity.y = -15;
             this.context.Log("Jump!!");
-            AudioManager.playSound("die");
+            AudioManager.playSound("wing");
             // (this.context.console as Console).Log('Jump!!');
           }
         }
@@ -76,8 +76,8 @@ export class Bird extends React.Component {
           style={{
             ...this.getStyles(),
             backgroundColor: "red",
-            width: 25 * this.context.scale,
-            height: 25 * this.context.scale
+            height: 25 * this.context.scale,
+            width: 25 * this.context.scale
           }}
         />
       </div>
