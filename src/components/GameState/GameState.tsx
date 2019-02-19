@@ -14,7 +14,9 @@ interface IGameStateProps {
 export class GameState extends React.Component<IGameStateProps, IGameStateState> {
 
     public static childContextTypes = {
-        updateState: PropTypes.func
+        updateState: PropTypes.func,
+        x: PropTypes.number,
+        y: PropTypes.number
     };
 
     constructor(props: any) {
@@ -29,7 +31,9 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
 
     public getChildContext() {
         return {
-            updateState: this.updateState
+            updateState: this.updateState,
+            x: this.state.x,
+            y: this.state.y
         };
     }
 
@@ -42,7 +46,7 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
     }
 
     public render(){
-        return <div>{this.updateState}</div>
+        return <div>{this.props.children}</div>
     }
 
 }
