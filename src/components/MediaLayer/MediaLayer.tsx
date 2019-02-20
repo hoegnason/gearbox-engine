@@ -26,8 +26,9 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
     }
 
     public static childContextTypes = {
+        dimensions: PropTypes.any,
         loop: PropTypes.object,
-        scale: PropTypes.number      
+        scale: PropTypes.number     
     };
 
     private container: any;
@@ -57,6 +58,7 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
 
     public getChildContext() {
         return {
+            dimensions: this.state.dimensions,
             loop: this.context.loop,
             scale: this.getScale().scale
         };

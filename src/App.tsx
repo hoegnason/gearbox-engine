@@ -3,6 +3,7 @@ import './App.css';
 
 import Bird from './components/bird/Bird';
 import Body from './components/body/Body';
+import { FlappyUI } from './components/flappy-ui/FlappyUI';
 import Level from './components/Level';
 import { Loop } from './components/loop/Loop';
 import MediaLayer from './components/MediaLayer/MediaLayer';
@@ -19,6 +20,7 @@ class App extends React.Component {
         <Loop style={{ width: 1920, height: 1080, margin: '0 auto' }}>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>
+              <FlappyUI />
               <Level />
               <Pipe x={500} />
               <Bird />

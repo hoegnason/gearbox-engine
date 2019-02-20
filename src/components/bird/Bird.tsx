@@ -15,8 +15,6 @@ let that: Bird;
 let isPaused = false;
 let isGameOver = false;
 
-let count = 0;
-
 export class Bird extends React.Component {
 
   public static displayName = 'Bird';
@@ -144,21 +142,18 @@ export class Bird extends React.Component {
 
     if (!that.colided) {
 
-      count = count + 1;
+      that.context.Log('Bird colided with wall!');
 
       AudioManager.playSound('hit');
 
       isGameOver = true;
+      that.context.loop.stop();
+
       that.context.Log(`isGameOver: ${isGameOver}!`);
 
       setTimeout(() => {
         AudioManager.playSound('die');
-      }, 1000);
-
-      
-      that.context.loop.stop();
-
-      that.context.Log(`isGameOver: ${count}!`);
+      }, 1000);     
 
       that.colided = true;
     }
