@@ -1,12 +1,17 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
+import { Subscription } from 'rxjs';
 
-import { keyboardObs } from '../../core/hid/keyboardSubject';
+import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
 
-import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
+import GameLoop from 'src/core/game-loop/GameLoop';
 import Body from '../body/Body';
 
+
 let that: Bird;
+
+let isPaused = false;
+let isGameOver = false;
 
 export class Bird extends React.Component {
 
@@ -21,9 +26,7 @@ export class Bird extends React.Component {
 
   public body: any;
 
-  private subscription: GameLoopSubscription;
-
-  
+  private keyboardSubscription: Subscription;
 
   constructor(props: any) {
     super(props);
@@ -32,20 +35,27 @@ export class Bird extends React.Component {
 
   public componentDidMount() {
 
-    const SPACE = 32;
+    this.setGameOver(false);
 
-      keyboardObs.subscribe((key: number) => {
-        
-        if (SPACE === key) {
-          this.jump();
-        }
-      })
+    this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
+
+      if (' ' === key) {
+        this.jump();
+      }
+
+      if ('Esc' === key || 'Escape' === key) {
+        this.togglePause();
+      }
+    });
 
     that = this;
   }
 
   public componentWillUnmount() {
-    this.subscription.unsubscribe();
+
+    if (null != this.keyboardSubscription) {
+      this.keyboardSubscription.unsubscribe();
+    }
   }
 
   public render() {
@@ -59,11 +69,49 @@ export class Bird extends React.Component {
   }
 
   private jump() {
-    
+
     if (null != this.body && null != this.body.body) {
 
       this.body.body.velocity.y = -15;
-      this.context.Log("Jump!!")
+      this.context.Log("Jump!!");
+    }
+  }
+
+  private setGameOver(gameOver: boolean) {
+
+    const loop = this.context.loop as GameLoop;
+
+    isGameOver = gameOver;
+    
+    if(gameOver) {
+
+      loop.stop();
+    } else {
+
+      loop.start();
+    }
+
+    this.context.Log(`isGameOver: ${gameOver}!`);
+  }
+
+  private togglePause() {
+
+    if (null != this.context && null != this.context.loop) {
+
+      const loop = this.context.loop as GameLoop;
+
+      if (!isGameOver) {
+       
+        if (isPaused) {
+        
+          loop.start();
+          isPaused = false
+        } else {
+  
+          loop.stop();
+          isPaused = true
+        }
+      }
     }
   }
 

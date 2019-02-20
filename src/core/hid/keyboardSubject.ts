@@ -1,11 +1,18 @@
-import { fromEvent, merge } from 'rxjs';
+import { fromEvent, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const SPACE = 32;
+export interface IKeyboardOpts {
+    touchKey?: string;
+}
 
-const touchObs = fromEvent(document, 'touchstart').pipe(map((event: TouchEvent) => SPACE));
+const touchObs = (key: string) => fromEvent(document, 'touchstart').pipe(map((event: TouchEvent) => key));
+const keyboardObs = fromEvent(document, 'keydown').pipe(map((event: KeyboardEvent) => event.key));
 
-export const keyboardObs =
-    merge(
-        fromEvent(document, 'keydown').pipe(map((event: KeyboardEvent) => (null != event && null != event.which) ? event.which : null )),
-        touchObs);
+export const createKeyboardObservable = (opts?: IKeyboardOpts): Observable<string> => {
+
+    if (null != opts && null != opts.touchKey &&  (typeof opts.touchKey === 'string')) {
+        return merge(keyboardObs, touchObs(opts.touchKey));
+    }
+
+    return keyboardObs;
+}
