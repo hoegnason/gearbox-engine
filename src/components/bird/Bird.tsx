@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 
 import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
 
+import { AudioManager } from '../../core/sound/AudioManager';
+
 import GameLoop from 'src/core/game-loop/GameLoop';
 import Body from '../body/Body';
 
@@ -28,12 +30,18 @@ export class Bird extends React.Component {
 
   private keyboardSubscription: Subscription;
 
+  private colided = false;
+
   constructor(props: any) {
     super(props);
   }
 
 
   public componentDidMount() {
+
+    AudioManager.loadSoundFile('wing', "assets/sound/sfx_wing.wav", false);
+    AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
+    AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
 
     this.setGameOver(false);
 
@@ -62,7 +70,7 @@ export class Bird extends React.Component {
 
     return (
       <div>
-        <Body ref={b => { this.body = b; }} onUpdate={this.doUpdate} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} />
+        <Body ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} />
         <div style={{ ...this.getStyles(), backgroundColor: 'red', width: 25 * this.context.scale, height: 25 * this.context.scale }} />
       </div>
     );
@@ -121,6 +129,23 @@ export class Bird extends React.Component {
       that.forceUpdate();
     }
   }
+
+  private onCollision(): void {
+
+    if (!that.colided) {
+      
+      AudioManager.playSound('hit');
+
+      that.setGameOver(true);
+
+      setTimeout(() => {
+        AudioManager.playSound('die');
+      }, 1000);
+
+      that.colided = true;
+    }
+  }
+
 
   private getStyles(): React.CSSProperties {
 
