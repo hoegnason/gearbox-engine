@@ -15,6 +15,8 @@ let that: Bird;
 let isPaused = false;
 let isGameOver = false;
 
+let count = 0;
+
 export class Bird extends React.Component {
 
   public static displayName = 'Bird';
@@ -43,7 +45,7 @@ export class Bird extends React.Component {
     AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
     AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
 
-    this.setGameOver(false);
+    // this.setGameOver(false);
 
     this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
 
@@ -80,27 +82,35 @@ export class Bird extends React.Component {
 
     if (null != this.body && null != this.body.body) {
 
-      this.body.body.velocity.y = -15;
-      this.context.Log("Jump!!");
+      if (!isGameOver) {
+        this.body.body.velocity.y = -15;
+        AudioManager.playSound('wing');
+        this.context.Log("Jump!!");
+      }
     }
   }
 
+  /*
   private setGameOver(gameOver: boolean) {
 
-    const loop = this.context.loop as GameLoop;
+    if (null != this.context && null != this.context.loop) {
 
-    isGameOver = gameOver;
-    
-    if(gameOver) {
+      const loop = this.context.loop as GameLoop;
 
       loop.stop();
-    } else {
 
-      loop.start();
+
+      if (!isPaused && !isGameOver && gameOver) {
+
+        this.context.Log(`STOP! isGameOver: ${gameOver}!`);
+        loop.stop();
+      }
+
+      isGameOver = gameOver;
+      this.context.Log(`isGameOver: ${gameOver}!`);
     }
-
-    this.context.Log(`isGameOver: ${gameOver}!`);
   }
+  */
 
   private togglePause() {
 
@@ -109,13 +119,13 @@ export class Bird extends React.Component {
       const loop = this.context.loop as GameLoop;
 
       if (!isGameOver) {
-       
+
         if (isPaused) {
-        
+
           loop.start();
           isPaused = false
         } else {
-  
+
           loop.stop();
           isPaused = true
         }
@@ -133,14 +143,22 @@ export class Bird extends React.Component {
   private onCollision(): void {
 
     if (!that.colided) {
-      
+
+      count = count + 1;
+
       AudioManager.playSound('hit');
 
-      that.setGameOver(true);
+      isGameOver = true;
+      that.context.Log(`isGameOver: ${isGameOver}!`);
 
       setTimeout(() => {
         AudioManager.playSound('die');
       }, 1000);
+
+      
+      that.context.loop.stop();
+
+      that.context.Log(`isGameOver: ${count}!`);
 
       that.colided = true;
     }
