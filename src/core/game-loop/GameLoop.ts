@@ -6,15 +6,18 @@ export class GameLoop {
 
     private subscribers: GameLoopObserverFunction[];
     private loopID: number | null;
+    private isPaused = false;
 
     constructor() {
         this.subscribers = [];
         this.loopID = null;
         this.loop = this.loop.bind(this);
+        this.isPaused = false;
     }
 
     public start() {
         if (!this.loopID) {
+            this.isPaused = false;
             this.loop();
         }
     }
@@ -23,6 +26,7 @@ export class GameLoop {
         if (this.loopID) {
             window.cancelAnimationFrame(Number(this.loopID));
             this.loopID = null;
+            this.isPaused = true;
         }
     }
 
@@ -54,7 +58,9 @@ export class GameLoop {
             callback.call(undefined);
         });
 
-        this.loopID = window.requestAnimationFrame(this.loop);
+        if (!this.isPaused) {
+            this.loopID = window.requestAnimationFrame(this.loop);
+        }
     }
 }
 

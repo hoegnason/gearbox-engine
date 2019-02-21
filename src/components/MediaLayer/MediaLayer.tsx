@@ -26,8 +26,10 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
     }
 
     public static childContextTypes = {
+        height: PropTypes.number,
         loop: PropTypes.object,
-        scale: PropTypes.number      
+        scale: PropTypes.number,
+        width: PropTypes.number,
     };
 
     private container: any;
@@ -57,8 +59,10 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
 
     public getChildContext() {
         return {
+            height: this.getScale().height,
             loop: this.context.loop,
-            scale: this.getScale().scale
+            scale: this.getScale().scale,
+            width: this.getScale().width
         };
     }
 
@@ -73,16 +77,17 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
         );
     }
 
-
-    public getScale() {
+    private getScale() {
         const [vwidth, vheight] = this.state.dimensions;
         const { height, width } = this.props;
 
         if (null != height && null != width) {
+            
             let targetWidth;
             let targetHeight;
             let targetScale;
 
+            // Check orientation
             if (height / width > vheight / vwidth) {
                 targetHeight = vheight;
                 targetWidth = targetHeight * width / height;
@@ -93,25 +98,17 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
                 targetScale = vwidth / width;
             }
 
-            if (!this.container) {
-                return {
-                    height,
-                    scale: 1,
-                    width,
-                };
-            } else {
-                return {
-                    height: targetHeight,
-                    scale: targetScale,
-                    width: targetWidth,
-                };
-            }
-        } else {
             return {
-                height: 0,
-                scale: 1,
-                width: 1
-            }
+                height: targetHeight,
+                scale: targetScale,
+                width: targetWidth,
+            };
+        }
+
+        return {
+            height: 0,
+            scale: 1,
+            width: 1
         }
     }
 
@@ -127,7 +124,7 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
         this.setState({
             dimensions: [
                 this.container.offsetWidth,
-                this.container.offsetHeight,
+                this.container.offsetHeight
             ],
         });
     }
