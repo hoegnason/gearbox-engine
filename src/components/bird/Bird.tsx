@@ -1,129 +1,184 @@
-import * as PropTypes from "prop-types";
-import * as React from "react";
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
+import { Subscription } from 'rxjs';
 
-import { GameLoopSubscription } from "src/core/game-loop/GameLoopSubscription";
-import { AudioManager } from "../../core/sound/AudioManager";
-import Body from "../body/Body";
+import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
+
+import { AudioManager } from '../../core/sound/AudioManager';
+
+import GameLoop from 'src/core/game-loop/GameLoop';
+import Body from '../body/Body';
+
 
 import { IGameStateState } from '../GameState/GameState';
 
 let that: Bird;
 
+let isPaused = false;
+let isGameOver = false;
+
 interface IBirdProps {
-    gameState: IGameStateState;
+  gameState: IGameStateState;
 }
 
 export class Bird extends React.Component<IBirdProps, {}> {
-    public static displayName = "Bird";
 
-    public static contextTypes = {
-        Log: PropTypes.func,
-        engine: PropTypes.object,
-        loop: PropTypes.object,
-        scale: PropTypes.number
-    };
+  public static displayName = 'Bird';
 
-    public body: any;
-    private colided = false;
+  public static contextTypes = {
+    Log: PropTypes.func,
+    engine: PropTypes.object,
+    loop: PropTypes.object,
+    scale: PropTypes.number
+  };
 
-    private subscription: GameLoopSubscription;
+  public body: any;
 
-    constructor(props: any) {
-        super(props);
+  private keyboardSubscription: Subscription;
+
+  private colided = false;
+
+  constructor(props: any) {
+    super(props);
+  }
+
+
+  public componentDidMount() {
+
+    AudioManager.loadSoundFile('wing', "assets/sound/sfx_wing.wav", false);
+    AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
+    AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
+
+    // this.setGameOver(false);
+
+    this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
+
+      if (' ' === key) {
+        this.jump();
+      }
+
+      if ('Esc' === key || 'Escape' === key) {
+        this.togglePause();
+      }
+    });
+
+    that = this;
+  }
+
+  public componentWillUnmount() {
+
+    if (null != this.keyboardSubscription) {
+      this.keyboardSubscription.unsubscribe();
     }
+  }
 
-    public componentDidMount() {
-        const SPACE = 32;
-        AudioManager.loadSoundFile('wing', "assets/sound/sfx_wing.wav", false);
-        AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
-        AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
+  public render() {
 
-        const doc = document.querySelector("body");
+    return (
+      <div>
+        <Body ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} />
+        <div style={{ ...this.getStyles(), backgroundColor: 'red', width: 25 * this.context.scale, height: 25 * this.context.scale }} />
+      </div>
+    );
+  }
 
-        if (null != doc) {
-            const processKey = (event: any) => {
-                if (SPACE === event.which) {
-                    if (null != this.body && null != this.body.body) {
-                        this.body.body.velocity.y = -15;
-                        this.context.Log("Jump!!");
-                        AudioManager.playSound("wing");
-                    }
-                }
-            };
+  private jump() {
 
-            doc.addEventListener("keydown", processKey);
+    if (null != this.body && null != this.body.body) {
+
+      if (!isGameOver) {
+        this.body.body.velocity.y = -15;
+        AudioManager.playSound('wing');
+        this.context.Log("Jump!!");
+      }
+    }
+  }
+
+  /*
+  private setGameOver(gameOver: boolean) {
+
+    if (null != this.context && null != this.context.loop) {
+
+      const loop = this.context.loop as GameLoop;
+
+      loop.stop();
+
+
+      if (!isPaused && !isGameOver && gameOver) {
+
+        this.context.Log(`STOP! isGameOver: ${gameOver}!`);
+        loop.stop();
+      }
+
+      isGameOver = gameOver;
+      this.context.Log(`isGameOver: ${gameOver}!`);
+    }
+  }
+  */
+
+  private togglePause() {
+
+    if (null != this.context && null != this.context.loop) {
+
+      const loop = this.context.loop as GameLoop;
+
+      if (!isGameOver) {
+
+        if (isPaused) {
+
+          loop.start();
+          isPaused = false
+        } else {
+
+          loop.stop();
+          isPaused = true
         }
+      }
+    }
+  }
 
-        that = this;
+  private doUpdate(): void {
+
+    if (null != that.forceUpdate) {
+      that.forceUpdate();
+    }
+  }
+
+  private onCollision(): void {
+
+    if (!that.colided) {
+
+      that.context.Log('Bird colided with wall!');
+
+      AudioManager.playSound('hit');
+
+      isGameOver = true;
+      that.context.loop.stop();
+
+      that.context.Log(`isGameOver: ${isGameOver}!`);
+
+      setTimeout(() => {
+        AudioManager.playSound('die');
+      }, 1000);
+
+    }
+  }
+  private getStyles(): React.CSSProperties {
+
+    // if (null != this.body && null != this.body.body) {
+    if (null != this.body && null != this.body.body) {
+      if (null != this.props.gameState && null != this.props.gameState.x) {
+        return {
+          position: 'absolute',
+          // transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
+          transform: `translate(${50 * this.context.scale}px, ${50 * this.context.scale}px)`,
+          transformOrigin: 'left top',
+        };
+      }
     }
 
-    public componentWillUnmount() {
-        this.subscription.unsubscribe();
-    }
-
-    // MovePipes: sett velocity til (x: 0, y: 0) - áðrenn var x: 5
-    public render() {
-        return (
-            <div>
-                <Body
-                    ref={b => {
-                        this.body = b;
-                    }}
-                    onUpdate={this.doUpdate}
-                    onCollision={this.onCollision}
-                    dynamic={true}
-                    x={500}
-                    y={1}
-                    width={25}
-                    height={25}
-                    velocity={{ x: 0, y: 0 }}
-                    colided={false}
-                />
-                <div
-                    style={{
-                        ...this.getStyles(),
-                        backgroundColor: "red",
-                        height: 25 * this.context.scale,
-                        width: 25 * this.context.scale
-                    }}
-                />
-            </div>
-        );
-    }
-
-    private doUpdate(): void {
-        if (null != that.forceUpdate) {
-            that.forceUpdate();
-        }
-    }
-
-    private onCollision(): void {
-        if (!that.colided) {
-            AudioManager.playSound('hit');
-
-            setTimeout(() => {
-                AudioManager.playSound('die');
-            }, 1000);
-
-            that.colided = true;
-        }
-    }
-    private getStyles(): React.CSSProperties {
-
-        // if (null != this.body && null != this.body.body) {
-        if (null != this.body && null != this.body.body) {
-            if (null != this.props.gameState && null != this.props.gameState.x) {
-                return {
-                    position: 'absolute',
-                    // transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
-                    transform: `translate(${ 50 * this.context.scale}px, ${50 * this.context.scale}px)`,
-                    transformOrigin: 'left top',
-                };
-            }
-        }
-
-        return {};
-    }
+    return {};
+  }
 }
 
 
