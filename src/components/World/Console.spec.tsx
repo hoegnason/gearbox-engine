@@ -1,3 +1,4 @@
+/*
 import { shallow } from 'enzyme';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
@@ -7,7 +8,6 @@ import { Console } from './Console';
 describe('Console functionality', async () => {
     
     it('Should display log', async () => {
-
       jest.mock('./Console', () => ({
         Console: 'mockConsole'
       }));
@@ -50,6 +50,6 @@ describe('Console functionality', async () => {
       const spy2 = jest.spyOn(wrappedLog, 'Log');
       wrappedLog.Log("Aftur ein test");
 
-      expect(spy2).toHaveBeenCalled();*/
+      expect(spy2).toHaveBeenCalled();*//*
     });
-  });
+  });*/
