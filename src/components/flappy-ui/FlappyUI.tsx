@@ -5,7 +5,6 @@ import * as React from 'react';
 export class FlappyUI extends React.Component {
 
     public static contextTypes = {
-        dimensions: PropTypes.any,
         height: PropTypes.number,
         loop: PropTypes.object,
         scale: PropTypes.number,
@@ -13,9 +12,6 @@ export class FlappyUI extends React.Component {
     }
 
     public render() {
-
-        // tslint:disable-next-line
-        console.log(this.context);
 
         return <div style={this.getWrappedStyle()}>
             <div style={{ ...this.getTextStyle(), position: 'absolute', transform: `translate(0px, ${this.context.scale * 75}px)`, height: '100%', width: '100%', fontFamily: "'Luckiest Guy', cursive" }}>Game Over!</div>

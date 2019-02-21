@@ -17,7 +17,7 @@ class App extends React.Component {
     const stageBackground: React.CSSProperties = { background: 'url(assets/flappy-background-day.png) center repeat-x', backgroundSize: 'auto 100%', margin: '0 auto' };
 
     return (
-      <div className="App">
+      <div className="App" style={{width: '100%', height: '100%'}}>
         <Loop>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>

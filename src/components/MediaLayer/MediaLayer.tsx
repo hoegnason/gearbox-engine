@@ -26,7 +26,6 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
     }
 
     public static childContextTypes = {
-        dimensions: PropTypes.any,
         height: PropTypes.number,
         loop: PropTypes.object,
         scale: PropTypes.number,
@@ -60,7 +59,6 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
 
     public getChildContext() {
         return {
-            dimensions: this.state.dimensions,
             height: this.getScale().height,
             loop: this.context.loop,
             scale: this.getScale().scale,
@@ -84,10 +82,12 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
         const { height, width } = this.props;
 
         if (null != height && null != width) {
+            
             let targetWidth;
             let targetHeight;
             let targetScale;
 
+            // Check orientation
             if (height / width > vheight / vwidth) {
                 targetHeight = vheight;
                 targetWidth = targetHeight * width / height;
@@ -98,25 +98,17 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
                 targetScale = vwidth / width;
             }
 
-            if (!this.container) {
-                return {
-                    height,
-                    scale: 1,
-                    width,
-                };
-            } else {
-                return {
-                    height: targetHeight,
-                    scale: targetScale,
-                    width: targetWidth,
-                };
-            }
-        } else {
             return {
-                height: 0,
-                scale: 1,
-                width: 1
-            }
+                height: targetHeight,
+                scale: targetScale,
+                width: targetWidth,
+            };
+        }
+
+        return {
+            height: 0,
+            scale: 1,
+            width: 1
         }
     }
 
@@ -128,26 +120,11 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
         };
     }
 
-    private getClientDimensions() {
-
-        // 870 upvotes frá https://stackoverflow.com/questions/3437786/get-the-size-of-the-screen-current-web-page-and-browser-window
-        const w = window;
-        const d = document;
-        const e = d.documentElement;
-        const g = d.getElementsByTagName('body')[0];
-        const x = w.innerWidth || e.clientWidth || g.clientWidth;
-        const y = w.innerHeight|| e.clientHeight|| g.clientHeight;
-        
-        return {x, y};
-      }
-
     private setDimensions() {
-        const dims = this.getClientDimensions();
-
         this.setState({
             dimensions: [
-                dims.x,
-                dims.y,
+                this.container.offsetWidth,
+                this.container.offsetHeight
             ],
         });
     }
