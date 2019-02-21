@@ -1,6 +1,5 @@
-/*
+
 import { shallow } from 'enzyme';
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 // import World from '../World';
 import { Console } from './Console';
@@ -12,17 +11,17 @@ describe('Console functionality', async () => {
         Console: 'mockConsole'
       }));
 
-      const logger = shallow(<Console />);
-      expect(logger.find("div").length).toEqual(0);
+      const logger = shallow(<Console messages={[]} />);
+      expect(logger.find("div").length).toEqual(1);
 
       // const world = shallow(<World/>);
       // expect(world.find('mockConsole').length).toEqual(1);
 
-      const logger2 = shallow(<Console body={["test"]} timestamp={""}/>);
+      const logger2 = shallow(<Console messages={[{body: "Test", date: new Date()}]}/>);
 
       expect(logger2.find("div").length).toEqual(2);
     });
-
+    /*
     it('should pass Log function to children', async () => {
   
       jest.mock('../loop/Loop', () => ({
@@ -42,7 +41,7 @@ describe('Console functionality', async () => {
         Log: PropTypes.func,
       }
       
-      /* 
+      
       // Call passed Log() function
       const wrapper = mount(<World><Client /></World>);
 
@@ -50,6 +49,6 @@ describe('Console functionality', async () => {
       const spy2 = jest.spyOn(wrappedLog, 'Log');
       wrappedLog.Log("Aftur ein test");
 
-      expect(spy2).toHaveBeenCalled();*//*
-    });
-  });*/
+      expect(spy2).toHaveBeenCalled();
+    });*/
+  });

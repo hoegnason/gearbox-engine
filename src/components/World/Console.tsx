@@ -57,14 +57,6 @@ export class Console extends React.Component<IConsoleProps, {}> {
                         {message.date.toTimeString().split(' ')[0] + ' ' + message.body}</div>)
             })
 
-            // tslint:disable-next-line:no-console
-            console.log(showConsole, ConsoleArray);
-
-            /*const showConsole = this.props.messages.map((text, key) => {
-                return <div key = { key } style = {{ textAlign: 'left', fontSize: '20px' }
-            }> { text } < /div>
-            });*/
-
             return (
                 <div style={consoleStyle}>{showConsole}</div>
             );
