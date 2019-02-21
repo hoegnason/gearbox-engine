@@ -4,10 +4,6 @@ import './App.css';
 // import Body from './components/body/Body';
 import GameState from './components/GameState/GameState';
 
-import Bird from './components/bird/Bird';
-import Body from './components/body/Body';
-import { FlappyUI } from './components/flappy-ui/FlappyUI';
-import Level from './components/Level';
 import { Loop } from './components/loop/Loop';
 import MediaLayer from './components/MediaLayer/MediaLayer';
 // import Pipe from './components/pipe/Pipe';
