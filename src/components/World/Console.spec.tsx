@@ -53,5 +53,3 @@ describe('Console functionality', async () => {
       expect(spy2).toHaveBeenCalled();*//*
     });
   });*/
-
-  // test
