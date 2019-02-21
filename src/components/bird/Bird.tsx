@@ -10,12 +10,18 @@ import GameLoop from 'src/core/game-loop/GameLoop';
 import Body from '../body/Body';
 
 
+import { IGameStateState } from '../GameState/GameState';
+
 let that: Bird;
 
 let isPaused = false;
 let isGameOver = false;
 
-export class Bird extends React.Component {
+interface IBirdProps {
+  gameState: IGameStateState;
+}
+
+export class Bird extends React.Component<IBirdProps, {}> {
 
   public static displayName = 'Bird';
 
@@ -153,25 +159,27 @@ export class Bird extends React.Component {
 
       setTimeout(() => {
         AudioManager.playSound('die');
-      }, 1000);     
+      }, 1000);
 
-      that.colided = true;
     }
   }
-
-
   private getStyles(): React.CSSProperties {
 
+    // if (null != this.body && null != this.body.body) {
     if (null != this.body && null != this.body.body) {
-      return {
-        position: 'absolute',
-        transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
-        transformOrigin: 'left top',
-      };
+      if (null != this.props.gameState && null != this.props.gameState.x) {
+        return {
+          position: 'absolute',
+          // transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
+          transform: `translate(${50 * this.context.scale}px, ${50 * this.context.scale}px)`,
+          transformOrigin: 'left top',
+        };
+      }
     }
 
     return {};
   }
 }
+
 
 export default Bird;

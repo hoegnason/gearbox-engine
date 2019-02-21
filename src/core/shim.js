@@ -18,5 +18,8 @@ Audio.prototype.play = function() {
 Audio.prototype.pause = function() {
   this.paused = true;
 };
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 global.Audio = Audio;

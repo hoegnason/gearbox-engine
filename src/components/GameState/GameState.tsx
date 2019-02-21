@@ -1,10 +1,17 @@
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-interface IGameStateState {
-    gameOver: boolean;
-    x: number;
-    y: number;
+
+import Bird from '../bird/Bird';
+import Body from '../body/Body';
+import {FlappyUI} from '../flappy-ui/FlappyUI';
+import Level from '../Level';
+import Pipe from '../pipe/Pipe';
+
+export interface IGameStateState {
+    scrollSpeed?: number;
+    gameOver?: boolean;
+    updateState?: (gameState: IGameStateState) => void;
+    x?: number;
 }
 
 interface IGameStateProps {
@@ -13,36 +20,30 @@ interface IGameStateProps {
 
 export class GameState extends React.Component<IGameStateProps, IGameStateState> {
 
-    public static childContextTypes = {
-        updateState: PropTypes.func
-    };
-
     constructor(props: any) {
         super(props);
+
+        const updater = this.updateState.bind(this);
+
         this.state = {
             gameOver: false,
+            scrollSpeed: -5,
+            updateState: updater,
             x: 0,
-            y: 0
+            
         }
 
     }
 
-    public getChildContext() {
-        return {
-            updateState: this.updateState
-        };
+    public updateState(state: IGameStateState){
+        this.setState(state);
     }
 
-    public updateState(GameOver: boolean, newX: number, newY: number){
-        this.setState({
-            gameOver: GameOver,
-            x: newX,
-            y: newY
-        });
-    }
-
+    // MovePipes: flutt Pipe og Body component frá App og inn her
     public render(){
-        return <div>{this.updateState}</div>
+
+        return <div><FlappyUI /><Bird gameState={this.state} /><Level gameState={this.state }/><Pipe x={900} />
+        <Body dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} /></div>
     }
 
 }
