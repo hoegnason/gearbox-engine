@@ -23,7 +23,6 @@ class Pipe extends React.Component<IPipeProps, {}> {
             <div>
                 <Body x={this.props.x} y={pipeTopY} width={120} height={200} dynamic={false} velocity={{ x: -5, y: 0 }} colided={false} />
                 <div style={this.getPipeStyles(this.props.x, pipeTopY)} />
-
                 <Body x={this.props.x} y={pipeButtomY} width={120} height={200} dynamic={false} velocity={{ x: -5, y: 0 }} colided={false} />
                 <div style={this.getPipeStyles(this.props.x, pipeButtomY)} />
             </div>
