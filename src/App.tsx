@@ -13,11 +13,12 @@ import World from './components/World/World';
 class App extends React.Component {
 
   public render() {
+
     const stageBackground: React.CSSProperties = { background: 'url(assets/flappy-background-day.png) center repeat-x', backgroundSize: 'auto 100%', margin: '0 auto' };
 
     return (
       <div className="App">
-        <Loop style={{ width: 1920, height: 1080, margin: '0 auto' }}>
+        <Loop>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>
               <FlappyUI />

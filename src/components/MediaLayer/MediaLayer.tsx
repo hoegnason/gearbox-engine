@@ -27,8 +27,10 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
 
     public static childContextTypes = {
         dimensions: PropTypes.any,
+        height: PropTypes.number,
         loop: PropTypes.object,
-        scale: PropTypes.number     
+        scale: PropTypes.number,
+        width: PropTypes.number,
     };
 
     private container: any;
@@ -59,8 +61,10 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
     public getChildContext() {
         return {
             dimensions: this.state.dimensions,
+            height: this.getScale().height,
             loop: this.context.loop,
-            scale: this.getScale().scale
+            scale: this.getScale().scale,
+            width: this.getScale().width
         };
     }
 
@@ -75,8 +79,7 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
         );
     }
 
-
-    public getScale() {
+    private getScale() {
         const [vwidth, vheight] = this.state.dimensions;
         const { height, width } = this.props;
 
@@ -125,11 +128,26 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
         };
     }
 
+    private getClientDimensions() {
+
+        // 870 upvotes frá https://stackoverflow.com/questions/3437786/get-the-size-of-the-screen-current-web-page-and-browser-window
+        const w = window;
+        const d = document;
+        const e = d.documentElement;
+        const g = d.getElementsByTagName('body')[0];
+        const x = w.innerWidth || e.clientWidth || g.clientWidth;
+        const y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+        
+        return {x, y};
+      }
+
     private setDimensions() {
+        const dims = this.getClientDimensions();
+
         this.setState({
             dimensions: [
-                this.container.offsetWidth,
-                this.container.offsetHeight,
+                dims.x,
+                dims.y,
             ],
         });
     }
