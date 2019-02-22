@@ -1,39 +1,48 @@
-import { mount } from 'enzyme';
-import * as PropTypes from 'prop-types';
+import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import GameState from './GameState';
+
+function timeout(ms: any) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 describe('GameState functionality', async () => {
 
 
 
     it("Should pass updateState to children", async() =>{
+
         const Client = (props: any, context: any) => {
 
-            const test = context.updateState instanceof Function;
+            const test = props.updateState instanceof Function;
             expect(test).toBe(true);
   
-            const updateState = context.updateState as any;
-            updateState(true, 0 ,0);
+            props.updateState({x: 1});
+
+            
         
             return <div>This is a test!</div>
           }
-        
-          Client.contextTypes = {
-            updateState: PropTypes.func,
-          }
 
-          const wrapper = mount(<GameState><Client /></GameState>);
-
+          const wrapper = shallow(<GameState><Client /></GameState>);
 
           const wrappedFunc = (wrapper.instance() as any);
+          const wrappedGameState = (wrapper.instance() as GameState);
+
+          expect(wrappedGameState.state.x).toBe(0);
 
           const spy = jest.spyOn(wrappedFunc, 'updateState');
-          wrappedFunc.updateState(false, 4,4);
+
+          await timeout(250);
+
+          wrappedFunc.updateState({x: 1});
       
           // Check that the ticks variable is greater than 0 to check if the loop works correctly
           expect(spy).toHaveBeenCalled();
+
+          expect(wrappedGameState.state.x).toBe(1);
+
     });
 
 });

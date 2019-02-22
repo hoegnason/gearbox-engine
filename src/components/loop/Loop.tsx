@@ -38,7 +38,8 @@ export class Loop extends React.Component<ILoopProps, {}> {
     public render() {
         const defaultStyles: React.CSSProperties = {
             height: '100%',
-            width: '100%',
+            margin: '0 auto',
+            width: '100%'
         };
         const styles = { ...defaultStyles, ...this.props.style };
 

@@ -1,30 +1,27 @@
 import * as React from 'react';
 import './App.css';
 
-import Bird from './components/bird/Bird';
-import Body from './components/body/Body';
-import Level from './components/Level';
+// import Body from './components/body/Body';
+import GameState from './components/GameState/GameState';
+
 import { Loop } from './components/loop/Loop';
 import MediaLayer from './components/MediaLayer/MediaLayer';
-import Menu from './components/menu/Menu';
-import Pipe from './components/pipe/Pipe';
+// import Pipe from './components/pipe/Pipe';
 import World from './components/World/World';
 
 class App extends React.Component {
 
   public render() {
+
     const stageBackground: React.CSSProperties = { background: 'url(assets/flappy-background-day.png) center repeat-x', backgroundSize: 'auto 100%', margin: '0 auto' };
 
+    // MovePipes: Flutt Pipes og Body componentin inn í GameState componentin
     return (
-      <div className="App">
-        <Loop style={{ width: 1920, height: 1080, margin: '0 auto' }}>
+      <div className="App" style={{width: '100%', height: '100%'}}>
+        <Loop>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>
-              <Menu/>
-              <Level />
-              <Pipe x={500} />
-              <Bird />
-              <Body dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+              <GameState />
             </World>
           </MediaLayer>
         </Loop>

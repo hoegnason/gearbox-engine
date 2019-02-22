@@ -6,7 +6,11 @@ export interface IMessage {
     body: string;
 }
 
-export class Console extends React.Component<any> {
+interface IConsoleProps {
+    messages: IMessage[]
+}
+
+export class Console extends React.Component<IConsoleProps, {}> {
     /*
     public static contextTypes = {
         body: PropTypes.string,
@@ -32,22 +36,32 @@ export class Console extends React.Component<any> {
             verticalAlign: 'bottom',
             width: '20%'
         }
-        if (this.props.body != null) {
-            const showConsole = this.props.body.map((text: any, key: number) => {
-                return <div key={key} style=
-                    {{ maxHeight: '200px', overflow: 'auto', verticalAlign: 'bottom', fontSize: '20px', textAlign: 'left' }}>{text}</div>
-            })
+        if (this.props.messages != null) {
 
-            /*const showConsole = this.props.messages.map((text, key) => {
-                return <div key = { key } style = {{ textAlign: 'left', fontSize: '20px' }
-            }> { text } < /div>
-            });*/
+            const ConsoleArray = [...this.props.messages];
+
+            ConsoleArray.reverse();
+
+            // const showConsole: any[] = [];
+            
+            const showConsole = ConsoleArray.map((message: IMessage, key: number) => {
+                return (
+                    <div key={key} style=
+                        {{
+                            fontSize: '20px',
+                            maxHeight: '200px',
+                            overflow: 'auto',
+                            textAlign: 'left',
+                            verticalAlign: 'bottom',
+                        }}>
+                        {message.date.toTimeString().split(' ')[0] + ' ' + message.body}</div>)
+            })
 
             return (
                 <div style={consoleStyle}>{showConsole}</div>
             );
         }
-        else{return null;}
-            
+        else { return null; }
+
     };
 };

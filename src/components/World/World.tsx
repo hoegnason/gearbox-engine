@@ -1,7 +1,7 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { PhysicsEngine } from '../../core/physics/physics-engine';
-import { Console } from './Console';
+import { Console, IMessage } from './Console';
 
 import GameLoop from '../../core/game-loop/GameLoop';
 import { GameLoopSubscription } from '../../core/game-loop/GameLoopSubscription';
@@ -11,12 +11,11 @@ interface IWorldProps {
     gravity: object;
 }
 
-export interface IMessage {
-    body: string[];
-    timestamp: Date[];
+export interface IWorldState {
+    messages: IMessage[]
 }
 
-export default class World extends React.Component<IWorldProps, IMessage> {
+export default class World extends React.Component<IWorldProps, IWorldState> {
 
     public static defaultProps = {
         gravity: {
@@ -29,7 +28,7 @@ export default class World extends React.Component<IWorldProps, IMessage> {
     public static contextTypes = {
         Log: PropTypes.func,
         loop: PropTypes.object,
-        scale: PropTypes.number,        
+        scale: PropTypes.number,
     };
 
     public static childContextTypes = {
@@ -40,6 +39,8 @@ export default class World extends React.Component<IWorldProps, IMessage> {
     private subscription: GameLoopSubscription;
     private engine: any;
 
+    private lastTime = 0;
+
     constructor(props: any) {
         super(props);
 
@@ -49,8 +50,7 @@ export default class World extends React.Component<IWorldProps, IMessage> {
         this.Log = this.Log.bind(this);
 
         this.state = {
-            body: [],
-            timestamp: []
+            messages: []
         }
     }
 
@@ -79,10 +79,9 @@ export default class World extends React.Component<IWorldProps, IMessage> {
         };
     }
 
-    public Log(text: string){
+    public Log(text: string) {
         this.setState(prevState => ({
-            body: [...prevState.body, text],
-            timestamp: [...prevState.timestamp, new Date()]
+            messages: [...prevState.messages, { body: text, date: new Date() }]
         }));
     }
 
@@ -93,13 +92,26 @@ export default class World extends React.Component<IWorldProps, IMessage> {
             position: 'absolute',
             top: 0,
             width: '100%'
-        };        
+        };
 
-        return <div style={defaultStyles}>{this.props.children}{this.Log}<div>
-        <Console body={this.state.body} timestamp={this.state.timestamp}/></div></div>;
+        return (
+            <div style={defaultStyles}>{this.props.children}{this.Log}
+                <div>
+                    <Console messages={this.state.messages} />
+                </div>
+            </div>
+        );
     }
 
     private loop() {
-       this.engine.tick();
+            const currTime = 0.001 * Date.now();
+
+            if (null != this.lastTime && currTime > this.lastTime) {
+                this.lastTime = currTime;
+
+                this.engine.tick();
+            }
+            this.lastTime = currTime;
+       
     }
 }
