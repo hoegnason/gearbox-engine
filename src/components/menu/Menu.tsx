@@ -1,11 +1,54 @@
 import * as React from "react";
+// import Dialog from './Dialog';
+import Modal from './modal';
+
 import './styl.css';
 // import { Link } from 'react-router'
-// import Modal from './modal';
 
 
 export default class Menu extends React.Component<any> {
-  public menuStyle: React.CSSProperties = {
+
+  public state = {
+    show: true
+  };
+
+  public showModal = () => {
+    this.setState({ show:true })
+  }
+
+  public hideModal = () => {
+    this.setState({ show:false })
+  }
+
+  public render(){
+    return (
+      <section className="Info">
+        <div className="InfoTitle">
+          <h1>Okkurt</h1>
+          <p>
+            teyst
+      </p>
+        </div>
+        <div >
+          <div onClick={this.showModal}>
+            <Modal >
+                <p style={{color: "#000000"}}>Modal</p>
+                <p>Data</p>
+            </Modal>
+            <p>VISION</p>
+         
+          </div>
+
+          <div className="BoxRight">
+            <p>VALUE</p>
+          
+          </div>
+        </div>
+      </section>
+  )
+  }
+
+ /* public menuStyle: React.CSSProperties = {
       
     backgroundColor: "black",
     height: '100%',
@@ -35,8 +78,6 @@ export default class Menu extends React.Component<any> {
             <div className="menu__right">
                 <ul className="menu__list">
                     <li className="menu__list-item"><a className="menu__link menu__link--active" href="#">Home</a></li>
-                    <li className="menu__list-item"><a className="menu__link" href="#">About</a></li>
-                    <li className="menu__list-item"><a className="menu__link" href="#">Portfolio</a></li>
                     <li className="menu__list-item"><a className="menu__link" onClick={this.newGame}></a></li>
                 </ul>
 
@@ -47,5 +88,5 @@ export default class Menu extends React.Component<any> {
       )
     }
     return <div style={this.menuStyle}>{showMenu()}</div>
-  }
+  } */
 }
