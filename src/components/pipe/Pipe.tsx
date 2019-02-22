@@ -10,21 +10,25 @@ class Pipe extends React.Component<IPipeProps, {}> {
 
     public static contextTypes = {
         loop: PropTypes.object,
-        scale: PropTypes.number
+        scale: PropTypes.number,
+        width: PropTypes.number
     }
 
     public render() {
 
         const pipeTopY = 0;
         const pipeButtomY = 400;
+        const pipeWidth = 120
 
-        // MovePipes: Sett velocity til x: -5 fyri at senda pipes aftureftir
+        const scoreColiderY = ((pipeTopY + pipeButtomY) / 2);
+
         return (
             <div>
-                <Body x={this.props.x} y={pipeTopY} width={120} height={200} dynamic={false} velocity={{ x: -5, y: 0 }} colided={false} />
+                <Body bodyName={'Pipe'} x={this.props.x} y={pipeTopY} width={pipeWidth} height={200} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
                 <div style={this.getPipeStyles(this.props.x, pipeTopY)} />
-                <Body x={this.props.x} y={pipeButtomY} width={120} height={200} dynamic={false} velocity={{ x: -5, y: 0 }} colided={false} />
+                <Body bodyName={'Pipe'} x={this.props.x} y={pipeButtomY} width={pipeWidth} height={200} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
                 <div style={this.getPipeStyles(this.props.x, pipeButtomY)} />
+                <Body bodyName={'ScoreColider'} x={this.props.x + pipeWidth} y={scoreColiderY} width={pipeWidth} height={200} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         );
     }
