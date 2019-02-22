@@ -45,7 +45,7 @@ export class FlappyUI extends React.Component<IFlappyUIProps, {}> {
 
     private getScoreElement(): React.ReactElement {
         return (
-            <div>
+            <div style={{...this.getTextStyle(), fontSize: (50 * this.context.scale)}}>
                 {this.props.gameState.score && this.props.gameState.score}
             </div>
         )

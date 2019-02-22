@@ -57,6 +57,12 @@ export class Console extends React.Component<IConsoleProps, {}> {
                         {message.date.toTimeString().split(' ')[0] + ' ' + message.body}</div>)
             })
 
+            if (!((window as any).debug)) {
+                consoleStyle.display = 'none';
+            } else {
+                consoleStyle.display = 'block';
+            }
+
             return (
                 <div style={consoleStyle}>{showConsole}</div>
             );

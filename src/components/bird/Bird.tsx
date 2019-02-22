@@ -93,6 +93,9 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
     if (this.props.gameState.debug && null != this.body && null != this.body.body && null != this.body.body.y) {
       this.body.body.y = centerY;
+      
+      this.body.body.velocity.x = 0;
+      this.body.body.velocity.y = 0;
     }
 
     const xOffset = Math.floor(((this.context.width / this.context.scale) * 0.2));
@@ -149,6 +152,15 @@ export class Bird extends React.Component<IBirdProps, {}> {
   private toggleDebug(): void {
 
     this.props.gameState.debug = !this.props.gameState.debug;
+    (window as any).debug = this.props.gameState.debug;
+
+    if ((window as any).debug) {
+      
+      this.context.Log('debugging enabled!');
+    } else {
+      
+      this.context.Log('debugging disabled!');
+    }
   }
 
   private togglePause(): void {
@@ -239,8 +251,8 @@ export class Bird extends React.Component<IBirdProps, {}> {
       if (null != this.props.gameState && null != this.props.gameState.x) {
         return {
           position: 'absolute',
-          // transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
-          transform: `translate(${50 * this.context.scale}px, ${50 * this.context.scale}px)`,
+          transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
+          // transform: `translate(${50 * this.context.scale}px, ${50 * this.context.scale}px)`,
           transformOrigin: 'left top',
         };
       }

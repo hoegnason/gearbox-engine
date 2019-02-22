@@ -96,7 +96,8 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
     }
 
     private inViewOfCamera(x: number) {
-        return (x > 0 && x < (this.context.width / this.context.scale));
+        // return (x > 0 && x < (this.context.width / this.context.scale));
+        return (x > -240 && x < (this.context.width / this.context.scale));
     }
 
 }

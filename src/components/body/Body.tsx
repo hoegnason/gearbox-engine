@@ -59,7 +59,6 @@ export class Body extends React.Component<IBodyProps, IBodyProps> {
     }
 
     public componentWillUnmount() {
-
         (this.context.engine as PhysicsEngine).removeBody(this.body);
     }
 
@@ -87,7 +86,7 @@ export class Body extends React.Component<IBodyProps, IBodyProps> {
 
         return (
             <div style={styles}>
-                <div style={bodyStyles} />
+                <div style={((window as any).debug) ? {...bodyStyles, display: 'block'} : {display: 'none'}} />
             </div>
         );
     }
