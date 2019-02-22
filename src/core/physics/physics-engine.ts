@@ -3,6 +3,8 @@ import { CollisionDection, IRect } from './collision-detection';
 import { IVector, Vector } from './vector';
 
 export interface IBody extends IRect {
+    bodyID?: number;
+    bodyName?: string;
     dynamic: boolean;
     velocity: IVector;
     colided: boolean;
@@ -35,6 +37,8 @@ export class PhysicsEngine {
 
     private collisionDection: CollisionDection;
     private gravity: IVector;
+
+    private nextAutoIncrement = 1;
     
 
     constructor(options?: IPhysicsEngineOptions) {
@@ -45,6 +49,9 @@ export class PhysicsEngine {
     }
 
     public addBody(body: IBody): void {
+
+        body.bodyID = this.autoIncrement();
+        
         this.world.push(body);
     }
 
@@ -81,9 +88,12 @@ export class PhysicsEngine {
 
         this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
         this.applyVelocity(dynamicBodies);
+    }
 
-        // MovePipes: Seta velocity á allar staticBodies aka (dynamicBodies = false);
-        this.applyVelocity(staticBodies);
+    private autoIncrement(): number {
+        this.nextAutoIncrement = this.nextAutoIncrement + 1;
+
+        return this.nextAutoIncrement;
     }
 
     private applyVelocity(dynamicBodies: IBody[]) {
@@ -133,11 +143,13 @@ export class PhysicsEngine {
 
         collisions.forEach((collision: IBodyCollision) => {
 
+            /*
             collision.bodyA.velocity.x = 0;
             collision.bodyA.velocity.y = 0;
 
             collision.bodyB.velocity.x = 0;
             collision.bodyB.velocity.y = 0;
+            */
 
             if (null != collision.bodyA.onCollision) {
 

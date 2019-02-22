@@ -49,7 +49,7 @@ export default class Level extends React.Component<ILevelProps, ILevelState> {
                 // this.context.Log("looping !: stageX");
                 // console.log("looping !: stageX"); // tslint:disable-line    
             }
-
+            
 
             // 60 frames per sec!
             const currTime = 1 * Date.now();

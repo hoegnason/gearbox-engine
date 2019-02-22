@@ -20,9 +20,20 @@ export class Body extends React.Component<IBodyProps, IBodyProps> {
     };
 
     public body: IBodyProps;
+    private initialized = false;
 
     constructor(props: any) {
         super(props);
+
+        this.body = {
+            colided: false,
+            dynamic: false,
+            height: 0,
+            velocity: {x: 0, y: 0},
+            width: 0,
+            x: 0,
+            y: 0
+        }
     }
 
     public getChildContext() {
@@ -32,20 +43,22 @@ export class Body extends React.Component<IBodyProps, IBodyProps> {
     }
 
     public componentWillReceiveProps(props: IBodyProps) {
-        if (null != props && null == this.body) {
+        if (null != props && !this.initialized) {
+            this.initialized = true;
+
             this.body = { ...props };
             (this.context.engine as PhysicsEngine).addBody(this.body);
         }
 
-        /*
-        if (null != props) {
-            
+        // Updates this.body with new props if it is a static body
+        if (this.initialized && !this.body.dynamic) {
+            Object.keys(props).forEach((key: string) => {
+                this.body[key] = props[key];
+            });
         }
-        */
     }
 
     public componentWillUnmount() {
-
         (this.context.engine as PhysicsEngine).removeBody(this.body);
     }
 
@@ -73,7 +86,7 @@ export class Body extends React.Component<IBodyProps, IBodyProps> {
 
         return (
             <div style={styles}>
-                <div style={bodyStyles} />
+                <div style={((window as any).debug) ? {...bodyStyles, display: 'block'} : {display: 'none'}} />
             </div>
         );
     }
