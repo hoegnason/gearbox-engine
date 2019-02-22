@@ -64,7 +64,7 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     public componentDidMount() {
         this.subscription = (this.context.loop as GameLoop).subscribe(this.loop);
-        this.Log('Yolo sweg!');
+        this.Log('Flappy Bird (Team Gearbox Engine build #103)');
     }
 
     public componentWillUnmount() {
