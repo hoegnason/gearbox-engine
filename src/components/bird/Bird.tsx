@@ -20,8 +20,6 @@ let isPaused = false;
 let isGameOver = false;
 let scoreColiderID: number = 0;
 
-let debug = false;
-
 let centerY = 0;
 
 interface IBirdProps {
@@ -93,7 +91,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public render() {
 
-    if (debug && null != this.body && null != this.body.body && null != this.body.body.y) {
+    if (this.props.gameState.debug && null != this.body && null != this.body.body && null != this.body.body.y) {
       this.body.body.y = centerY;
     }
 
@@ -150,7 +148,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   private toggleDebug(): void {
 
-    debug = !debug;
+    this.props.gameState.debug = !this.props.gameState.debug;
   }
 
   private togglePause(): void {
@@ -178,7 +176,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   private doUpdate(): void {
 
-    if (debug && null != that.body && null != that.body.body && null != that.context.height && null != that.context.scale) {
+    if (that.props.gameState.debug && null != that.body && null != that.body.body && null != that.context.height && null != that.context.scale) {
 
       centerY = ((that.context.height / that.context.scale) / 2);
       that.body.body.y = centerY;

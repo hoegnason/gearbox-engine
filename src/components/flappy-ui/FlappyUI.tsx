@@ -21,12 +21,39 @@ export class FlappyUI extends React.Component<IFlappyUIProps, {}> {
             <div style={this.getWrappedStyle()}>
                 {(this.props.gameState.paused) ? this.getPauseElement() : ''}
                 {(this.props.gameState.gameOver) ? this.getGameOverElement() : ''}
-        </div>);
+                {this.getScoreElement()}
+                {!this.props.gameState.paused ? ((this.props.gameState.debug) ? this.getDebugElement() : '') : ''}
+            </div>);
+    }
+
+    private getDebugElement(): React.ReactElement {
+        return (
+            <div style={{
+                ...this.getTextStyle(), backgroundColor: 'rgba(0, 0, 0, 0.3)', borderRadius: '25px', fontFamily: "'Luckiest Guy', cursive", fontSize: 24 * this.context.scale, left: '50%', padding: `${this.context.scale * 20}px`, position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
+
+                /* transform: `translate(${(this.context.width / 2)}px, ${(this.context.height / 2)}px)`, */ /* height: '100%', width: '100%', */
+            }}>Debug Mode!<p
+                style={{
+                    color: 'gold',
+                    fontSize: (18 * this.context.scale),
+                    // tslint:disable-next-line:object-literal-sort-keys
+                    WebkitTextFillColor: 'gold',
+                    WebkitTextStrokeColor: 'black',
+                    WebkitTextStrokeWidth: '`${1 * this.context.scale}px`'
+                }}>Auto Pilot Activated!</p></div>)
+    }
+
+    private getScoreElement(): React.ReactElement {
+        return (
+            <div>
+                {this.props.gameState.score && this.props.gameState.score}
+            </div>
+        )
     }
 
     private getPauseElement(): React.ReactElement {
-        return (<div style={
-            {
+        return (
+            <div style={{
                 ...this.getTextStyle(), backgroundColor: 'rgba(0, 0, 0, 0.3)', borderRadius: '25px', fontFamily: "'Luckiest Guy', cursive", fontSize: 96 * this.context.scale, left: '50%', padding: `${this.context.scale * 20}px`, position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
 
                 /* transform: `translate(${(this.context.width / 2)}px, ${(this.context.height / 2)}px)`, */ /* height: '100%', width: '100%', */

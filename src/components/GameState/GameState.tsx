@@ -15,6 +15,7 @@ export interface IGameStateState {
     x?: number;
     paused?: boolean;
     score?: number;
+    debug?: boolean;
 }
 
 interface IGameStateProps {
@@ -86,7 +87,7 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
         
         pipes.push({x: pipeOffsetX});
 
-        for (let i = 2; i < 10; i++) {
+        for (let i = 2; i < 100; i++) {
 
             pipes.push({x: ((pipeOffsetX + 120) * i)});
         }
