@@ -54,8 +54,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public componentDidMount() {
 
-    debug = true;
-
     AudioManager.loadSoundFile('wing', "assets/sound/sfx_wing.wav", false);
     AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
     AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
@@ -71,6 +69,10 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       if ('Esc' === key || 'Escape' === key) {
         this.togglePause();
+      }
+
+      if ('d' === key) {
+        this.toggleDebug();
       }
     });
 
@@ -148,13 +150,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   private toggleDebug(): void {
 
-    if (isPaused) {
-
-      this.showPausedUI(false);
-    } else {
-
-      this.showPausedUI(true);
-    }
+    debug = !debug;
   }
 
   private togglePause(): void {
