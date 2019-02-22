@@ -20,8 +20,6 @@ let isPaused = false;
 let isGameOver = false;
 let scoreColiderID: number = 0;
 
-let centerY = 0;
-
 interface IBirdProps {
   gameState: IGameStateState;
 }
@@ -72,14 +70,30 @@ export class Bird extends React.Component<IBirdProps, {}> {
       if ('d' === key) {
         this.toggleDebug();
       }
+
+      /*
+      if ('1' === key) {
+        if (null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.scrollSpeed) {
+          this.props.gameState.updateState({scrollSpeed: this.props.gameState.scrollSpeed + 10});
+
+          // tslint:disable-next-line:no-console
+          console.log('scrollSpeed: ', this.props.gameState.scrollSpeed);
+        }
+      }
+
+      if ('2' === key) {
+        if (null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.scrollSpeed) {
+          this.props.gameState.updateState({scrollSpeed: this.props.gameState.scrollSpeed - 10});
+        }
+      }
+      
+      // tslint:disable-next-line:no-console
+      console.log('pressed key: ', key);
+      */
+
     });
 
     that = this;
-
-    if (null != this.context.height && null != this.context.scale) {
-      centerY = ((this.context.height / this.context.scale) / 2);
-    }
-
   }
 
   public componentWillUnmount() {
@@ -92,8 +106,8 @@ export class Bird extends React.Component<IBirdProps, {}> {
   public render() {
 
     if (this.props.gameState.debug && null != this.body && null != this.body.body && null != this.body.body.y) {
-      this.body.body.y = centerY;
-      
+      this.body.body.y = ((window as any).autoPilotY) || 288;
+
       this.body.body.velocity.x = 0;
       this.body.body.velocity.y = 0;
     }
@@ -190,8 +204,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
     if (that.props.gameState.debug && null != that.body && null != that.body.body && null != that.context.height && null != that.context.scale) {
 
-      centerY = ((that.context.height / that.context.scale) / 2);
-      that.body.body.y = centerY;
+      that.body.body.y = that.body.body.y = ((window as any).autoPilotY);
     }
 
     /*

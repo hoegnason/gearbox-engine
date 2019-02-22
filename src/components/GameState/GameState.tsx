@@ -67,13 +67,35 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
         const pipe4 = pipeOffset + 120 + pipeOffsetX + 120 + pipeOffsetX + 120 + pipeOffsetX;
         */
 
+        const closePipes = this.pipes.filter((pipe) => this.inViewOfCamera).filter((targetPipe: IPipeProps) => {
+            
+            if (this.state.x) {
+
+
+                // tslint:disable-next-line:no-console
+                // console.log('this.state.x: ', (-1 * this.state.x), 'targetPipe.x: ', targetPipe.x, '(targetPipe.x - (-1 * this.state.x)): ', (targetPipe.x - (-1 * this.state.x)));
+                
+
+                return (Math.abs((targetPipe.x - (-1 * this.state.x))) < 400);
+            }
+
+            return false;
+        });
+
+        if (null != closePipes && null != closePipes.length && null != closePipes[0]) {
+            (window as any).autoPilotY = Math.floor(((closePipes[0].y * (576-176)) + (176/2)));
+        }
+
+        // tslint:disable-next-line:no-console
+        // console.log('closePipes: ', closePipes, (window as any).autoPilotY);
+
         return (
             <div>
                 <FlappyUI gameState={this.state} />
                 <Bird gameState={this.state} />
                 <Level gameState={this.state} />
                 
-                {this.state.x && this.pipes.map((pipe: IPipeProps) => this.inViewOfCamera(-pipeOffsetX + pipeOffset + pipe.x) && <Pipe x={-pipeOffsetX + pipeOffset + pipe.x} />)}
+                {this.state.x && this.pipes.map((pipe: IPipeProps) => this.inViewOfCamera(-pipeOffsetX + pipeOffset + pipe.x) && <Pipe x={-pipeOffsetX + pipeOffset + pipe.x} y={pipe.y} />)}
 
                 <Body bodyName={'Ground'} dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
@@ -85,11 +107,15 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
         
         const pipes: IPipeProps[] = [];
         
-        pipes.push({x: pipeOffsetX});
+        pipes.push({x: pipeOffsetX, y: 0.5});
 
         for (let i = 2; i < 100; i++) {
 
-            pipes.push({x: ((pipeOffsetX + 120) * i)});
+            if (i % 2 === 0) {
+                pipes.push({x: ((pipeOffsetX + 120) * i), y: 0.5});
+            } else {
+                pipes.push({x: ((pipeOffsetX + 120) * i), y: 0.3});
+            }
         }
 
         return pipes;
