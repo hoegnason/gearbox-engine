@@ -7,16 +7,12 @@ export interface IBodyProps extends IBody {
     style?: object;
 };
 
-export class Body extends React.Component<IBodyProps, IBodyProps> {
+export class Body extends React.Component<IBodyProps, {}> {
 
     public static contextTypes = {
         engine: PropTypes.object,
         loop: PropTypes.object,
         scale: PropTypes.number
-    };
-  
-    public static childContextTypes = {
-        body: PropTypes.object
     };
 
     public body: IBodyProps;
@@ -36,10 +32,13 @@ export class Body extends React.Component<IBodyProps, IBodyProps> {
         }
     }
 
-    public getChildContext() {
-        return {
-            body: this.body
-        };
+    public shouldComponentUpdate(props: IBodyProps, prevState: {}): boolean {
+        
+        if ((window as any).debug) {
+            return true;
+        }
+
+        return false;
     }
 
     public componentWillReceiveProps(props: IBodyProps) {

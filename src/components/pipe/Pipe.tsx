@@ -25,6 +25,21 @@ class Pipe extends React.Component<IPipeProps, {}> {
         width: PropTypes.number
     }
 
+    private x: number;
+    private y: number;
+
+    public shouldComponentUpdate(props: IPipeProps, prevState: {}) {
+        
+        if (props.x !== this.x || props.y !== this.y) {
+            this.x = props.x;
+            this.y = props.y;
+
+            return true;
+        }
+
+        return false;
+    }
+
     public render() {
 
         const yTop = (max - scoreZone) * this.props.y;
@@ -62,9 +77,9 @@ class Pipe extends React.Component<IPipeProps, {}> {
             height: height * this.context.scale,
             overflow: 'hidden',
             position: 'absolute',
-            transform: `translate(${x * this.context.scale}px, ${y * this.context.scale}px)`,
+            transform: `translate(${Math.floor((x * this.context.scale))}px, ${Math.floor((y * this.context.scale))}px)`,
             transformOrigin: 'left top',
-            width: 120 * this.context.scale
+            width: Math.floor((120 * this.context.scale))
         };
     }
 }
