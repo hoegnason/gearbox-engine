@@ -9,6 +9,8 @@ import MediaLayer from './components/MediaLayer/MediaLayer';
 // import Pipe from './components/pipe/Pipe';
 import World from './components/World/World';
 
+import ConsoleState from './components/Console/ConsoleState';
+
 class App extends React.Component {
 
   public render() {
@@ -17,11 +19,13 @@ class App extends React.Component {
 
     // MovePipes: Flutt Pipes og Body componentin inn í GameState componentin
     return (
-      <div className="App" style={{width: '100%', height: '100%'}}>
+      <div className="App" style={{ width: '100%', height: '100%' }}>
         <Loop>
           <MediaLayer width={1024} height={576} style={stageBackground}>
             <World>
-              <GameState />
+              <ConsoleState>
+                <GameState />
+              </ConsoleState>
             </World>
           </MediaLayer>
         </Loop>

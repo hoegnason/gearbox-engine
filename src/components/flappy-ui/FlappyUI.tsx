@@ -15,14 +15,39 @@ export class FlappyUI extends React.Component<IFlappyUIProps, {}> {
         width: PropTypes.number
     }
 
+    public static defaultProps: IFlappyUIProps = {
+        gameState: {
+            debug: false,
+            gameOver: false,
+            paused: false,
+            score: 0,
+            scrollSpeed: 0,
+            updateState: () => { /* */ },
+            x: 0
+        }
+    }
+
+    private oldProps: IGameStateState = {};
+
+    public shouldComponentUpdate(nextProps: IFlappyUIProps, nextState: {}) {
+        if ((this.oldProps.debug !== nextProps.gameState.debug) || (this.oldProps.gameOver !== nextProps.gameState.gameOver) || (this.oldProps.paused !== nextProps.gameState.paused)) {
+            
+            this.oldProps = nextProps.gameState;
+            
+            return true;
+        }
+
+        return false;
+    }
+
     public render() {
 
         return (
             <div style={this.getWrappedStyle()}>
-                {(this.props.gameState.paused) ? this.getPauseElement() : ''}
-                {(this.props.gameState.gameOver) ? this.getGameOverElement() : ''}
+                {this.props.gameState.paused && this.getPauseElement() }
+                {this.props.gameState.gameOver && this.getGameOverElement()}
                 {this.getScoreElement()}
-                {!this.props.gameState.paused ? ((this.props.gameState.debug) ? this.getDebugElement() : '') : ''}
+                {!this.props.gameState.paused && this.props.gameState.debug && this.getDebugElement()}
             </div>);
     }
 

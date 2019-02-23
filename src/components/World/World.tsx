@@ -1,7 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { PhysicsEngine } from '../../core/physics/physics-engine';
-import { Console, IMessage } from './Console';
 
 import GameLoop from '../../core/game-loop/GameLoop';
 import { GameLoopSubscription } from '../../core/game-loop/GameLoopSubscription';
@@ -11,11 +10,7 @@ interface IWorldProps {
     gravity: object;
 }
 
-export interface IWorldState {
-    messages: IMessage[]
-}
-
-export default class World extends React.Component<IWorldProps, IWorldState> {
+export default class World extends React.Component<IWorldProps, {}> {
 
     public static defaultProps = {
         gravity: {
@@ -26,13 +21,11 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
     };
 
     public static contextTypes = {
-        Log: PropTypes.func,
         loop: PropTypes.object,
-        scale: PropTypes.number,
+        scale: PropTypes.number
     };
 
     public static childContextTypes = {
-        Log: PropTypes.func,
         engine: PropTypes.object
     };
 
@@ -46,8 +39,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
         this.engine = new PhysicsEngine();
         this.loop = this.loop.bind(this);
-
-        this.Log = this.Log.bind(this);
 
         this.state = {
             messages: []
@@ -64,7 +55,6 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     public componentDidMount() {
         this.subscription = (this.context.loop as GameLoop).subscribe(this.loop);
-        this.Log('Flappy Bird (Team Gearbox Engine build #103)');
     }
 
     public componentWillUnmount() {
@@ -74,15 +64,8 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
 
     public getChildContext() {
         return {
-            Log: this.Log,
-            engine: this.engine,
+            engine: this.engine
         };
-    }
-
-    public Log(text: string) {
-        this.setState(prevState => ({
-            messages: [...prevState.messages, { body: text, date: new Date() }]
-        }));
     }
 
     public render() {
@@ -95,23 +78,21 @@ export default class World extends React.Component<IWorldProps, IWorldState> {
         };
 
         return (
-            <div style={defaultStyles}>{this.props.children}{this.Log}
-                <div>
-                    <Console messages={this.state.messages} />
-                </div>
+            <div style={defaultStyles}>
+                {this.props.children}
             </div>
         );
     }
 
     private loop() {
-            const currTime = 0.001 * Date.now();
+        const currTime = 0.001 * Date.now();
 
-            if (null != this.lastTime && currTime > this.lastTime) {
-                this.lastTime = currTime;
-
-                this.engine.tick();
-            }
+        if (null != this.lastTime && currTime > this.lastTime) {
             this.lastTime = currTime;
-       
+
+            this.engine.tick();
+        }
+        this.lastTime = currTime;
+
     }
 }
