@@ -73,7 +73,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
         this.toggleDebug();
       }
 
-      /*
       if ('1' === key) {
         if (null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.scrollSpeed) {
           this.props.gameState.updateState({scrollSpeed: this.props.gameState.scrollSpeed + 10});
@@ -88,10 +87,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
           this.props.gameState.updateState({scrollSpeed: this.props.gameState.scrollSpeed - 10});
         }
       }
-      
-      // tslint:disable-next-line:no-console
-      console.log('pressed key: ', key);
-      */
 
     });
   }
@@ -186,9 +181,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       scoreColiderID = bodyColidedWith.bodyID || 0;
 
-      const newScrollSpeed = this.props.gameState.scrollSpeed! + (-1 * this.props.gameState.score!);
-
-      this.props.gameState.updateState!({ score: this.props.gameState.score! + 1, scrollSpeed: newScrollSpeed });
+      this.props.gameState.updateState!({ score: this.props.gameState.score! + 1});
 
       this.context.Log(`gameState.score: ${this.props.gameState.score}`);
 

@@ -15,8 +15,6 @@ interface IGameStateProps {
     children?: any;
 }
 
-let lastLoop = 0;
-
 export class GameState extends React.Component<IGameStateProps, IGameStateState> {
 
     public static contextTypes = {
@@ -50,20 +48,7 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
     }
 
     public loop(): void {
-
-        // 60 frames per sec!
-        const currTime = 1 * Date.now();
-
-        if (lastLoop) {
-            lastLoop = 0;
-        }
-
-        // if ((lastLoop + 1000 / 60) < currTime) {
-
         this.updateState({ x: this.state.x! + this.state.scrollSpeed! });
-
-        lastLoop = currTime;
-        // }
     }
 
     // This should completly ignore ConsoleState
