@@ -32,7 +32,7 @@ export default class World extends React.Component<IWorldProps, {}> {
     private subscription: GameLoopSubscription;
     private engine: any;
 
-    private lastTime = 0;
+    // private lastTime = 0;
 
     constructor(props: any) {
         super(props);
@@ -85,14 +85,19 @@ export default class World extends React.Component<IWorldProps, {}> {
     }
 
     private loop() {
+        
+        /*
         const currTime = 0.001 * Date.now();
 
         if (null != this.lastTime && currTime > this.lastTime) {
             this.lastTime = currTime;
+            */
 
             this.engine.tick();
+
+            /*
         }
         this.lastTime = currTime;
-
+        */
     }
 }

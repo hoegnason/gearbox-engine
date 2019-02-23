@@ -14,7 +14,7 @@ import { IGameStateState } from '../GameState/GameState';
 
 import { IBody } from 'src/core/physics/physics-engine';
 
-let that: Bird;
+import { gameState } from '../GameState/DefaultProps';
 
 let scoreColiderID: number = 0;
 
@@ -35,17 +35,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
     width: PropTypes.number
   };
 
-  public static defaultProps: IBirdProps = {
-    gameState: {
-      debug: false,
-      gameOver: false,
-      paused: false,
-      score: 0,
-      scrollSpeed: 0,
-      updateState: () => { /* */ },
-      x: 0
-    }
-  }
+  public static defaultProps: IBirdProps = { gameState }
 
   public body: any;
 
@@ -55,6 +45,8 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   constructor(props: any) {
     super(props);
+
+    this.onCollision = this.onCollision.bind(this);
   }
 
 
@@ -102,8 +94,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
       */
 
     });
-
-    that = this;
   }
 
   public componentWillUnmount() {
@@ -126,7 +116,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
     return (
       <div>
-        {/* <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} /> */}
         <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={true} x={xOffset} y={1} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
         <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
       </div>
@@ -142,34 +131,8 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
   }
 
-  /*
-  private setGameOver(gameOver: boolean) {
-
-    if (null != this.context && null != this.context.loop) {
-
-      const loop = this.context.loop as GameLoop;
-
-      loop.stop();
-
-
-      if (!isPaused && !isGameOver && gameOver) {
-
-        this.context.Log(`STOP! isGameOver: ${gameOver}!`);
-        loop.stop();
-      }
-
-      isGameOver = gameOver;
-      this.context.Log(`isGameOver: ${gameOver}!`);
-    }
-  }
-  */
-
   private showPausedUI(show: boolean) {
-
-    if (null != that.props.gameState && null != that.props.gameState.updateState) {
-
-      that.props.gameState.updateState({ paused: show });
-    }
+    this.props.gameState.updateState!({ paused: show });
   }
 
   private toggleDebug(): void {
@@ -211,16 +174,10 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   private doUpdate(): void {
 
-    if (that.props.gameState.debug && null != that.body && null != that.body.body && null != that.context.height && null != that.context.scale) {
+    if (this.props.gameState.debug && null != this.body && null != this.body.body && null != this.context.height && null != this.context.scale) {
 
-      that.body.body.y = that.body.body.y = ((window as any).autoPilotY);
+      this.body.body.y = ((window as any).autoPilotY);
     }
-
-    /*
-    if (null != that.forceUpdate) {
-      that.forceUpdate();
-    }
-    */
   }
 
   private onCollision(bodyColidedWith: IBody): void {
@@ -229,47 +186,43 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       scoreColiderID = bodyColidedWith.bodyID || 0;
 
-      const newScrollSpeed = that.props.gameState.scrollSpeed! + (-1 * that.props.gameState.score!);
+      const newScrollSpeed = this.props.gameState.scrollSpeed! + (-1 * this.props.gameState.score!);
 
-      that.props.gameState.updateState!({ score: that.props.gameState.score! + 1, scrollSpeed: newScrollSpeed });
+      this.props.gameState.updateState!({ score: this.props.gameState.score! + 1, scrollSpeed: newScrollSpeed });
 
-      that.context.Log(`gameState.score: ${that.props.gameState.score}`);
-
-      // that.body.body.velocity.x = (-1 * newScrollSpeed);
+      this.context.Log(`gameState.score: ${this.props.gameState.score}`);
 
       AudioManager.playSound('point');
     }
 
     if ('Ground' === bodyColidedWith.bodyName || 'Pipe' === bodyColidedWith.bodyName) {
 
-      if (!that.colided) {
+      if (!this.colided) {
 
-        that.context.Log(`Bird colided with: ${bodyColidedWith.bodyName}!`);
+        this.context.Log(`Bird colided with: ${bodyColidedWith.bodyName}!`);
 
         AudioManager.playSound('hit');
 
-        that.context.loop.stop();
+        this.context.loop.stop();
 
-        that.props.gameState!.updateState!({ gameOver: true });
+        this.props.gameState!.updateState!({ gameOver: true });
 
         setTimeout(() => {
-          if (null != that.props.gameState && null != that.props.gameState.updateState) {
-            that.body.body.y = 0;
-            that.body.body.x = 0;
+          this.body.body.y = 0;
+          this.body.body.x = 0;
 
-            that.body.body.velocity.x = 0;
-            that.body.body.velocity.y = 0;
+          this.body.body.velocity.x = 0;
+          this.body.body.velocity.y = 0;
 
-            that.props.gameState.updateState({
-              gameOver: false,
-              paused: false,
-              score: 0,
-              scrollSpeed: -5,
-              x: 0,
-            });
+          this.props.gameState.updateState!({
+            gameOver: false,
+            paused: false,
+            score: 0,
+            scrollSpeed: -5,
+            x: 0,
+          });
 
-            that.context.loop.start();
-          }
+          this.context.loop.start();
         }, 1000);
       }
 
@@ -281,16 +234,12 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   private getStyles(): React.CSSProperties {
 
-    // if (null != this.body && null != this.body.body) {
-    if (null != this.body && null != this.body.body) {
-      if (null != this.props.gameState && null != this.props.gameState.x) {
-        return {
-          position: 'absolute',
-          transform: `translate(${Math.floor((this.body.body.x * this.context.scale))}px, ${Math.floor((this.body.body.y * this.context.scale))}px)`,
-          // transform: `translate(${50 * this.context.scale}px, ${50 * this.context.scale}px)`,
-          transformOrigin: 'left top',
-        };
-      }
+    if (null != this.body) {
+      return {
+        position: 'absolute',
+        transform: `translate(${Math.floor((this.body.body.x * this.context.scale))}px, ${Math.floor((this.body.body.y * this.context.scale))}px)`,
+        transformOrigin: 'left top',
+      };
     }
 
     return {};

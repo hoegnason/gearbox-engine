@@ -49,7 +49,7 @@ export default class ConsoleState extends React.Component<{}, IConsoleState> {
         };
 
         return (
-            <div style={defaultStyles}>{this.props.children}{this.Log}
+            <div style={defaultStyles}>{this.props.children}
                 <div>
                     <Console messages={this.state.messages} />
                 </div>

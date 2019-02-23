@@ -2,6 +2,8 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { IGameStateState } from '../GameState/GameState';
 
+import {gameState} from '../GameState/DefaultProps';
+
 interface IFlappyUIProps {
     gameState: IGameStateState;
 }
@@ -15,22 +17,13 @@ export class FlappyUI extends React.Component<IFlappyUIProps, {}> {
         width: PropTypes.number
     }
 
-    public static defaultProps: IFlappyUIProps = {
-        gameState: {
-            debug: false,
-            gameOver: false,
-            paused: false,
-            score: 0,
-            scrollSpeed: 0,
-            updateState: () => { /* */ },
-            x: 0
-        }
-    }
+    public static defaultProps: IFlappyUIProps = {gameState}
 
     private oldProps: IGameStateState = {};
 
     public shouldComponentUpdate(nextProps: IFlappyUIProps, nextState: {}) {
-        if ((this.oldProps.debug !== nextProps.gameState.debug) || (this.oldProps.gameOver !== nextProps.gameState.gameOver) || (this.oldProps.paused !== nextProps.gameState.paused)) {
+        
+        if ((this.oldProps.debug !== nextProps.gameState.debug) || (this.oldProps.gameOver !== nextProps.gameState.gameOver) || (this.oldProps.paused !== nextProps.gameState.paused) || (this.oldProps.score !== nextProps.gameState.score)) {
             
             this.oldProps = nextProps.gameState;
             

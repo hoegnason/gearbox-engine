@@ -1,13 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-
-import Bird from '../bird/Bird';
-import Body from '../body/Body';
-import { FlappyUI } from '../flappy-ui/FlappyUI';
-import Level from '../Level';
-import PipeGenerator from '../PipeGenerator/PipeGenerator';
-
 export interface IGameStateState {
     scrollSpeed?: number;
     gameOver?: boolean;
@@ -22,9 +15,13 @@ interface IGameStateProps {
     children?: any;
 }
 
+let lastLoop = 0;
+
 export class GameState extends React.Component<IGameStateProps, IGameStateState> {
 
     public static contextTypes = {
+        engine: PropTypes.object,
+        loop: PropTypes.object,
         scale: PropTypes.number,
         width: PropTypes.number
     };
@@ -43,18 +40,42 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
             updateState: updater,
             x: 0
         }
+
+        this.loop = this.loop.bind(this);
+    }
+
+    public componentDidMount() {
+
+        this.context.engine.update = this.loop;
+    }
+
+    public loop(): void {
+
+        // 60 frames per sec!
+        const currTime = 1 * Date.now();
+
+        if (lastLoop) {
+            lastLoop = 0;
+        }
+
+        // if ((lastLoop + 1000 / 60) < currTime) {
+
+        this.updateState({ x: this.state.x! + this.state.scrollSpeed! });
+
+        lastLoop = currTime;
+        // }
     }
 
     // This should completly ignore ConsoleState
     public shouldComponentUpdate(nextProps: IGameStateProps, nextState: IGameStateState): boolean {
 
         if ((null == nextProps) || (null == nextProps.children)) {
-            
+
             return true;
         }
 
         if (null != nextProps && null != nextProps.children && nextProps.children.length !== this.childrenLenght) {
-            
+
             return true;
         }
 
@@ -68,15 +89,15 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
     // MovePipes: flutt Pipe og Body component frá App og inn her
     public render() {
 
+        const children = React.Children.map(this.props.children, child => {
+            return React.cloneElement(child, {
+                gameState: this.state
+            });
+        });
+
         return (
             <div>
-                <FlappyUI gameState={this.state} />
-                <Bird gameState={this.state} />
-                <Level gameState={this.state} />
-
-                <PipeGenerator gameState={this.state} />>
-
-                <Body bodyName={'Ground'} dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                {children}
             </div>
         )
     }

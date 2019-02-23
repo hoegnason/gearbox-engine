@@ -5,8 +5,10 @@ import Pipe, { IPipeProps } from '../pipe/Pipe';
 
 import {IGameStateState} from '../GameState/GameState';
 
+import {gameState} from '../GameState/DefaultProps';
+
 interface IPipeGeneratorProps {
-    gameState: IGameStateState
+    gameState?: IGameStateState
 }
 
 const pipeOffsetX = 900;
@@ -18,6 +20,7 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
         width: PropTypes.number
     };
 
+    public static defaultProps: IPipeGeneratorProps = { gameState }
 
     private pipes: IPipeProps[] = [];
 
@@ -31,7 +34,7 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
 
     public shouldComponentUpdate(nextProps: IPipeGeneratorProps, nextState: {}): boolean {
 
-        if (nextProps.gameState.x !== this.oldX) {
+        if (nextProps.gameState!.x !== this.oldX) {
             
             return true;
         }
@@ -42,35 +45,43 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
     // MovePipes: flutt Pipe og Body component frá App og inn her
     public render() {
 
-        const pipeOffset = pipeOffsetX + (this.props.gameState.x || 0);
-        // const speed = (this.state.scrollSpeed) ? this.state.scrollSpeed : 0;
+        const pipeOffset = pipeOffsetX + this.props.gameState!.x!;
 
         if ((window as any).debug) {
 
-            const closePipes = this.pipes.filter((pipe) => this.inViewOfCamera).filter((targetPipe: IPipeProps) => {
-
-                if (this.props.gameState.x) {
-
-
-                    return (Math.abs((targetPipe.x - (-1 * this.props.gameState.x))) < 400);
-                }
-
-                return false;
-            });
-
-            if (null != closePipes && null != closePipes.length && null != closePipes[0]) {
-                (window as any).autoPilotY = Math.floor(((closePipes[0].y * (576 - 176)) + (176 / 2)));
-            }
-
+            this.findNearestPipe();
         }
 
         return (
             <div>
-                {this.props.gameState.x && this.pipes.map((pipe: IPipeProps, index: number) => this.inViewOfCamera(-pipeOffsetX + pipeOffset + pipe.x) && <Pipe key={index} x={-pipeOffsetX + pipeOffset + pipe.x} y={pipe.y} />)}
+                {this.props.gameState!.x && this.pipes.map((pipe: IPipeProps, index: number) => this.inViewOfCamera(-pipeOffsetX + pipeOffset + pipe.x) && <Pipe key={index} x={-pipeOffsetX + pipeOffset + pipe.x} y={pipe.y} />)}
             </div>
         )
     }
 
+    private findNearestPipe(): void {
+
+        /*
+        if (null != this.props[this.props.gameState.score!]) {
+            (window as any).autoPilotY = Math.floor(((closePipes[0].y * (576 - 176)) + (176 / 2)));
+        }
+        */
+
+        const closePipes = this.pipes.filter((pipe) => this.inViewOfCamera).filter((targetPipe: IPipeProps) => {
+
+            if (this.props.gameState!.x) {
+
+
+                return (Math.abs((targetPipe.x - (-1 * this.props.gameState!.x))) < 400);
+            }
+
+            return false;
+        });
+
+        if (null != closePipes && null != closePipes.length && null != closePipes[0]) {
+            (window as any).autoPilotY = Math.floor(((closePipes[0].y * (576 - 176)) + (176 / 2)));
+        }
+    }
 
     private generatePipes(): IPipeProps[] {
 

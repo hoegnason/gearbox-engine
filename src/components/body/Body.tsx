@@ -35,6 +35,7 @@ export class Body extends React.Component<IBodyProps, {}> {
     public shouldComponentUpdate(props: IBodyProps, prevState: {}): boolean {
         
         if ((window as any).debug) {
+
             return true;
         }
 

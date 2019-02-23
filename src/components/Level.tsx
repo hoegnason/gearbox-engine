@@ -1,16 +1,16 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { GameLoopSubscription } from 'src/core/game-loop/GameLoopSubscription';
-import { IGameStateState } from './GameState/GameState';
-import TileMap from './TileMap';
+import PipeGenerator from './PipeGenerator/PipeGenerator';
 
-export interface ILevelState {
-    stageX: number;
-}
+import { IGameStateState } from './GameState/GameState';
+
+import { gameState } from './GameState/DefaultProps';
+
+import { Body } from './body/Body';
 
 export interface ILevelProps {
-    gameState: IGameStateState;
+    gameState?: IGameStateState;
 }
 
 export interface ILevelContext {
@@ -18,87 +18,71 @@ export interface ILevelContext {
     loop: object;
 }
 
-let lastLoop = 0;
-
-export default class Level extends React.Component<ILevelProps, ILevelState> {
+export default class Level extends React.Component<ILevelProps, {}> {
 
 
     public static contextTypes = {
-        loop: PropTypes.object,
         scale: PropTypes.number
     };
 
-    private stageX: number;
-    private gameLoopSubscription: GameLoopSubscription;
+    public static defaultProps: ILevelProps = { gameState }
 
-    constructor(props: any) {
-        super(props);
+    private oldX = 0;
 
-        this.stageX = 0;
+    public shouldComponentUpdate(nextProps: ILevelProps, nextState: {}) {
 
-        this.state = {
-            stageX: 0,
-        };
-    }
+        if (nextProps.gameState!.x !== this.oldX) {
 
-    public componentDidMount() {
+            this.oldX = nextProps.gameState!.x!;
 
-        this.gameLoopSubscription = this.context.loop.subscribe(() => {
+            return true;
+        }
 
-            if (null != this.stageX) {
-                // this.context.Log("looping !: stageX");
-                // console.log("looping !: stageX"); // tslint:disable-line    
-            }
-            
-
-            // 60 frames per sec!
-            const currTime = 1 * Date.now();
-
-            if ((lastLoop + 1000 / 60) < currTime) {
-                if(null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.x) {
-                    this.props.gameState.updateState({x: this.props.gameState.x - 10});
-                }
-
-                lastLoop = currTime;
-            }
-        });
-    }
-
-    public componentWillUnmount() {
-        this.gameLoopSubscription.unsubscribe();
+        return false;
     }
 
     public getWrapperStyles(): React.CSSProperties {
         return {
+            left: '0',
             position: 'absolute',
-            transform: `translate(${this.props.gameState.x}px, 0px) translateZ(0)`,
-            transformOrigin: 'top left',
+            top: '0'
         };
     }
 
     public render() {
 
-        // tslint:disable-next-line
+        const stageBackground: React.CSSProperties = {
+            backgroundImage: 'url(assets/flappy-background-day.png)',
+            backgroundPosition: `${Math.floor((this.context.scale * this.props.gameState!.x!))}px 0px`,
+            backgroundRepeat: 'repeat-x',
+            backgroundSize: 'auto 100%',
+            height: '100%',
+            left: 0,
+            margin: '0 auto',
+            position: 'absolute',
+            top: 0,
+            width: '100%',
+        };
 
-        const grassTileStyle: React.CSSProperties = { top: Math.floor(64 * this.context.scale) };
+        const floorBackground: React.CSSProperties = {
+            backgroundImage: 'url(assets/grass.png)',
+            backgroundPosition: `${Math.floor((this.context.scale * this.props.gameState!.x!))}px 0px`,
+            backgroundRepeat: 'repeat-x',
+            backgroundSize: 'auto 100%',
+            bottom: 0,
+            height: '112px',
+            left: 0,
+            margin: '0 auto',
+            position: 'absolute',
+            width: '100%',
+        };
 
         return (
-            <div style={this.getWrapperStyles()}>
-                <TileMap
-                    style={grassTileStyle}
-                    src="assets/grass.png"
-                    tileSize={128}
-                    columns={24}
-                    rows={4}
-                    layers={[
-                        [
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                        ],
-                    ]}
-                />
+            <div>
+                <div style={stageBackground} />
+                <PipeGenerator gameState={this.props.gameState} />
+                <div style={floorBackground} />
+                <Body bodyName={'Ground'} dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         );
     }

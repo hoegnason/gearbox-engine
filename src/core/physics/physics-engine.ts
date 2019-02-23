@@ -33,13 +33,14 @@ export class PhysicsEngine {
         Log: PropTypes.func
     };
 
+    public update?: () => void = undefined;
+
     private world: IBody[];
 
     private collisionDection: CollisionDection;
     private gravity: IVector;
 
     private nextAutoIncrement = 1;
-    
 
     constructor(options?: IPhysicsEngineOptions) {
         this.collisionDection = new CollisionDection();
@@ -79,15 +80,24 @@ export class PhysicsEngine {
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
         this.applyGravity(dynamicBodies);
-        
+
+
+        this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
+        this.applyVelocity(dynamicBodies);
+
+
+        /*
         dynamicBodies.forEach((body: IBody) => {
             if (null != body.shouldUpdate && body.shouldUpdate && null != body.onUpdate) {
                 body.onUpdate();
             }
         })
+        */
 
-        this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
-        this.applyVelocity(dynamicBodies);
+
+        if (null != this.update) {
+            this.update();
+        }
     }
 
     private autoIncrement(): number {
