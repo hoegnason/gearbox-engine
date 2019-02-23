@@ -6,7 +6,6 @@ import Bird from '../bird/Bird';
 import Body from '../body/Body';
 import { FlappyUI } from '../flappy-ui/FlappyUI';
 import Level from '../Level';
-import PipeGenerator from '../pipe-generator/PipeGenerator';
 import Pipe, { IPipeProps } from '../pipe/Pipe';
 
 export interface IGameStateState {
@@ -23,6 +22,8 @@ interface IGameStateProps {
     children?: any;
 }
 
+const pipeOffsetX = 900;
+
 export class GameState extends React.Component<IGameStateProps, IGameStateState> {
 
     public static contextTypes = {
@@ -30,11 +31,8 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
         width: PropTypes.number
       };
 
-      private pipeOffsetX = 900;
 
       private pipes: IPipeProps[] = [];
-
-      private generator: PipeGenerator;
 
     constructor(props: any) {
         super(props);
@@ -49,17 +47,17 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
             x: 0
         }
 
-        this.generator = new PipeGenerator();
-        this.pipes = this.generator.generatePipes(this.pipeOffsetX);
+        this.pipes = this.generatePipes();
     }
 
     public updateState(state: IGameStateState) {
         this.setState(state);
     }
 
+    // MovePipes: flutt Pipe og Body component frá App og inn her
     public render() {
 
-        const pipeOffset = this.pipeOffsetX + ((this.state.x) ? this.state.x : 0);
+        const pipeOffset = pipeOffsetX + ((this.state.x) ? this.state.x : 0);
         // const speed = (this.state.scrollSpeed) ? this.state.scrollSpeed : 0;
 
         /*
@@ -97,12 +95,30 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
                 <Bird gameState={this.state} />
                 <Level gameState={this.state} />
                 
-                {this.state.x && this.pipes.map((pipe: IPipeProps) => this.inViewOfCamera(-this.pipeOffsetX + pipeOffset + pipe.x) &&
-                     <Pipe x={-this.pipeOffsetX + pipeOffset + pipe.x} y={pipe.y} />)}
+                {this.state.x && this.pipes.map((pipe: IPipeProps) => this.inViewOfCamera(-pipeOffsetX + pipeOffset + pipe.x) && <Pipe x={-pipeOffsetX + pipeOffset + pipe.x} y={pipe.y} />)}
 
                 <Body bodyName={'Ground'} dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         )
+    }
+
+
+    private generatePipes(): IPipeProps[]  {
+        
+        const pipes: IPipeProps[] = [];
+        
+        pipes.push({x: pipeOffsetX, y: 0.5});
+
+        for (let i = 2; i < 100; i++) {
+
+            if (i % 2 === 0) {
+                pipes.push({x: ((pipeOffsetX + 120) * i), y: 0.5});
+            } else {
+                pipes.push({x: ((pipeOffsetX + 120) * i), y: 0.3});
+            }
+        }
+
+        return pipes;
     }
 
     private inViewOfCamera(x: number) {
