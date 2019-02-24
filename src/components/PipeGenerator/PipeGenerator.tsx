@@ -80,7 +80,7 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
 
         // i starts at 2 because the pipe above has already been defined
         for (let i = 2; i < 10000; i++) {
-            const randomY =  ( Math.floor(Math.random() * Math.floor(6)) + 2) / 10;
+            const randomY =  ( Math.floor(Math.random() * Math.floor(5)) + 2) / 10;
             pipes.push({ x: ((pipeOffsetX + 120) * i), y: randomY });
         }
 
