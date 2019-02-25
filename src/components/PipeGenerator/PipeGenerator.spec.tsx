@@ -40,7 +40,7 @@ describe('PipeGenerator functionality', async () => {
         expect(wrapper.find(Pipe).length).toBe(3);
       });
 
-      it("should generate pipes (as debug)", async () => {
+      it("should execute debug mode)", async () => {
         const wrapper = mount(<PipeGenerator gameState={{ x: -1, gameOver: false, paused: false, debug:true }}/>, { context });
 
         expect(wrapper.find('div').length).toBe(1);
@@ -51,7 +51,7 @@ describe('PipeGenerator functionality', async () => {
         // One pipe at start  
         expect(wrapper.find(Pipe).length).toBe(1);
 
-        wrapper.setProps({gameState:{ x: -1450, gameOver: false, paused: false, debug:true }});;
+        wrapper.setProps({gameState:{ x: -3860, gameOver: false, paused: false, debug:true }});;
         
         await timeout(500);
         // 3 pipes during the game
@@ -60,7 +60,7 @@ describe('PipeGenerator functionality', async () => {
 
 
       it("should not update pipes", async () => {
-        const wrapper = mount(<PipeGenerator gameState={{ x: -1, gameOver: false, paused: false, debug:true }}/>, { context });
+        const wrapper = mount(<PipeGenerator gameState={{ x: -1, gameOver: false, paused: false, debug:false }}/>, { context });
 
         expect(wrapper.find('div').length).toBe(1);
         expect(wrapper.children().length).toBe(1);
@@ -70,14 +70,12 @@ describe('PipeGenerator functionality', async () => {
         // One pipe at start  
         expect(wrapper.find(Pipe).length).toBe(1);
 
-        wrapper.setProps({gameState:{ x: -1, gameOver: false, paused: false, debug:true }});
+        wrapper.setProps({gameState:{ x: -1, gameOver: false, paused: false, debug:false }});
 
 
         // Expect no changes
         expect(wrapper.find(Pipe).length).toBe(1);
       });
-
-      
 
       
 
