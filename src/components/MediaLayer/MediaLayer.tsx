@@ -45,16 +45,16 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
             dimensions: [0, 0],
         };
 
-        this.setDimensions = this.setDimensions.bind(this);
+        this.updateDimensions = this.updateDimensions.bind(this);
     }
 
     public componentDidMount() {
-        window.addEventListener('resize', this.setDimensions);
-        this.setDimensions();
+        window.addEventListener('resize', this.updateDimensions);
+        this.updateDimensions();
     }
 
     public componentWillUnmount() {
-        window.removeEventListener('resize', this.setDimensions);
+        window.removeEventListener('resize', this.updateDimensions);
     }
 
     public getChildContext() {
@@ -112,21 +112,21 @@ export class MediaLayer extends React.Component<IMediaLayerProps, IMediaState> {
         }
     }
 
-    private getWrapperStyles(): React.CSSProperties {
-        return {
-            height: '100%',
-            position: 'relative',
-            width: '100%'
-        };
-    }
-
-    private setDimensions() {
+    private updateDimensions() {
         this.setState({
             dimensions: [
                 this.container.offsetWidth,
                 this.container.offsetHeight
             ],
         });
+    }
+
+    private getWrapperStyles(): React.CSSProperties {
+        return {
+            height: '100%',
+            position: 'relative',
+            width: '100%'
+        };
     }
 
     private getInnerStyles() {
