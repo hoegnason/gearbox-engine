@@ -6,18 +6,16 @@ import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
 
 import { AudioManager } from '../../core/sound/AudioManager';
 
-import GameLoop from 'src/core/game-loop/GameLoop';
+import GameLoop from '../../core/game-loop/GameLoop';
 import Body from '../body/Body';
 
 
 import { IGameStateState } from '../GameState/GameState';
 
-import { IBody } from 'src/core/physics/physics-engine';
+import { IBody } from '../../core/physics/physics-engine';
 
-let that: Bird;
+import { gameState } from '../GameState/DefaultProps';
 
-let isPaused = false;
-let isGameOver = false;
 let scoreColiderID: number = 0;
 
 interface IBirdProps {
@@ -37,6 +35,8 @@ export class Bird extends React.Component<IBirdProps, {}> {
     width: PropTypes.number
   };
 
+  public static defaultProps: IBirdProps = { gameState }
+
   public body: any;
 
   private keyboardSubscription: Subscription;
@@ -45,15 +45,18 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   constructor(props: any) {
     super(props);
+
+    this.onCollision = this.onCollision.bind(this);
+    this.doUpdate = this.doUpdate.bind(this);
   }
 
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('wing', "assets/sound/sfx_wing.wav", false);
-    AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
-    AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
-    AudioManager.loadSoundFile('point', "assets/sound/sfx_point.wav", false);
+    AudioManager.loadSoundFile('wing', "./assets/sound/sfx_wing.wav", false);
+    AudioManager.loadSoundFile('hit', "./assets/sound/sfx_hit.wav", false);
+    AudioManager.loadSoundFile('die', "./assets/sound/sfx_die.wav", false);
+    AudioManager.loadSoundFile('point', "./assets/sound/sfx_point.wav", false);
 
     // this.setGameOver(false);
 
@@ -71,10 +74,9 @@ export class Bird extends React.Component<IBirdProps, {}> {
         this.toggleDebug();
       }
 
-      /*
       if ('1' === key) {
         if (null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.scrollSpeed) {
-          this.props.gameState.updateState({scrollSpeed: this.props.gameState.scrollSpeed + 10});
+          this.props.gameState.updateState({ scrollSpeed: this.props.gameState.scrollSpeed + 10 });
 
           // tslint:disable-next-line:no-console
           console.log('scrollSpeed: ', this.props.gameState.scrollSpeed);
@@ -83,17 +85,11 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       if ('2' === key) {
         if (null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.scrollSpeed) {
-          this.props.gameState.updateState({scrollSpeed: this.props.gameState.scrollSpeed - 10});
+          this.props.gameState.updateState({ scrollSpeed: this.props.gameState.scrollSpeed - 10 });
         }
       }
-      
-      // tslint:disable-next-line:no-console
-      console.log('pressed key: ', key);
-      */
 
     });
-
-    that = this;
   }
 
   public componentWillUnmount() {
@@ -105,7 +101,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public render() {
 
-    if (this.props.gameState.debug && null != this.body && null != this.body.body && null != this.body.body.y) {
+    if (this.props.gameState.debug) {
       this.body.body.y = ((window as any).autoPilotY) || 288;
 
       this.body.body.velocity.x = 0;
@@ -113,54 +109,35 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
 
     const xOffset = Math.floor(((this.context.width / this.context.scale) * 0.2));
+    const yOffset = Math.floor((this.context.height / this.context.scale) * 0.25);
+
+    if (!this.props.gameState.ready && (this.props.gameState.x! < -300)) {
+      this.props.gameState.ready = true;
+    }
 
     return (
       <div>
-        {/* <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={true} x={1} y={1} width={25} height={25} velocity={{ x: 5, y: 0 }} colided={false} /> */}
-        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={true} x={xOffset} y={1} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
-        <div style={{ ...this.getStyles(), backgroundColor: 'red', width: 25 * this.context.scale, height: 25 * this.context.scale }} />
+        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
+        <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
       </div>
     );
   }
 
   private jump() {
 
-    if (null != this.body && null != this.body.body) {
+    if(!this.props.gameState.ready) {
+      this.props.gameState.updateState!({ready: true});
+    }
 
-      if (!isGameOver) {
-        this.body.body.velocity.y = -15;
-        AudioManager.playSound('wing');
-        this.context.Log("Jump!!");
-      }
+    if (!this.props.gameState.gameOver) {
+      this.body.body.velocity.y = -15;
+      AudioManager.playSound('wing');
+      this.context.Log("Jump!!");
     }
   }
-
-  /*
-  private setGameOver(gameOver: boolean) {
-
-    if (null != this.context && null != this.context.loop) {
-
-      const loop = this.context.loop as GameLoop;
-
-      loop.stop();
-
-
-      if (!isPaused && !isGameOver && gameOver) {
-
-        this.context.Log(`STOP! isGameOver: ${gameOver}!`);
-        loop.stop();
-      }
-
-      isGameOver = gameOver;
-      this.context.Log(`isGameOver: ${gameOver}!`);
-    }
-  }
-  */
 
   private showPausedUI(show: boolean) {
-    if (null != that.props.gameState && null != that.props.gameState.updateState) {
-      that.props.gameState.updateState({ paused: show });
-    }
+    this.props.gameState.updateState!({ paused: show });
   }
 
   private toggleDebug(): void {
@@ -169,10 +146,10 @@ export class Bird extends React.Component<IBirdProps, {}> {
     (window as any).debug = this.props.gameState.debug;
 
     if ((window as any).debug) {
-      
+
       this.context.Log('debugging enabled!');
     } else {
-      
+
       this.context.Log('debugging disabled!');
     }
   }
@@ -183,17 +160,17 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       const loop = this.context.loop as GameLoop;
 
-      if (!isGameOver) {
+      if (null != this.props.gameState.updateState && !this.props.gameState.gameOver) {
 
-        if (isPaused) {
+        if (this.props.gameState.paused) {
 
           loop.start();
-          isPaused = false;
+          this.props.gameState.updateState({ paused: false });
           this.showPausedUI(false);
         } else {
 
           loop.stop();
-          isPaused = true;
+          this.props.gameState.updateState({ paused: true });
           this.showPausedUI(true);
         }
       }
@@ -202,73 +179,70 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   private doUpdate(): void {
 
-    if (that.props.gameState.debug && null != that.body && null != that.body.body && null != that.context.height && null != that.context.scale) {
+    if (this.props.gameState.debug && null != this.body && null != this.body.body && null != this.context.height && null != this.context.scale) {
 
-      that.body.body.y = that.body.body.y = ((window as any).autoPilotY);
+      this.body.body.y = ((window as any).autoPilotY);
     }
-
-    /*
-    if (null != that.forceUpdate) {
-      that.forceUpdate();
-    }
-    */
   }
 
   private onCollision(bodyColidedWith: IBody): void {
 
     if ('ScoreColider' === bodyColidedWith.bodyName && scoreColiderID !== bodyColidedWith.bodyID) {
+
       scoreColiderID = bodyColidedWith.bodyID || 0;
 
-      if (null != that.props.gameState && null != that.props.gameState.updateState && null != that.props.gameState.score && null != that.props.gameState.scrollSpeed) {
+      this.props.gameState.updateState!({ score: this.props.gameState.score! + 1 });
 
-        const newScrollSpeed = that.props.gameState.scrollSpeed + (-1 * that.props.gameState.score);
+      this.context.Log(`gameState.score: ${this.props.gameState.score}`);
 
-        that.props.gameState.updateState({ score: that.props.gameState.score + 1, scrollSpeed: newScrollSpeed });
-
-        that.context.Log(`gameState.score: ${that.props.gameState.score}`);
-
-        // that.body.body.velocity.x = (-1 * newScrollSpeed);
-
-        AudioManager.playSound('point');
-      }
+      AudioManager.playSound('point');
     }
 
     if ('Ground' === bodyColidedWith.bodyName || 'Pipe' === bodyColidedWith.bodyName) {
 
-      if (!that.colided) {
+      if (!this.colided) {
 
-        that.context.Log(`Bird colided with: ${bodyColidedWith.bodyName}!`);
+        this.context.Log(`Bird colided with: ${bodyColidedWith.bodyName}!`);
 
         AudioManager.playSound('hit');
 
-        isGameOver = true;
-        that.context.loop.stop();
+        this.context.loop.stop();
 
-        if (null != that.props.gameState && null != that.props.gameState.updateState) {
-          that.props.gameState.updateState({ gameOver: true });
-        }
-
-        that.context.Log(`isGameOver: ${isGameOver}!`);
+        this.props.gameState!.updateState!({ gameOver: true });
 
         setTimeout(() => {
-          AudioManager.playSound('die');
-        }, 1000);
+          this.body.body.y = 0;
+          this.body.body.x = Math.floor(((this.context.width / this.context.scale) * 0.2));
 
+          this.body.body.velocity.x = 0;
+          this.body.body.velocity.y = 0;
+
+          this.props.gameState.updateState!({
+            gameOver: false,
+            paused: false,
+            score: 0,
+            scrollSpeed: -5,
+            x: 0,
+          });
+
+          this.context.loop.start();
+        }, 1000);
       }
+
+      setTimeout(() => {
+        AudioManager.playSound('die');
+      }, 1000);
     }
   }
+
   private getStyles(): React.CSSProperties {
 
-    // if (null != this.body && null != this.body.body) {
-    if (null != this.body && null != this.body.body) {
-      if (null != this.props.gameState && null != this.props.gameState.x) {
-        return {
-          position: 'absolute',
-          transform: `translate(${this.body.body.x * this.context.scale}px, ${this.body.body.y * this.context.scale}px)`,
-          // transform: `translate(${50 * this.context.scale}px, ${50 * this.context.scale}px)`,
-          transformOrigin: 'left top',
-        };
-      }
+    if (null != this.body) {
+      return {
+        position: 'absolute',
+        transform: `translate(${Math.floor((this.body.body.x * this.context.scale))}px, ${Math.floor((this.body.body.y * this.context.scale))}px)`,
+        transformOrigin: 'left top',
+      };
     }
 
     return {};
