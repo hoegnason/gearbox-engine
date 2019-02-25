@@ -2,6 +2,8 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { IGameStateState } from '../GameState/GameState';
 
+import {gameState} from '../GameState/DefaultProps';
+
 interface IFlappyUIProps {
     gameState: IGameStateState;
 }
@@ -15,15 +17,44 @@ export class FlappyUI extends React.Component<IFlappyUIProps, {}> {
         width: PropTypes.number
     }
 
+    public static defaultProps: IFlappyUIProps = {gameState}
+
+    private oldProps: IGameStateState = {};
+
+    public shouldComponentUpdate(nextProps: IFlappyUIProps, nextState: {}) {
+        
+        if ((this.oldProps.debug !== nextProps.gameState.debug) || (this.oldProps.gameOver !== nextProps.gameState.gameOver) || (this.oldProps.paused !== nextProps.gameState.paused) || (this.oldProps.score !== nextProps.gameState.score)) {
+            
+            this.oldProps = nextProps.gameState;
+            
+            return true;
+        }
+
+        return false;
+    }
+
     public render() {
 
         return (
             <div style={this.getWrappedStyle()}>
-                {(this.props.gameState.paused) ? this.getPauseElement() : ''}
-                {(this.props.gameState.gameOver) ? this.getGameOverElement() : ''}
+                {!this.props.gameState.ready && this.getReadyElement()}
+                {this.props.gameState.paused && this.getPauseElement()}
+                {this.props.gameState.gameOver && this.getGameOverElement()}
                 {this.getScoreElement()}
-                {!this.props.gameState.paused ? ((this.props.gameState.debug) ? this.getDebugElement() : '') : ''}
+                {!this.props.gameState.paused && this.props.gameState.debug && this.getDebugElement()}
             </div>);
+    }
+
+    private getReadyElement(): React.ReactElement {
+        return (
+            <div style={{
+                ...this.getTextStyle(),
+                borderRadius: '25px',color: 'gold', fontFamily: "'Luckiest Guy', cursive", fontSize: 24 * this.context.scale, left: '20%', position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
+                // tslint:disable-next-line:object-literal-sort-keys
+                WebkitTextStrokeColor: 'black',
+                WebkitTextFillColor: 'gold',
+                WebkitTextStrokeWidth: `${1 * this.context.scale}px`
+            }}>Get Ready</div>)
     }
 
     private getDebugElement(): React.ReactElement {
