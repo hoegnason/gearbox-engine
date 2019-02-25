@@ -6,13 +6,13 @@ import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
 
 import { AudioManager } from '../../core/sound/AudioManager';
 
-import GameLoop from 'src/core/game-loop/GameLoop';
+import GameLoop from '../../core/game-loop/GameLoop';
 import Body from '../body/Body';
 
 
 import { IGameStateState } from '../GameState/GameState';
 
-import { IBody } from 'src/core/physics/physics-engine';
+import { IBody } from '../../core/physics/physics-engine';
 
 import { gameState } from '../GameState/DefaultProps';
 
@@ -47,15 +47,16 @@ export class Bird extends React.Component<IBirdProps, {}> {
     super(props);
 
     this.onCollision = this.onCollision.bind(this);
+    this.doUpdate = this.doUpdate.bind(this);
   }
 
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('wing', "assets/sound/sfx_wing.wav", false);
-    AudioManager.loadSoundFile('hit', "assets/sound/sfx_hit.wav", false);
-    AudioManager.loadSoundFile('die', "assets/sound/sfx_die.wav", false);
-    AudioManager.loadSoundFile('point', "assets/sound/sfx_point.wav", false);
+    AudioManager.loadSoundFile('wing', "./assets/sound/sfx_wing.wav", false);
+    AudioManager.loadSoundFile('hit', "./assets/sound/sfx_hit.wav", false);
+    AudioManager.loadSoundFile('die', "./assets/sound/sfx_die.wav", false);
+    AudioManager.loadSoundFile('point', "./assets/sound/sfx_point.wav", false);
 
     // this.setGameOver(false);
 
@@ -75,7 +76,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       if ('1' === key) {
         if (null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.scrollSpeed) {
-          this.props.gameState.updateState({scrollSpeed: this.props.gameState.scrollSpeed + 10});
+          this.props.gameState.updateState({ scrollSpeed: this.props.gameState.scrollSpeed + 10 });
 
           // tslint:disable-next-line:no-console
           console.log('scrollSpeed: ', this.props.gameState.scrollSpeed);
@@ -84,7 +85,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       if ('2' === key) {
         if (null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.scrollSpeed) {
-          this.props.gameState.updateState({scrollSpeed: this.props.gameState.scrollSpeed - 10});
+          this.props.gameState.updateState({ scrollSpeed: this.props.gameState.scrollSpeed - 10 });
         }
       }
 
@@ -108,16 +109,25 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
 
     const xOffset = Math.floor(((this.context.width / this.context.scale) * 0.2));
+    const yOffset = Math.floor((this.context.height / this.context.scale) * 0.25);
+
+    if (!this.props.gameState.ready && (this.props.gameState.x! < -300)) {
+      this.props.gameState.ready = true;
+    }
 
     return (
       <div>
-        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={true} x={xOffset} y={1} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
+        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
         <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
       </div>
     );
   }
 
   private jump() {
+
+    if(!this.props.gameState.ready) {
+      this.props.gameState.updateState!({ready: true});
+    }
 
     if (!this.props.gameState.gameOver) {
       this.body.body.velocity.y = -15;
@@ -181,7 +191,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       scoreColiderID = bodyColidedWith.bodyID || 0;
 
-      this.props.gameState.updateState!({ score: this.props.gameState.score! + 1});
+      this.props.gameState.updateState!({ score: this.props.gameState.score! + 1 });
 
       this.context.Log(`gameState.score: ${this.props.gameState.score}`);
 
@@ -202,7 +212,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
         setTimeout(() => {
           this.body.body.y = 0;
-          this.body.body.x = 0;
+          this.body.body.x = Math.floor(((this.context.width / this.context.scale) * 0.2));
 
           this.body.body.velocity.x = 0;
           this.body.body.velocity.y = 0;

@@ -52,8 +52,8 @@ export default class Level extends React.Component<ILevelProps, {}> {
     public render() {
 
         const stageBackground: React.CSSProperties = {
-            backgroundImage: 'url(assets/flappy-background-day.png)',
-            backgroundPosition: `${Math.floor((this.context.scale * this.props.gameState!.x!))}px 0px`,
+            backgroundImage: 'url(./assets/sprites/SkyTileSprite.png)',
+            backgroundPosition: `${Math.floor(( (this.context.scale * this.props.gameState!.x!) / 3 ))}px 0px`,
             backgroundRepeat: 'repeat-x',
             backgroundSize: 'auto 100%',
             height: '100%',
@@ -65,7 +65,7 @@ export default class Level extends React.Component<ILevelProps, {}> {
         };
 
         const floorBackground: React.CSSProperties = {
-            backgroundImage: 'url(assets/grass.png)',
+            backgroundImage: 'url(./assets/sprites/GrassThinSprite.png)',
             backgroundPosition: `${Math.floor((this.context.scale * this.props.gameState!.x!))}px 0px`,
             backgroundRepeat: 'repeat-x',
             backgroundSize: 'auto 100%',

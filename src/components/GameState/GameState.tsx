@@ -4,6 +4,7 @@ import * as React from 'react';
 export interface IGameStateState {
     scrollSpeed?: number;
     gameOver?: boolean;
+    ready?: boolean,
     updateState?: (gameState: IGameStateState) => void;
     x?: number;
     paused?: boolean;
@@ -33,10 +34,12 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
 
         this.state = {
             gameOver: false,
+            ready: false,
             score: 0,
             scrollSpeed: -5,
             updateState: updater,
-            x: 0
+            x: 0,
+
         }
 
         this.loop = this.loop.bind(this);

@@ -86,13 +86,11 @@ export class PhysicsEngine {
         this.applyVelocity(dynamicBodies);
 
 
-        /*
         dynamicBodies.forEach((body: IBody) => {
             if (null != body.shouldUpdate && body.shouldUpdate && null != body.onUpdate) {
                 body.onUpdate();
             }
         })
-        */
 
 
         if (null != this.update) {

@@ -1,6 +1,7 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import Body from '../body/Body';
+import Sprite from '../sprite/Sprite';
 
 export interface IPipeProps {
     x: number;
@@ -29,7 +30,7 @@ class Pipe extends React.Component<IPipeProps, {}> {
     private y: number;
 
     public shouldComponentUpdate(props: IPipeProps, prevState: {}) {
-        
+
         if (props.x !== this.x || props.y !== this.y) {
             this.x = props.x;
             this.y = props.y;
@@ -49,7 +50,7 @@ class Pipe extends React.Component<IPipeProps, {}> {
         const pipeTopHeight = yTop;
 
         // const pipeButtomY = 400;
-        const pipeWidth = 120
+        const pipeWidth = 90
 
         // const scoreColiderY = ((pipeTopY + pipeButtomY) / 2);
 
@@ -62,25 +63,19 @@ class Pipe extends React.Component<IPipeProps, {}> {
         return (
             <div>
                 <Body bodyName={'Pipe'} x={this.props.x} y={pipeTopY} width={pipeWidth} height={pipeTopHeight} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
-                <div style={this.getPipeStyles(this.props.x, pipeTopY, pipeTopHeight)} />
+                
+                <div style={{ transform: `translate(0px, ${((-1 * (1024 - pipeTopHeight)) * this.context.scale )}px)` }}>
+                    <Sprite x={this.props.x} y={pipeTopY} width={100} height={1024} src={'./assets/sprites/CroppedColumnReversed.png'} />
+                </div>
+
                 <Body bodyName={'Pipe'} x={this.props.x} y={pipeButtomY} width={pipeWidth} height={pipeButtomHeight} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
-                <div style={this.getPipeStyles(this.props.x, pipeButtomY, pipeButtomHeight)} />
+                <div>
+                    <Sprite x={this.props.x} y={pipeButtomY} width={100} height={1024} src={'./assets/sprites/CroppedColumn.png'} />
+                </div>
+
                 <Body bodyName={'ScoreColider'} x={this.props.x + pipeWidth} y={scoreColiderY} width={pipeWidth} height={200} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         );
-    }
-
-    private getPipeStyles(x: number, y: number, height: number): React.CSSProperties {
-
-        return {
-            backgroundColor: 'green',
-            height: height * this.context.scale,
-            overflow: 'hidden',
-            position: 'absolute',
-            transform: `translate(${Math.floor((x * this.context.scale))}px, ${Math.floor((y * this.context.scale))}px)`,
-            transformOrigin: 'left top',
-            width: Math.floor((120 * this.context.scale))
-        };
     }
 }
 

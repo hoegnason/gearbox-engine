@@ -37,11 +37,24 @@ export class FlappyUI extends React.Component<IFlappyUIProps, {}> {
 
         return (
             <div style={this.getWrappedStyle()}>
-                {this.props.gameState.paused && this.getPauseElement() }
+                {!this.props.gameState.ready && this.getReadyElement()}
+                {this.props.gameState.paused && this.getPauseElement()}
                 {this.props.gameState.gameOver && this.getGameOverElement()}
                 {this.getScoreElement()}
                 {!this.props.gameState.paused && this.props.gameState.debug && this.getDebugElement()}
             </div>);
+    }
+
+    private getReadyElement(): React.ReactElement {
+        return (
+            <div style={{
+                ...this.getTextStyle(),
+                borderRadius: '25px',color: 'gold', fontFamily: "'Luckiest Guy', cursive", fontSize: 24 * this.context.scale, left: '20%', position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
+                // tslint:disable-next-line:object-literal-sort-keys
+                WebkitTextStrokeColor: 'black',
+                WebkitTextFillColor: 'gold',
+                WebkitTextStrokeWidth: `${1 * this.context.scale}px`
+            }}>Get Ready</div>)
     }
 
     private getDebugElement(): React.ReactElement {

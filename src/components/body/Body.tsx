@@ -1,6 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { IBody, PhysicsEngine } from 'src/core/physics/physics-engine';
+import { IBody, PhysicsEngine } from '../../core/physics/physics-engine';
 
 export interface IBodyProps extends IBody {
     children?: object;
