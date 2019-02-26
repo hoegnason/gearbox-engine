@@ -18,7 +18,6 @@ class App extends React.Component {
 
   public render() {
 
-    // MovePipes: Flutt Pipes og Body componentin inn í GameState componentin
     return (
 
           
