@@ -35,7 +35,7 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
     public shouldComponentUpdate(nextProps: IPipeGeneratorProps, nextState: {}): boolean {
 
         if (nextProps.gameState!.x !== this.oldX) {
-            
+            this.oldX = nextProps.gameState!.x!;
             return true;
         }
 
@@ -69,13 +69,8 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
 
         const closePipes = this.pipes.filter((pipe) => this.inViewOfCamera).filter((targetPipe: IPipeProps) => {
 
-            if (this.props.gameState!.x) {
+                return (Math.abs((targetPipe.x - (-1 * this.props.gameState!.x!))) < 400);
 
-
-                return (Math.abs((targetPipe.x - (-1 * this.props.gameState!.x))) < 400);
-            }
-
-            return false;
         });
 
         if (null != closePipes && null != closePipes.length && null != closePipes[0]) {
