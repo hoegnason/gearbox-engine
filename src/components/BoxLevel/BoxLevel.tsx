@@ -25,13 +25,6 @@ export default class Level extends React.Component<ILevelProps, {}> {
 
     public static defaultProps: ILevelProps = { gameState }
 
-    public getWrapperStyles(): React.CSSProperties {
-        return {
-            left: '0',
-            position: 'absolute',
-            top: '0'
-        };
-    }
 
     public render() {
 
