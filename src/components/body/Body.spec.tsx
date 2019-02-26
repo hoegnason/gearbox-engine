@@ -4,13 +4,10 @@ import * as React from 'react';
 
 import { PhysicsEngine } from '../../core/physics/physics-engine';
 import { Body } from './Body';
-import { timeout } from 'rxjs/operators';
 
-/*
 function timeout(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-*/
 
 describe('Body', async () => {
 
