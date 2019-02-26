@@ -1,11 +1,11 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { IGameStateState } from './GameState/GameState';
+import { IGameStateState } from '../GameState/GameState';
 
-import { gameState } from './GameState/DefaultProps';
+import { gameState } from '../GameState/DefaultProps';
 
-import { Body } from './body/Body';
+import { Body } from '../body/Body';
 
 export interface ILevelProps {
     gameState?: IGameStateState;
@@ -24,20 +24,6 @@ export default class Level extends React.Component<ILevelProps, {}> {
     };
 
     public static defaultProps: ILevelProps = { gameState }
-
-    private oldX = 0;
-
-    public shouldComponentUpdate(nextProps: ILevelProps, nextState: {}) {
-
-        if (nextProps.gameState!.x !== this.oldX) {
-
-            this.oldX = nextProps.gameState!.x!;
-
-            return true;
-        }
-
-        return false;
-    }
 
     public getWrapperStyles(): React.CSSProperties {
         return {

@@ -5,7 +5,7 @@ import BoxGame from './BoxGame';
 
 
 import Box from '../box/Box';
-import BoxLevel from '../BoxLevel';
+import BoxLevel from '../BoxLevel/BoxLevel';
 import GameState from '../GameState/GameState';
 
 

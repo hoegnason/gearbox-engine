@@ -18,7 +18,7 @@ describe('Box', () => {
     expect(wrapperBox.body.body).not.toBeNull();
 
     
-    await timeout(300);;
+    await timeout(300);
 
 
   });
