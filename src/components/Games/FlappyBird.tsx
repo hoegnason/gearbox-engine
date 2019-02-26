@@ -3,6 +3,11 @@ import * as React from 'react';
 import '../../App.css';
 
 
+import Loop from '../loop/Loop'
+import MediaLayer from '../MediaLayer/MediaLayer'
+import World from '../World/World'
+// import GameEngine from '../../core/GameEngine/GameEngine'
+
 import { Bird } from '../bird/Bird';
 
 import GameState from '../GameState/GameState';
@@ -13,6 +18,8 @@ import { FlappyUI } from '../flappy-ui/FlappyUI';
 
 import ConsoleState from '../Console/ConsoleState';
 import Level from '../Level';
+
+
 
 /*
 interface IFlappyBirdProps {
@@ -28,14 +35,20 @@ class FlappyBird extends React.Component {
     public render() {
 
         return (
-        <ConsoleState>
-            <GameState>
-                <Level />
-                <Bird />
-                <FlappyUI />
-            </GameState>
-        </ConsoleState>
-                   );      
+            <Loop>
+                <MediaLayer>
+                    <World>
+                        <ConsoleState>
+                            <GameState>
+                                <Level />
+                                <Bird />
+                                <FlappyUI />
+                            </GameState>
+                        </ConsoleState>
+                    </World>
+                </MediaLayer>
+            </Loop>
+        );
     }
 }
 

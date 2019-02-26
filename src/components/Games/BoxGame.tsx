@@ -2,10 +2,14 @@
 import * as React from 'react';
 import '../../App.css';
 
-
 import Box from '../box/Box';
 import BoxLevel from '../BoxLevel';
 import GameState from '../GameState/GameState';
+import Loop from '../loop/Loop'
+import MediaLayer from '../MediaLayer/MediaLayer'
+import World from '../World/World'
+
+
 
 /*
 interface IFlappyBirdProps {
@@ -21,13 +25,17 @@ class BoxGame extends React.Component {
     public render() {
 
         return (
-            <div>
-                <GameState>
-                    <BoxLevel />
-                    <Box />  
-                </GameState>
-            </div>
-        );   
+            <Loop>
+                <MediaLayer width={1024} height={576}>
+                    <World>
+                        <GameState>
+                            <BoxLevel />
+                            <Box />
+                        </GameState>
+                    </World>
+                </MediaLayer>
+            </Loop>
+        );
     }
 }
 
