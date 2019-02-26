@@ -17,7 +17,7 @@ import GameState from '../GameState/GameState';
 import { FlappyUI } from '../flappy-ui/FlappyUI';
 
 import ConsoleState from '../Console/ConsoleState';
-import Level from '../Level';
+import {Level} from '../Level';
 
 
 
