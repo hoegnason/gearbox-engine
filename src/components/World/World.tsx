@@ -91,10 +91,6 @@ export default class World extends React.Component<IWorldProps, {}> {
         // 60 frames per sec!
         const currTime = 1 * Date.now();
 
-        if (lastLoop) {
-            lastLoop = 0;
-        }
-
         if ((lastLoop + 1000 / 60) < currTime) {
 
             this.engine.tick();

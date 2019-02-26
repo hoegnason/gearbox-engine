@@ -6,7 +6,7 @@ export interface IMessage {
     body: string;
 }
 
-interface IConsoleProps {
+export interface IConsoleProps {
     messages: IMessage[]
 }
 
