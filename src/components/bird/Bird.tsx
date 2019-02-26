@@ -53,7 +53,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('wing', "assets/sound/flapping_wing1.ogg", false);
+    AudioManager.loadSoundFile('wing', "assets/sound/flapping_wing.ogg", false);
     AudioManager.loadSoundFile('hit', "assets/sound/hit.ogg", false);
     AudioManager.loadSoundFile('die', "assets/sound/hit_ground.ogg", false);
     AudioManager.loadSoundFile('point', "assets/sound/point.ogg", false);
