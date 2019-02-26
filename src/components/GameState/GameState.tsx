@@ -26,6 +26,7 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
     };
 
     private childrenLenght = 0;
+    private initialized = false;
 
     constructor(props: any) {
         super(props);
@@ -57,8 +58,10 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
     // This should completly ignore ConsoleState
     public shouldComponentUpdate(nextProps: IGameStateProps, nextState: IGameStateState): boolean {
 
-        if ((null == nextProps) || (null == nextProps.children)) {
+        if (!this.initialized) {
 
+            this.initialized = true;
+            
             return true;
         }
 

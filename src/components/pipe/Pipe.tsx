@@ -26,8 +26,8 @@ class Pipe extends React.Component<IPipeProps, {}> {
         width: PropTypes.number
     }
 
-    private x: number;
-    private y: number;
+    private x = 0;
+    private y = 0;
 
     public shouldComponentUpdate(props: IPipeProps, prevState: {}) {
 

@@ -1,54 +1,55 @@
 
 import { shallow } from 'enzyme';
 import * as React from 'react';
-// import World from '../World';
 import { Console } from './Console';
 
+function timeout(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 describe('Console functionality', async () => {
-    
+  
+    afterEach(() => {
+      (window as any).debug = false;
+    });
+
     it('Should display log', async () => {
-      jest.mock('./Console', () => ({
-        Console: 'mockConsole'
-      }));
 
       const logger = shallow(<Console messages={[]} />);
       expect(logger.find("div").length).toEqual(1);
-
-      // const world = shallow(<World/>);
-      // expect(world.find('mockConsole').length).toEqual(1);
 
       const logger2 = shallow(<Console messages={[{body: "Test", date: new Date()}]}/>);
 
       expect(logger2.find("div").length).toEqual(2);
     });
-    /*
-    it('should pass Log function to children', async () => {
-  
-      jest.mock('../loop/Loop', () => ({
-        loop: 'mockLoop'
-      }));
 
-      // Defines react stateless component that can accept a GameLoop object trough context
-      const Client = (props: any, context: any) => {
-  
-        const world = context.Log as any;
-        world("Hetta er ein test");
+    it('shoud show component on debug and hide it when not debugging', async () => {
 
-        return <div>This is a test!</div>
-      }
-  
-      Client.contextTypes = {
-        Log: PropTypes.func,
-      }
+      const logger = shallow(<Console messages={[]} />);
+      expect(logger.find("div").length).toEqual(1);
+
+      const wrapperDiv = logger.find('div').first();
+      const style = wrapperDiv.get(0).props.style;
       
+
+      expect(style).toHaveProperty('display', 'none');
+
+      timeout(250);
+
+      // Expect to show console when the debug flag is set
+      (window as any).debug = true;
       
-      // Call passed Log() function
-      const wrapper = mount(<World><Client /></World>);
+      // Update props to force rerender
+      logger.setProps([
+        {body: "Test", date: new Date()},
+        {body: "Test2", date: new Date()}
+      ]);
 
-      const wrappedLog = (wrapper.instance() as any);
-      const spy2 = jest.spyOn(wrappedLog, 'Log');
-      wrappedLog.Log("Aftur ein test");
+      timeout(250);
 
-      expect(spy2).toHaveBeenCalled();
-    });*/
+      const wrapperDivNext = logger.find('div').first();
+      const styleNext = wrapperDivNext.get(0).props.style;
+
+      expect(styleNext).toHaveProperty('display', 'block');
+    });
   });
