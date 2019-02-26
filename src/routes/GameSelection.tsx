@@ -10,7 +10,7 @@ class GameSelection extends React.Component {
         <div>
             <div>Games</div>
             <div><Link to='/flappybird'>FlappyBird</Link></div>
-            <div><Link to='/box'>Box</Link></div>
+            <div><Link to='/boxgame'>Box</Link></div>
         </div>
     );
   }

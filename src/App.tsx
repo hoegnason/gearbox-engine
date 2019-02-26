@@ -28,8 +28,8 @@ class App extends React.Component {
                   <Router>
                     <Switch>
                       <Route exact={true} path='/' component={GameSelection} />
-                      <Route exact={true} path='/flappybird' component={FlappyBird} />
-                      <Route exact={true} path='/box' component={BoxGame} />
+                      <Route  path='/flappybird' component={FlappyBird} />
+                      <Route  path='/boxgame' component={BoxGame} />
                     </Switch>
                   </Router>
                 </World>
