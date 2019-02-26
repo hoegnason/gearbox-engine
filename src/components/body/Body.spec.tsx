@@ -11,6 +11,12 @@ function timeout(ms: number) {
 
 describe('Body', async () => {
 
+    afterEach(() => {
+        
+        // Reset debug mode!
+        (window as any).debug = false;
+    });
+
     it('should render a <div /> and be unmounted', async () => {
 
         const wrapper = shallow(<Body x={0} y={0} dynamic={false} bodyName={'test'} velocity={{ x: 0, y: 0 }} colided={false} width={100} height={100} />, {
