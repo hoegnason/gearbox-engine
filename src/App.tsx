@@ -13,7 +13,7 @@ import World from './components/World/World';
 import { FlappyUI } from './components/flappy-ui/FlappyUI';
 
 import ConsoleState from './components/Console/ConsoleState';
-import Level from './components/Level';
+import { Level } from './components/Level';
 
 class App extends React.Component {
 

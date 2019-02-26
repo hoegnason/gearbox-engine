@@ -3,7 +3,7 @@ import * as React from 'react';
 
 
 import Body from '../body/Body';
-import Pipe from '../pipe/Pipe';
+import Pipe from './Pipe';
 
 
 
