@@ -18,7 +18,7 @@ export interface ILevelContext {
     loop: object;
 }
 
-export default class Level extends React.Component<ILevelProps, {}> {
+export class Level extends React.Component<ILevelProps, {}> {
 
 
     public static contextTypes = {
@@ -39,14 +39,6 @@ export default class Level extends React.Component<ILevelProps, {}> {
         }
 
         return false;
-    }
-
-    public getWrapperStyles(): React.CSSProperties {
-        return {
-            left: '0',
-            position: 'absolute',
-            top: '0'
-        };
     }
 
     public render() {

@@ -74,15 +74,12 @@ export class Body extends React.Component<IBodyProps, {}> {
         const bodyStyles: React.CSSProperties = {
             backgroundColor: 'rgba(0, 255, 0, 0.3)',
             height: (this.props.height * this.context.scale),
+            position: 'absolute',
+            transform: `translate(${this.body.x * this.context.scale}px, ${this.body.y * this.context.scale}px)`,
+            transformOrigin: 'left top',
             width: (this.props.width * this.context.scale),
-            zIndex: 999999,
+            zIndex: 999999
         };
-
-        if (null != this.body) {
-            bodyStyles.position = 'absolute';
-            bodyStyles.transform = `translate(${this.body.x * this.context.scale}px, ${this.body.y * this.context.scale}px)`;
-            bodyStyles.transformOrigin = 'left top';
-        }
 
         return (
             <div style={styles}>

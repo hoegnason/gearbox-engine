@@ -31,7 +31,7 @@ class Pipe extends React.Component<IPipeProps, {}> {
 
     public shouldComponentUpdate(props: IPipeProps, prevState: {}) {
 
-        if (props.x !== this.x || props.y !== this.y) {
+        if ((props.x !== this.x) || (props.y !== this.y)) {
             this.x = props.x;
             this.y = props.y;
 
