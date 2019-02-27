@@ -6,50 +6,49 @@ import Body from '../body/Body';
 import Pipe from './Pipe';
 
 
-function timeout(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-const context = {scale: 1, width: 1000};
+const context = { scale: 1, width: 1000 };
 
 describe('Pipe functionality', async () => {
 
+  let wrapper: any;
+  beforeEach(() => {
+    wrapper = shallow(<Pipe x={10} y={0.5} />, { context })
+  });
 
-      it('should have 3 bodies', async () => {
-        const wrapper = shallow(<Pipe x= {10} y={0.5}/>, {context})
 
-        expect(wrapper.find(Body).length).toBe(3);
-      });
+  it('should have 3 bodies', async () => {
+    expect(wrapper.find(Body).length).toBe(3);
+  });
 
-      it('Should update when changed', async () => {
-        const wrapper = shallow(<Pipe x={10} y={0.5}/>, {context})
+  it('Should update when changed', async () => {
 
-        const wrapperPipe = wrapper.instance() as Pipe;
+    wrapper.setProps({x: 50, y: 0.2});
 
-        const props = wrapper.props();
+    const wrapperPipe = wrapper.instance() as Pipe;
 
-        const nextProps = {...props}
-        nextProps.x = 100;
-        nextProps.y = 0.6;
+    const props = wrapper.props();
 
-        const shouldNotUpdate = wrapperPipe.shouldComponentUpdate(nextProps, {});
-        expect(shouldNotUpdate).toBe(true);
-      });
+    const nextProps = { ...props }
+    nextProps.x = 100;
+    nextProps.y = 0.6;
 
-      it('Should not update if same values', async () => {
-        const wrapper = shallow(<Pipe x={1} y={0.5}/>, {context})
+    const shouldNotUpdate = wrapperPipe.shouldComponentUpdate(nextProps, {});
+    expect(shouldNotUpdate).toBe(true);
+  });
 
-        await timeout(200);
+  it('Should not update if same values', async () => {
 
-        const wrapperPipe = wrapper.instance() as Pipe;
+    wrapper.setProps({x: 10, y: 0.5});
 
-        const props = wrapper.props();
+    const wrapperPipe = wrapper.instance() as Pipe;
 
-        const nextProps = {...props}
-        nextProps.x = 1;
-        nextProps.y = 0.5;
+    const props = wrapper.props();
+    
+    const nextProps = { ...props }
+    nextProps.x = 10;
+    nextProps.y = 0.5;
 
-        const shouldNotUpdate = wrapperPipe.shouldComponentUpdate(nextProps, {});
-        expect(shouldNotUpdate).toBe(false);
-      });
+    const shouldNotUpdate = wrapperPipe.shouldComponentUpdate(nextProps, {});
+    expect(shouldNotUpdate).toBe(false);
+  });
 });
