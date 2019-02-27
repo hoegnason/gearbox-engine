@@ -47,7 +47,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
     super(props);
 
     this.onCollision = this.onCollision.bind(this);
-    this.doUpdate = this.doUpdate.bind(this);
   }
 
 
@@ -94,9 +93,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public componentWillUnmount() {
 
-    if (null != this.keyboardSubscription) {
-      this.keyboardSubscription.unsubscribe();
-    }
+    this.keyboardSubscription.unsubscribe();
   }
 
   public render() {
@@ -117,7 +114,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
     return (
       <div>
-        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
+        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
         <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
       </div>
     );
@@ -177,12 +174,24 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
   }
 
-  private doUpdate(): void {
+  private resetGame() {
+    setTimeout(() => {
+      this.body.body.y = 0;
+      this.body.body.x = Math.floor(((this.context.width / this.context.scale) * 0.2));
 
-    if (this.props.gameState.debug && null != this.body && null != this.body.body && null != this.context.height && null != this.context.scale) {
+      this.body.body.velocity.x = 0;
+      this.body.body.velocity.y = 0;
 
-      this.body.body.y = ((window as any).autoPilotY);
-    }
+      this.props.gameState.updateState!({
+        gameOver: false,
+        paused: false,
+        score: 0,
+        scrollSpeed: -5,
+        x: 0,
+      });
+
+      this.context.loop.start();
+    }, 1000);
   }
 
   private onCollision(bodyColidedWith: IBody): void {
@@ -210,23 +219,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
         this.props.gameState!.updateState!({ gameOver: true });
 
-        setTimeout(() => {
-          this.body.body.y = 0;
-          this.body.body.x = Math.floor(((this.context.width / this.context.scale) * 0.2));
-
-          this.body.body.velocity.x = 0;
-          this.body.body.velocity.y = 0;
-
-          this.props.gameState.updateState!({
-            gameOver: false,
-            paused: false,
-            score: 0,
-            scrollSpeed: -5,
-            x: 0,
-          });
-
-          this.context.loop.start();
-        }, 1000);
+        this.resetGame();
       }
 
       setTimeout(() => {
