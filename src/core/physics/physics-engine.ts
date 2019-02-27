@@ -157,31 +157,11 @@ export class PhysicsEngine {
     private resolveCollisions(collisions: IBodyCollision[]): void {
 
         collisions.forEach((collision: IBodyCollision) => {
-        
-            /*
-        const curTime: Date = new Date();
-        const elapsedTime: number = (curTime.getMilliseconds() - this.lastTime.getMilliseconds());
-        this.lastTime = curTime;
-        */
-/*
-            if (collision.bodyA.dynamic){
-               if (collision.bodyA.y < collision.bodyB.y){
-                collision.bodyA.y = 0;
-                if (collision.bodyA.velocity.y > 0){
-                    collision.bodyA.velocity.y = collision.bodyA.velocity.y * -1;
-                }
-               }
+
+            if(collision.bodyA.dynamic){
+                collision.bodyA.y = collision.bodyB.y-(collision.bodyA.height);
+                collision.bodyA.velocity.y *= -0.5;
             }
-*/
-            /*
-            if (collision.bodyB.dynamic){
-                if (collision.bodyB.y > collision.bodyA.y){
-                 collision.bodyB.y = 0;
-                 if (collision.bodyB.velocity.y > 0){
-                     collision.bodyB.velocity.y = collision.bodyB.velocity.y * -1;
-                 }
-                }
-             }*/
             
             // collision.bodyA.velocity.x = 0;
             // collision.bodyA.velocity.y = 0;
