@@ -19,7 +19,7 @@ describe('Body', async () => {
 
     it('should render a <div /> and be unmounted', async () => {
 
-        const wrapper = shallow(<Body x={0} y={0} dynamic={false} bodyName={'test'} velocity={{ x: 0, y: 0 }} colided={false} width={100} height={100} />, {
+        const wrapper = shallow(<Body x={0} y={0} dynamic={false} bodyName={'test'} velocity={{ x: 0, y: 0 }} colided={false} width={100} height={100} prevX={0} prevY={0} />, {
             context: { engine: new PhysicsEngine() }
         });
 

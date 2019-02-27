@@ -37,7 +37,7 @@ export class Box extends React.Component<IBoxProps, {}> {
 
     return (
       <div>
-        <Body bodyName={'Box'} ref={b => { this.body = b; }} dynamic={true} x={250} y={0} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
+        <Body bodyName={'Box'} ref={b => { this.body = b; }} dynamic={true} prevX={250} prevY={0} x={250} y={0} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
         <div style={{ ...this.getStyles(), backgroundColor: 'green', width: Math.floor(500 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
       </div>
     );

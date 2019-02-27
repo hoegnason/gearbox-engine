@@ -75,7 +75,7 @@ export class PhysicsEngine {
     }
 
     public tick() {
-
+        
         const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
@@ -84,7 +84,7 @@ export class PhysicsEngine {
 
         this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
         this.applyVelocity(dynamicBodies);
-
+        
 
         dynamicBodies.forEach((body: IBody) => {
             if (null != body.shouldUpdate && body.shouldUpdate && null != body.onUpdate) {
@@ -107,9 +107,16 @@ export class PhysicsEngine {
     private applyVelocity(dynamicBodies: IBody[]) {
 
         dynamicBodies.forEach((body: IBody) => {
+
+
             const res = Vector.add(body, body.velocity);
             body.x = res.x;
             body.y = res.y;
+
+            body.velocity.x += (body.x - body.prevX)*0.0166;
+            body.prevX = body.x;
+            body.velocity.y += (body.y - body.prevY)*0.0166;
+            body.prevY = body.y;
 
             body.shouldUpdate = true;
         })
@@ -150,14 +157,38 @@ export class PhysicsEngine {
     private resolveCollisions(collisions: IBodyCollision[]): void {
 
         collisions.forEach((collision: IBodyCollision) => {
-
+        
             /*
-            collision.bodyA.velocity.x = 0;
-            collision.bodyA.velocity.y = 0;
+        const curTime: Date = new Date();
+        const elapsedTime: number = (curTime.getMilliseconds() - this.lastTime.getMilliseconds());
+        this.lastTime = curTime;
+        */
+/*
+            if (collision.bodyA.dynamic){
+               if (collision.bodyA.y < collision.bodyB.y){
+                collision.bodyA.y = 0;
+                if (collision.bodyA.velocity.y > 0){
+                    collision.bodyA.velocity.y = collision.bodyA.velocity.y * -1;
+                }
+               }
+            }
+*/
+            /*
+            if (collision.bodyB.dynamic){
+                if (collision.bodyB.y > collision.bodyA.y){
+                 collision.bodyB.y = 0;
+                 if (collision.bodyB.velocity.y > 0){
+                     collision.bodyB.velocity.y = collision.bodyB.velocity.y * -1;
+                 }
+                }
+             }*/
+            
+            // collision.bodyA.velocity.x = 0;
+            // collision.bodyA.velocity.y = 0;
 
-            collision.bodyB.velocity.x = 0;
-            collision.bodyB.velocity.y = 0;
-            */
+           // collision.bodyB.velocity.x = 0;
+           // collision.bodyB.velocity.y = 0;
+            
 
             if (null != collision.bodyA.onCollision) {
 

@@ -25,10 +25,12 @@ export class Body extends React.Component<IBodyProps, {}> {
             colided: false,
             dynamic: false,
             height: 0,
+            prevX: 0,
+            prevY: 0,
             velocity: {x: 0, y: 0},
             width: 0,
             x: 0,
-            y: 0
+            y: 0,
         }
     }
 
