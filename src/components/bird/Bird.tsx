@@ -231,7 +231,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
       }
 
       setTimeout(() => {
-        AudioManager.playSound('die');
+        AudioManager.playSound('hit');
       }, 1000);
     }
   }
