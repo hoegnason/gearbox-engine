@@ -29,7 +29,6 @@ export class Box extends React.Component<IBoxProps, {}> {
 
   public body: any;
 
-
   constructor(props: any) {
     super(props);
 
@@ -37,8 +36,15 @@ export class Box extends React.Component<IBoxProps, {}> {
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('background_music', "assets/sound/arcade-loop.ogg", true);
+    AudioManager.loadSoundFile('background_music', "assets/sound/arcade-loop.ogg", false);
     AudioManager.playSound('background_music');
+    
+  }
+
+  public componentWillUnmount() {
+
+    AudioManager.stopSound('background_music');
+
   }
 
   public render() {
