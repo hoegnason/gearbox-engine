@@ -133,8 +133,9 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
     {/* <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} /> */}
 
-    const y = this.body.body.velocity.y;
-    const attitude = Math.max(Math.min((y - 5), 20), -20);
+    const y = Math.floor(this.body.body.velocity.y * 1.5);
+
+    const attitude = Math.max(Math.min((y-15), 90), -20);
 
     return (
       <div>
