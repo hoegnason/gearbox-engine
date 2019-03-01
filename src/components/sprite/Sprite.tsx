@@ -82,7 +82,7 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
     public componentDidMount() {
         
         // tslint:disable-next-line:no-console
-        console.log('this.props.animate: ', this.props.animate);
+        // console.log('this.props.animate: ', this.props.animate);
 
         if (null != this.props.animate && this.props.animate) {
             this.subscription = (this.context.loop as GameLoop).subscribe(this.animate);
@@ -99,7 +99,7 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
     public render() {
 
         // tslint:disable-next-line:no-console
-        console.log('spriteTile: ', this.state.tileID);
+        // console.log('spriteTile: ', this.state.tileID);
 
         return (
             <div style={this.getWrapperStyles()}>
@@ -123,7 +123,7 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
     private animate(): void {
 
         // tslint:disable-next-line:no-console
-        console.log(this.props.ticksPerFrame, this.tick);
+        // console.log(this.props.ticksPerFrame, this.tick);
 
         if (!this.state.finished) {
 
@@ -131,15 +131,14 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
                 this.stop = true;
 
                 // tslint:disable-next-line:no-console
-                console.log('Should animate!', this.state.tileID);
+                // console.log('Should animate!', this.state.tileID);
 
                 if (null != this.props.opts && null != this.props.opts['sprite-sheet'] && this.props.steps) {
 
                     const nextStep = (this.state.currentStep + 1) % this.props.steps.length;
-                    const nextTile = {...this.props.opts['sprite-sheet'][nextStep]};
 
                     // tslint:disable-next-line:no-console
-                    console.log('nextStep:', nextStep, nextTile);
+                    // console.log('nextStep:', nextStep, nextTile);
 
                     this.tick = 0;
 
