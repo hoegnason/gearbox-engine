@@ -15,6 +15,11 @@ import { IGameStateState } from '../GameState/GameState';
 import { IBody } from '../../core/physics/physics-engine';
 
 import { gameState } from '../GameState/DefaultProps';
+import Sprite from '../sprite/Sprite';
+
+import BirdHero from '../../assets/sprites/BirdHero.png';
+
+import BirdHeroOpts from '../../assets/sprites/BirdHero.json';
 
 let scoreColiderID: number = 0;
 
@@ -45,6 +50,20 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   constructor(props: any) {
     super(props);
+
+    this.body = {
+      body: {
+        bodyID: 1,
+        bodyName: 'Bird',
+        colided: false,
+        dynamic: false,
+        height: 0,
+        velocity: { x: 0, y: 0 },
+        width: 0,
+        x: 0,
+        y: 0
+      }
+    };
 
     this.onCollision = this.onCollision.bind(this);
   }
@@ -112,18 +131,20 @@ export class Bird extends React.Component<IBirdProps, {}> {
       this.props.gameState.ready = true;
     }
 
+    {/* <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} /> */}
+
     return (
       <div>
         <Body bodyName={'Bird'} ref={b => { this.body = b; }} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
-        <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
+        <Sprite x={this.body.body.x} y={this.body.body.y} width={67} height={113} src={BirdHero} opts={BirdHeroOpts} />
       </div>
     );
   }
 
   private jump() {
 
-    if(!this.props.gameState.ready) {
-      this.props.gameState.updateState!({ready: true});
+    if (!this.props.gameState.ready) {
+      this.props.gameState.updateState!({ ready: true });
     }
 
     if (!this.props.gameState.gameOver) {
@@ -226,19 +247,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
         AudioManager.playSound('die');
       }, 1000);
     }
-  }
-
-  private getStyles(): React.CSSProperties {
-
-    if (null != this.body) {
-      return {
-        position: 'absolute',
-        transform: `translate(${Math.floor((this.body.body.x * this.context.scale))}px, ${Math.floor((this.body.body.y * this.context.scale))}px)`,
-        transformOrigin: 'left top',
-      };
-    }
-
-    return {};
   }
 }
 

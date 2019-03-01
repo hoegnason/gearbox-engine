@@ -8,14 +8,27 @@ export interface ISpriteProps {
     width: number;
     x: number;
     y: number;
+    opts: object;
 }
 
-export default class Sprite extends React.Component<ISpriteProps, {}> {
+export interface ISpriteTile {
+    height: number;
+    width: number;
+    x: number;
+    y: number;
+}
+
+export interface ISpriteState {
+    spriteTile?: ISpriteTile;
+}
+
+export default class Sprite extends React.Component<ISpriteProps, ISpriteState> {
 
     public static propTypes = {
-        height: PropTypes.array,
+        height: PropTypes.number,
+        opts: PropTypes.object,
         src: PropTypes.string,
-        styles: PropTypes.func,
+        style: PropTypes.object,
         width: PropTypes.number,
         x: PropTypes.number,
         y: PropTypes.number
@@ -23,6 +36,7 @@ export default class Sprite extends React.Component<ISpriteProps, {}> {
 
     public static defaultProps = {
         height: 0,
+        opts: {},
         src: PropTypes.string,
         styles: {},
         width: 0,
@@ -35,74 +49,80 @@ export default class Sprite extends React.Component<ISpriteProps, {}> {
         scale: PropTypes.number
     };
 
-    private imageURL: string;
-    private prevSrc: string;
+    public constructor(props: any) {
+        super(props);
 
-    public componentWillReceiveProps(props: ISpriteProps) {
-
-        if (null != this.props.src && '' !== this.props.src && this.prevSrc !== props.src) {
-            this.loadImage(props.src);
-            this.prevSrc = props.src;
-        }
+        this.state = {};
     }
-
-    // TODO: Fix types!
-    /*
-    public shouldComponentUpdate(nextProps: any, nextState: any, nextContext: any) {
-        return this.context.scale !== nextContext.scale;
-    }
-    */
 
     public render() {
 
         return (
-            <img style={{ ...this.getInnerStyles(), ...this.props.style }} src={this.imageURL} />
+            <div style={this.getWrapperStyles()}>
+                <img style={{ ...this.getInnerStyles(), ...this.props.style }} src={this.props.src} />
+            </div>
         );
     }
 
-    /*
+    public componentWillReceiveProps(nextProps: ISpriteProps) {
+
+        if (null != nextProps && null != nextProps.opts && null != nextProps.opts['sprite-sheet'] && null != nextProps.opts['sprite-sheet'][0]) {
+
+            const tile = nextProps.opts['sprite-sheet'][1];
+
+            this.setState({ spriteTile: tile });
+        }
+    }
 
     private getWrapperStyles(): React.CSSProperties {
+
+        if (null != this.state.spriteTile) {
+            return {
+                height: this.scale(this.state.spriteTile.height * this.context.scale),
+                left: this.scale(this.props.x * this.context.scale),
+                overflow: 'hidden',
+                position: 'absolute',
+                top: this.scale(this.props.y),
+                transformOrigin: 'top left',
+                /*
+                transform: `translate(${Math.floor((this.props.x * this.context.scale))}px, ${Math.floor((this.props.y * this.context.scale))}px)`,
+                transformOrigin: 'left top',
+                */
+                width: this.scale(this.state.spriteTile.width),
+            }
+        }
+
         return {
-            
-            height: '100%',
-            left: 0,
+            height: this.scale(this.props.height * this.context.scale),
+            left: this.scale(this.props.x * this.context.scale),
+            overflow: 'hidden',
             position: 'absolute',
-            top: 0,
-            width: '100%'
-        };
-    }
-    */
-
-    private loadImage(uri: string) {
-
-        import(uri).then((image) => {
-            
-
-            // tslint:disable-next-line:no-console
-            console.log('image: ', image);
-
-            this.imageURL = image;
-        });
-
-
-        // tslint:disable-next-line:no-console
-        console.log('uri: ', uri);
-
-        // this.imageURL = require(uri);
-    }
-
-    private getInnerStyles(): React.CSSProperties {
-        return {
-            height: Math.floor((this.props.height * this.context.scale)),
-            left: Math.floor((this.props.x * this.context.scale)),
-            position: 'absolute',
-            top: Math.floor((this.props.y * this.context.scale)),
+            top: this.scale(this.props.y),
+            transformOrigin: 'top left',
             /*
             transform: `translate(${Math.floor((this.props.x * this.context.scale))}px, ${Math.floor((this.props.y * this.context.scale))}px)`,
             transformOrigin: 'left top',
             */
-            width: Math.floor((this.props.width * this.context.scale)),
+            width: this.scale(this.props.width),
         };
+    }
+
+    private getInnerStyles(): React.CSSProperties {
+
+        if (null != this.state.spriteTile) {
+            return {
+                height: this.scale(128),
+                position: 'absolute',
+                transform: `translate(-${this.scale(this.state.spriteTile.x + (this.state.spriteTile.width / 2))}px, -${this.scale(this.state.spriteTile.y)}px)`,
+                transformOrigin: 'left top',
+                width: this.scale(384)
+            };
+        }
+
+        return {};
+    }
+
+    private scale(scalar: number): number {
+        return Math.floor(scalar * this.context.scale);
     }
 }

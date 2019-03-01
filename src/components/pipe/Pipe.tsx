@@ -3,7 +3,8 @@ import * as React from 'react';
 import Body from '../body/Body';
 import Sprite from '../sprite/Sprite';
 
-import pipeSprite from '../../assets/sprites/BirdHero.png';
+import croppedColumn from '../../assets/sprites/CroppedColumn.png';
+import croppedColumnReversed from '../../assets/sprites/CroppedColumnReversed.png';
 
 export interface IPipeProps {
     x: number;
@@ -65,18 +66,10 @@ class Pipe extends React.Component<IPipeProps, {}> {
         return (
             <div>
                 <Body bodyName={'Pipe'} x={this.props.x} y={pipeTopY} width={pipeWidth} height={pipeTopHeight} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
-                
-                <div style={{ transform: `translate(0px, ${((-1 * (1024 - pipeTopHeight)) * this.context.scale )}px)` }}>
-                {/* './assets/sprites/CroppedColumnReversed.png' */}
-                    <Sprite x={this.props.x} y={pipeTopY} width={100} height={1024} src={'assets/sprites/CroppedColumnReversed.png'} />
-                </div>
-
-                <img src={pipeSprite} />
+                <Sprite x={this.props.x} y={((-1 * (1024 - (pipeTopHeight))) / this.context.scale)} width={100} height={1024} src={croppedColumnReversed} />
 
                 <Body bodyName={'Pipe'} x={this.props.x} y={pipeButtomY} width={pipeWidth} height={pipeButtomHeight} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
-                <div>
-                    <Sprite x={this.props.x} y={pipeButtomY} width={100} height={1024} src={'assets/sprites/CroppedColumn.png'} />
-                </div>
+                <Sprite x={this.props.x} y={pipeButtomY} width={100} height={1024} src={croppedColumn} />
 
                 <Body bodyName={'ScoreColider'} x={this.props.x + pipeWidth} y={scoreColiderY} width={pipeWidth} height={200} dynamic={false} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
