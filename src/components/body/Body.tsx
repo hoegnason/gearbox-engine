@@ -27,6 +27,7 @@ export class Body extends React.Component<IBodyProps, {}> {
             height: 0,
             prevX: 0,
             prevY: 0,
+            trigger: false,
             velocity: {x: 0, y: 0},
             width: 0,
             x: 0,

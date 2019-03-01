@@ -74,7 +74,7 @@ export class Level extends React.Component<ILevelProps, {}> {
                 <div style={stageBackground} />
                 <PipeGenerator gameState={this.props.gameState} />
                 <div style={floorBackground} />
-                <Body bodyName={'Ground'} dynamic={false} prevX={0} prevY={(576 - 64)} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                <Body bodyName={'Ground'} dynamic={false} trigger={false} prevX={0} prevY={(576 - 64)} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         );
     }

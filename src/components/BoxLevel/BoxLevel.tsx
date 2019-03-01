@@ -65,7 +65,8 @@ export default class Level extends React.Component<ILevelProps, {}> {
             <div>
                 <div style={stageBackground} />
                 <div style={floorBackground} />
-                <Body bodyName={'Ground'} dynamic={false} prevX={0} prevY={0} x={0} y={550} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                <Body bodyName={'Ground'} dynamic={false} trigger={false} prevX={0} prevY={0} x={0} y={550} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                <Body bodyName={'Wall'} dynamic={false} trigger={false} prevX={0} prevY={0} x={0} y={0} width={64} height={1024} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         );
     }
