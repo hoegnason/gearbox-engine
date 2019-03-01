@@ -45,7 +45,7 @@ export class PhysicsEngine {
 
     constructor(options?: IPhysicsEngineOptions) {
         this.collisionDection = new CollisionDection();
-        this.gravity = { x: -0.7, y: 0 };
+        this.gravity = { x: 0, y: 1 };
 
         this.world = [];
     }
@@ -194,7 +194,7 @@ export class PhysicsEngine {
   var half_width_box2:Number = box2.width*0.5;
 
   var gap_between_boxes:Number = length - half_width_box1 - half_width_box2;
-*/
+
             const lengthX: number = Math.abs((collision.bodyA.x+collision.bodyA.width*0.5) - (collision.bodyB.x+collision.bodyB.width*0.5));
             const lengthY: number = Math.abs((collision.bodyA.y+collision.bodyA.height*0.5) - (collision.bodyB.y+collision.bodyB.height*0.5));
             const halfWidthA: number = collision.bodyA.width*0.5;
@@ -203,21 +203,20 @@ export class PhysicsEngine {
             const halfHeightB: number = collision.bodyB.height*0.5;
 
             const gapX: number = lengthX - halfWidthA - halfWidthB;
-            const gapY: number = lengthY - halfHeightA - halfHeightB;
+            const gapY: number = lengthY - halfHeightA - halfHeightB;*/
 
             if(collision.bodyA.dynamic){
                 if(!collision.bodyB.trigger){
-                    if (gapX <= 0 || gapY <= 0){
+                    if (collision.bodyA.velocity.y > 0){
                     
-                        if(gapY < gapX){
+
                             // collision.bodyA.y = collision.bodyA.y - (collision.bodyA.width-(collision.bodyB.y - collision.bodyA.y));
                             collision.bodyA.velocity.y *= -0.5;
                         }
-                        else{
+                    if (collision.bodyA.velocity.x !== 0){
                             // collision.bodyA.x = collision.bodyA.x - (collision.bodyA.width-(collision.bodyB.x - collision.bodyA.x));
                             collision.bodyA.velocity.x *= -0.5;
                         }
-                    }
                 }
                 
             }
