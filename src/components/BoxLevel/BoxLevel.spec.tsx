@@ -10,7 +10,7 @@ describe('BoxLevel functionality', () => {
 
     const wrapper = shallow(<BoxLevel />);
     
-    expect(wrapper.find('div').length).toBe(2);
+    expect(wrapper.find('div').length).toBe(3);
 
   });
 });

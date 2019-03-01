@@ -131,15 +131,13 @@ export class Bird extends React.Component<IBirdProps, {}> {
       this.props.gameState.ready = true;
     }
 
-    {/* <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} /> */}
-
     const y = Math.floor(this.body.body.velocity.y * 1.5);
 
     const attitude = Math.max(Math.min((y-15), 90), -20);
 
     return (
       <div>
-        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
+        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} trigger={false} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} prevX={xOffset} prevY={yOffset} />
         <Sprite x={this.body.body.x} y={this.body.body.y} width={67} height={113} src={BirdHero} opts={BirdHeroOpts} steps={['BirdHero_1', 'BirdHero_0']} ticksPerFrame={15} rotate={attitude} animate={true} />
       </div>
     );
@@ -152,7 +150,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
 
     if (!this.props.gameState.gameOver) {
-      this.body.body.velocity.y = -15;
+      this.body.body.velocity.y = -10;
       AudioManager.playSound('wing');
       this.context.Log("Jump!!");
     }

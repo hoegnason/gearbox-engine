@@ -6,6 +6,7 @@ export interface IBody extends IRect {
     bodyID?: number;
     bodyName?: string;
     dynamic: boolean;
+    trigger: boolean;
     velocity: IVector;
     colided: boolean;
     shouldUpdate?: boolean;
@@ -75,7 +76,7 @@ export class PhysicsEngine {
     }
 
     public tick() {
-
+        
         const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
@@ -84,7 +85,7 @@ export class PhysicsEngine {
 
         this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
         this.applyVelocity(dynamicBodies);
-
+        
 
         dynamicBodies.forEach((body: IBody) => {
             if (null != body.shouldUpdate && body.shouldUpdate && null != body.onUpdate) {
@@ -107,9 +108,16 @@ export class PhysicsEngine {
     private applyVelocity(dynamicBodies: IBody[]) {
 
         dynamicBodies.forEach((body: IBody) => {
+
+
             const res = Vector.add(body, body.velocity);
             body.x = res.x;
             body.y = res.y;
+
+            body.velocity.x += (body.x - body.prevX)*0.0166;
+            body.prevX = body.x;
+            body.velocity.y += (body.y - body.prevY)*0.0166;
+            body.prevY = body.y;
 
             body.shouldUpdate = true;
         })
@@ -151,13 +159,74 @@ export class PhysicsEngine {
 
         collisions.forEach((collision: IBodyCollision) => {
 
-            /*
-            collision.bodyA.velocity.x = 0;
-            collision.bodyA.velocity.y = 0;
+/*
+            
+  // Calculate relative velocity
+  Vec2 rv = B.velocity - A.velocity
+ 
+  // Calculate relative velocity in terms of the normal direction
+  float velAlongNormal = DotProduct( rv, normal )
+ 
+  // Do not resolve if velocities are separating
+  if(velAlongNormal > 0)
+    return;
+ 
+  // Calculate restitution
+  float e = min( A.restitution, B.restitution)
+ 
+  // Calculate impulse scalar
+  float j = -(1 + e) * velAlongNormal
+  j /= 1 / A.mass + 1 / B.mass
+ 
+  // Apply impulse
+  Vec2 impulse = j * normal
+  A.velocity -= 1 / A.mass * impulse
+  B.velocity += 1 / B.mass * impulse
 
-            collision.bodyB.velocity.x = 0;
-            collision.bodyB.velocity.y = 0;
-            */
+
+  const float percent = 0.2 // usually 20% to 80%
+  Vec2 correction = penetrationDepth / (A.inv_mass + B.inv_mass)) * percent * n
+  A.position -= A.inv_mass * correction
+  B.position += B.inv_mass * correction
+
+  var length:Number = box2.x - box1.x;
+  var half_width_box1:Number = box1.width*0.5;
+  var half_width_box2:Number = box2.width*0.5;
+
+  var gap_between_boxes:Number = length - half_width_box1 - half_width_box2;
+
+            const lengthX: number = Math.abs((collision.bodyA.x+collision.bodyA.width*0.5) - (collision.bodyB.x+collision.bodyB.width*0.5));
+            const lengthY: number = Math.abs((collision.bodyA.y+collision.bodyA.height*0.5) - (collision.bodyB.y+collision.bodyB.height*0.5));
+            const halfWidthA: number = collision.bodyA.width*0.5;
+            const halfWidthB: number = collision.bodyB.width*0.5;
+            const halfHeightA: number = collision.bodyA.height*0.5;
+            const halfHeightB: number = collision.bodyB.height*0.5;
+
+            const gapX: number = lengthX - halfWidthA - halfWidthB;
+            const gapY: number = lengthY - halfHeightA - halfHeightB;*/
+
+            if(collision.bodyA.dynamic){
+                if(!collision.bodyB.trigger){
+                    if (collision.bodyA.velocity.y > 0){
+                    
+
+                            // collision.bodyA.y = collision.bodyA.y - (collision.bodyA.width-(collision.bodyB.y - collision.bodyA.y));
+                            collision.bodyA.velocity.y *= -0.5;
+                        }
+                    if (collision.bodyA.velocity.x !== 0){
+                            // collision.bodyA.x = collision.bodyA.x - (collision.bodyA.width-(collision.bodyB.x - collision.bodyA.x));
+                            collision.bodyA.velocity.x *= -0.5;
+                        }
+                }
+                
+            }
+            
+            // collision.bodyA.velocity.x = 0;
+            // collision.bodyA.velocity.y = 0;
+
+           // collision.bodyB.velocity.x = 0;
+           // collision.bodyB.velocity.y = 0;
+            
 
             if (null != collision.bodyA.onCollision) {
 
