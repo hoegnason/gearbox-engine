@@ -133,10 +133,13 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
     {/* <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} /> */}
 
+    const y = this.body.body.velocity.y;
+    const attitude = Math.max(Math.min((y - 5), 20), -20);
+
     return (
       <div>
         <Body bodyName={'Bird'} ref={b => { this.body = b; }} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
-        <Sprite x={this.body.body.x} y={this.body.body.y} width={67} height={113} src={BirdHero} opts={BirdHeroOpts} />
+        <Sprite x={this.body.body.x} y={this.body.body.y} width={67} height={113} src={BirdHero} opts={BirdHeroOpts} steps={['BirdHero_1', 'BirdHero_0']} ticksPerFrame={15} rotate={attitude} animate={true} />
       </div>
     );
   }
