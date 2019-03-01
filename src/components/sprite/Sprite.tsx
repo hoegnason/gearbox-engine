@@ -35,6 +35,17 @@ export default class Sprite extends React.Component<ISpriteProps, {}> {
         scale: PropTypes.number
     };
 
+    private imageURL: string;
+    private prevSrc: string;
+
+    public componentWillReceiveProps(props: ISpriteProps) {
+
+        if (null != this.props.src && '' !== this.props.src && this.prevSrc !== props.src) {
+            this.loadImage(props.src);
+            this.prevSrc = props.src;
+        }
+    }
+
     // TODO: Fix types!
     /*
     public shouldComponentUpdate(nextProps: any, nextState: any, nextContext: any) {
@@ -45,7 +56,7 @@ export default class Sprite extends React.Component<ISpriteProps, {}> {
     public render() {
 
         return (
-            <img style={{...this.getInnerStyles(), ...this.props.style}} src={this.props.src} />
+            <img style={{ ...this.getInnerStyles(), ...this.props.style }} src={this.imageURL} />
         );
     }
 
@@ -62,6 +73,24 @@ export default class Sprite extends React.Component<ISpriteProps, {}> {
         };
     }
     */
+
+    private loadImage(uri: string) {
+
+        import(uri).then((image) => {
+            
+
+            // tslint:disable-next-line:no-console
+            console.log('image: ', image);
+
+            this.imageURL = image;
+        });
+
+
+        // tslint:disable-next-line:no-console
+        console.log('uri: ', uri);
+
+        // this.imageURL = require(uri);
+    }
 
     private getInnerStyles(): React.CSSProperties {
         return {
