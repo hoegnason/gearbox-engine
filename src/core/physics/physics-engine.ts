@@ -43,11 +43,15 @@ export class PhysicsEngine {
 
     private nextAutoIncrement = 1;
 
+    private lastTick = 0;
+
     constructor(options?: IPhysicsEngineOptions) {
         this.collisionDection = new CollisionDection();
         this.gravity = { x: 0, y: 1 };
 
         this.world = [];
+
+        this.lastTick = 0.001 * Date.now();
     }
 
     public addBody(body: IBody): void {
@@ -75,7 +79,11 @@ export class PhysicsEngine {
         });
     }
 
-    public tick() {
+    public tick(rerun = true) {
+
+        if (!rerun) {
+            return;
+        }
         
         const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
@@ -97,6 +105,8 @@ export class PhysicsEngine {
         if (null != this.update) {
             this.update();
         }
+
+        this.tick(false);        
     }
 
     private autoIncrement(): number {
@@ -107,6 +117,10 @@ export class PhysicsEngine {
 
     private applyVelocity(dynamicBodies: IBody[]) {
 
+        const now  = 0.001 * Date.now();
+
+        const tickSize = Math.abs(now - this.lastTick);
+
         dynamicBodies.forEach((body: IBody) => {
 
 
@@ -114,13 +128,15 @@ export class PhysicsEngine {
             body.x = res.x;
             body.y = res.y;
 
-            body.velocity.x += (body.x - body.prevX)*0.0166;
+            body.velocity.x += (body.x - body.prevX) * tickSize;
             body.prevX = body.x;
-            body.velocity.y += (body.y - body.prevY)*0.0166;
+            body.velocity.y += (body.y - body.prevY) * tickSize;
             body.prevY = body.y;
 
             body.shouldUpdate = true;
         })
+
+        this.lastTick = now;
     }
 
     private applyGravity(dynamicBodies: IBody[]) {
@@ -207,15 +223,20 @@ export class PhysicsEngine {
 
             if(collision.bodyA.dynamic){
                 if(!collision.bodyB.trigger){
+                    
                     if (collision.bodyA.velocity.y > 0){
                     
 
                             // collision.bodyA.y = collision.bodyA.y - (collision.bodyA.width-(collision.bodyB.y - collision.bodyA.y));
-                            collision.bodyA.velocity.y *= -0.5;
+                            // collision.bodyA.velocity.y *= -0.5;
+
+                            collision.bodyA.velocity.y *= -0.15;
                         }
                     if (collision.bodyA.velocity.x !== 0){
                             // collision.bodyA.x = collision.bodyA.x - (collision.bodyA.width-(collision.bodyB.x - collision.bodyA.x));
-                            collision.bodyA.velocity.x *= -0.5;
+                            // collision.bodyA.velocity.x *= -0.5;
+
+                            collision.bodyA.velocity.x *= -0.15;
                         }
                 }
                 

@@ -50,7 +50,7 @@ export class GameState extends React.Component<IGameStateProps, IGameStateState>
 
     public componentDidMount() {
 
-        this.context.engine.update = this.loop;
+        // this.context.engine.update = this.loop;
     }
 
     public loop(): void {

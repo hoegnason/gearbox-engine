@@ -1,5 +1,7 @@
 {
     "name": "BirdHero",
+    "height": 128,
+    "width": 384,
     "sprite-sheet": [
         {
             "name": "BirdHero_0",

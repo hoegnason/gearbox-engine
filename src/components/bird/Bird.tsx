@@ -197,6 +197,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
   }
 
+  /*
   private resetGame() {
     setTimeout(() => {
       this.body.body.y = 0;
@@ -216,6 +217,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
       this.context.loop.start();
     }, 1000);
   }
+  */
 
   private onCollision(bodyColidedWith: IBody): void {
 
@@ -238,11 +240,11 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
         AudioManager.playSound('hit');
 
-        this.context.loop.stop();
+        // this.context.loop.stop();
 
         this.props.gameState!.updateState!({ gameOver: true });
 
-        this.resetGame();
+        // this.resetGame();
       }
 
       setTimeout(() => {

@@ -10,7 +10,7 @@ export interface ISpriteProps {
     width: number;
     x: number;
     y: number;
-    opts?: object;
+    opts?: ISpriteOpts;
     steps?: string[];
     animate?: boolean;
     ticksPerFrame?: number;
@@ -32,7 +32,13 @@ export interface ISpriteState {
     tileID: number;
 }
 
-export default class Sprite extends React.Component<ISpriteProps, ISpriteState> {
+export interface ISpriteOpts {
+    name: string;
+    width: number;
+    height: number;
+}
+
+export default class Sprite extends React.PureComponent<ISpriteProps, ISpriteState> {
 
     public static propTypes = {
         height: PropTypes.number,
@@ -80,7 +86,7 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
     }
 
     public componentDidMount() {
-        
+
         // tslint:disable-next-line:no-console
         // console.log('this.props.animate: ', this.props.animate);
 
@@ -113,9 +119,9 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
         if (null != nextProps && null != nextProps.opts && null != nextProps.opts['sprite-sheet'] && null != nextProps.opts['sprite-sheet'][0]) {
 
             if (this.props.animate) {
-                this.setState({animate: true });
+                this.setState({ animate: true });
             } else {
-                this.setState({animate: false });
+                this.setState({ animate: false });
             }
         }
     }
@@ -200,12 +206,16 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
         if (null != this.props.opts && null != this.props.opts['sprite-sheet'] && null != this.props.opts['sprite-sheet'][this.state.tileID]) {
             const tile: ISpriteTile = this.props.opts['sprite-sheet'][this.state.tileID];
 
+            const height = this.props.opts.height;
+            const width = this.props.opts.width;
+
+
             return {
-                height: this.scale(128),
+                height: this.scale(height),
                 position: 'absolute',
                 transform: `translate(-${this.scale(tile.x + (tile.width / 2))}px, -${this.scale(tile.y)}px)`,
                 transformOrigin: 'left top',
-                width: this.scale(384)
+                width: this.scale(width)
             };
         }
 
