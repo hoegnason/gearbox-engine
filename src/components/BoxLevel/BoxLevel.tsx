@@ -30,7 +30,7 @@ export default class Level extends React.Component<ILevelProps, {}> {
     }
 
     public componentWillUnmount(){
-        ((window as any).debug)= true;
+        ((window as any).debug)= false;
     }
 
     public render() {
