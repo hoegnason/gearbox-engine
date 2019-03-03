@@ -120,6 +120,7 @@ export class PhysicsEngine {
             body.velocity.y += (body.y - body.prevY)*0.0166;
             body.prevY = body.y;
 
+            // shouldUpdate always true?
             body.shouldUpdate = true;
         })
     }
