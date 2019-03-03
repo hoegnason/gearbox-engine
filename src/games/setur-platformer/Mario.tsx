@@ -164,20 +164,26 @@ export class Mario extends React.Component<IMarioProps, {}> {
     private move(right: boolean) {
 
         if (right) {
-            if (this.body.body.velocity.x <= 10) {
+
+            if (this.body.body.velocity.x < 0) {
+                this.body.body.velocity.x = 0;
+            } else if (this.body.body.velocity.x <= 10) {
                 this.body.body.velocity.x = 10;
             }
         }
         
         if (!right) {
-            if (this.body.body.velocity.x >= -10) {
+
+            if (this.body.body.velocity.x > 0) {
+                this.body.body.velocity.x = 0;
+            } else if (this.body.body.velocity.x >= -10) {
                 this.body.body.velocity.x = -10;
             }
         }
     }
 
     private doUpdate() {
-        this.props.gameState.updateState!({ x: this.body.body.x });
+        this.props.gameState.updateState!({ x: Math.floor(this.body.body.x) });
     }
 
     private onCollision(colidedWith: IBody) {

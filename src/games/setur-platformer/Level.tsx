@@ -89,14 +89,24 @@ export class Level extends React.Component<ILevelProps, {}> {
         });
 
         return (
-            <div>
+            <div style={this.getWrapperStyles()}>
                 <div style={stageBackground} />
                 <div style={floorBackground} />
                 <Body bodyName={'Ground'} dynamic={false} trigger={false} prevX={0} prevY={(576 - 64)} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
                 {platform}
                 <Sprite y={platformY} x={platformX} width={512} height={128} src={DirtBlock} opts={DirtBlockOpts} style={{ zIndex: 999999999999 }} />
-                <Body bodyName={'Platform'} dynamic={false} trigger={false} prevX={platformX} prevY={platformY} x={0} y={platformY} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                <Body bodyName={'Platform'} dynamic={false} trigger={false} prevX={platformX} prevY={platformY} x={0} y={platformY} width={1280} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         );
+    }
+
+    private getWrapperStyles(): React.CSSProperties {
+        return {
+/*
+            position: 'absolute',
+            transform: `translate(${Math.floor(-1 * this.props.gameState!.x! * this.context.scale)}px, 0px) translateZ(0)`,
+            transformOrigin: 'left top',
+            */
+          };
     }
 }

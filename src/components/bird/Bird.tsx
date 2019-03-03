@@ -138,7 +138,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
     return (
       <div>
         <Body bodyName={'Bird'} ref={b => { this.body = b; }} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} trigger={false} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} prevX={xOffset} prevY={yOffset} />
-        <Sprite x={this.body.body.x} y={this.body.body.y} width={67} height={113} src={BirdHero} opts={BirdHeroOpts} steps={['BirdHero_1', 'BirdHero_0']} ticksPerFrame={15} rotate={attitude} animate={true} />
+        <Sprite x={Math.floor(this.body.body.x)} y={Math.floor(this.body.body.y)} width={67} height={113} src={BirdHero} opts={BirdHeroOpts} steps={['BirdHero_1', 'BirdHero_0']} ticksPerFrame={15} rotate={attitude} animate={true} />
       </div>
     );
   }
