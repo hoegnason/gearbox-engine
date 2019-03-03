@@ -2,7 +2,8 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { IGameStateState } from '../GameState/GameState';
 
-import {gameState} from '../GameState/DefaultProps';
+import { gameState } from '../GameState/DefaultProps';
+import { ScaledText } from '../ScaledText/ScaledText';
 
 interface IFlappyUIProps {
     gameState: IGameStateState;
@@ -17,16 +18,21 @@ export class FlappyUI extends React.Component<IFlappyUIProps, {}> {
         width: PropTypes.number
     }
 
-    public static defaultProps: IFlappyUIProps = {gameState}
+    public static defaultProps: IFlappyUIProps = { gameState }
 
     private oldProps: IGameStateState = {};
+    private renderedScale: 0;
 
     public shouldComponentUpdate(nextProps: IFlappyUIProps, nextState: {}) {
-        
+
+        if (this.renderedScale !== this.context.scale) {
+            return true;
+        }
+
         if ((this.oldProps.debug !== nextProps.gameState.debug) || (this.oldProps.gameOver !== nextProps.gameState.gameOver) || (this.oldProps.paused !== nextProps.gameState.paused) || (this.oldProps.score !== nextProps.gameState.score)) {
-            
+
             this.oldProps = nextProps.gameState;
-            
+
             return true;
         }
 
@@ -47,59 +53,56 @@ export class FlappyUI extends React.Component<IFlappyUIProps, {}> {
 
     private getReadyElement(): React.ReactElement {
         return (
-            <div style={{
+            <ScaledText style={{
                 ...this.getTextStyle(),
-                borderRadius: '25px',color: 'gold', fontFamily: "'Luckiest Guy', cursive", fontSize: 24 * this.context.scale, left: '20%', position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
+                borderRadius: '25px', color: 'gold', fontSize: '24px', left: '20%', position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
                 // tslint:disable-next-line:object-literal-sort-keys
                 WebkitTextStrokeColor: 'black',
                 WebkitTextFillColor: 'gold',
-                WebkitTextStrokeWidth: `${1 * this.context.scale}px`
-            }}>Get Ready</div>)
+                WebkitTextStrokeWidth: '2px '
+            }}>Get Ready</ScaledText>)
     }
 
     private getDebugElement(): React.ReactElement {
         return (
-            <div style={{
-                ...this.getTextStyle(), backgroundColor: 'rgba(0, 0, 0, 0.3)', borderRadius: '25px', fontFamily: "'Luckiest Guy', cursive", fontSize: 24 * this.context.scale, left: '50%', padding: `${this.context.scale * 20}px`, position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
-
-                /* transform: `translate(${(this.context.width / 2)}px, ${(this.context.height / 2)}px)`, */ /* height: '100%', width: '100%', */
+            <ScaledText style={{
+                ...this.getTextStyle(), backgroundColor: 'rgba(0, 0, 0, 0.3)', borderRadius: '25px', fontSize: '24px', left: '50%', padding: '20px', position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
             }}>Debug Mode!<p
                 style={{
                     color: 'gold',
-                    fontSize: (18 * this.context.scale),
+                    fontSize: '18px',
                     // tslint:disable-next-line:object-literal-sort-keys
                     WebkitTextFillColor: 'gold',
                     WebkitTextStrokeColor: 'black',
-                    WebkitTextStrokeWidth: '`${1 * this.context.scale}px`'
-                }}>Auto Pilot Activated!</p></div>)
+                    WebkitTextStrokeWidth: '2px '
+                }}>Auto Pilot Activated!</p></ScaledText>)
     }
 
     private getScoreElement(): React.ReactElement {
         return (
-            <div style={{...this.getTextStyle(), fontSize: (50 * this.context.scale)}}>
+            <ScaledText style={{ ...this.getTextStyle(), fontSize: '40px', position: 'absolute', left: '50%', top: '7%', transform: 'translate(-50%, -50%)' }}>
                 {this.props.gameState.score && this.props.gameState.score}
-            </div>
-        )
+            </ScaledText>
+        );
     }
 
     private getPauseElement(): React.ReactElement {
         return (
-            <div style={{
-                ...this.getTextStyle(), backgroundColor: 'rgba(0, 0, 0, 0.3)', borderRadius: '25px', fontFamily: "'Luckiest Guy', cursive", fontSize: 96 * this.context.scale, left: '50%', padding: `${this.context.scale * 20}px`, position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
-
-                /* transform: `translate(${(this.context.width / 2)}px, ${(this.context.height / 2)}px)`, */ /* height: '100%', width: '100%', */
-            }}>Paused</div>)
+            <ScaledText style={{
+                ...this.getTextStyle(), backgroundColor: 'rgba(0, 0, 0, 0.3)', borderRadius: '25px', fontSize: '96px', left: '50%', padding: '20px', position: 'absolute', top: '25%', transform: 'translate(-50%, -50%)',
+            }}>Paused</ScaledText>)
     }
 
     private getGameOverElement(): React.ReactElement {
-        return (<div style={{ ...this.getTextStyle(), position: 'absolute', transform: `translate(0px, ${this.context.scale * 75}px)`, height: '100%', width: '100%', fontFamily: "'Luckiest Guy', cursive" }}>Game Over!</div>);
+        return (<ScaledText style={{ ...this.getTextStyle(), position: 'absolute', transform: `translate(0px, ${this.context.scale * 75}px)`, height: '100%', width: '100%' }}>Game Over!</ScaledText>);
     }
 
     private getTextStyle(): React.CSSProperties {
         return {
             WebkitTextFillColor: 'white',
             WebkitTextStrokeColor: 'black',
-            WebkitTextStrokeWidth: `${2 * this.context.scale}px`
+            WebkitTextStrokeWidth: '2px',
+            fontFamily: "'Luckiest Guy', cursive"
         };
     }
 

@@ -1,0 +1,28 @@
+{
+    "name": "BirdHero",
+    "height": 128,
+    "width": 384,
+    "sprite-sheet": [
+        {
+            "name": "BirdHero_0",
+            "x": 8,
+            "y": 30,
+            "width": 113,
+            "height": 67
+        },
+        {
+            "name": "BirdHero_1",
+            "x": 131,
+            "y": 30,
+            "width": 118,
+            "height": 67
+        },
+        {
+            "name": "BirdHero_2",
+            "x": 264,
+            "y": 30,
+            "width": 113,
+            "height": 67
+        }
+    ]   
+}

@@ -43,6 +43,8 @@ export class PhysicsEngine {
 
     private nextAutoIncrement = 1;
 
+    private lastTick = 0;
+
     constructor(options?: IPhysicsEngineOptions) {
         this.collisionDection = new CollisionDection();
         this.gravity = { x: 0, y: 1 };
@@ -107,6 +109,10 @@ export class PhysicsEngine {
 
     private applyVelocity(dynamicBodies: IBody[]) {
 
+        const now = 0.001 * Date.now();
+
+        const tickSize = Math.abs(now - this.lastTick);
+
         dynamicBodies.forEach((body: IBody) => {
 
 
@@ -114,15 +120,19 @@ export class PhysicsEngine {
             body.x = res.x;
             body.y = res.y;
 
+            
             // Verlet Integration
-            body.velocity.x += (body.x - body.prevX)*0.0166; // Frame
+            // body.velocity.x += (body.x - body.prevX)*0.0166; // Frame
+            body.velocity.x += (body.x - body.prevX) * tickSize;
             body.prevX = body.x;
-            body.velocity.y += (body.y - body.prevY)*0.0166;
+            body.velocity.y += (body.y - body.prevY) * tickSize;
             body.prevY = body.y;
 
             // shouldUpdate always true?
             body.shouldUpdate = true;
         })
+
+        this.lastTick = now;
     }
 
     private applyGravity(dynamicBodies: IBody[]) {

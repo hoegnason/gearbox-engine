@@ -10,7 +10,7 @@ interface IWorldProps {
     gravity: object;
 }
 
-let lastLoop = 0;
+// let lastLoop = 0;
 
 export default class World extends React.Component<IWorldProps, {}> {
 
@@ -88,6 +88,7 @@ export default class World extends React.Component<IWorldProps, {}> {
 
     private loop() {
 
+        /*
         // 60 frames per sec!
         const currTime = 1 * Date.now();
 
@@ -97,5 +98,8 @@ export default class World extends React.Component<IWorldProps, {}> {
 
             lastLoop = currTime;
         }
+        */
+
+        this.engine.tick();
     }
 }
