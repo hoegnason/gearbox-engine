@@ -17,7 +17,7 @@ import { Level } from '../../games/setur-platformer/Level';
 import ConsoleState from '../Console/ConsoleState';
 
 
-import Mario from 'src/games/setur-platformer/Mario';
+import Mario from '../../games/setur-platformer/Mario';
 
 
 class SeturPlatformer extends React.Component {

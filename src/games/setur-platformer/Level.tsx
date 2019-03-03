@@ -12,7 +12,7 @@ import DirtBlock from './assets/sprites/forest_terrain_dirt.png';
 
 import DirtBlockOpts from './assets/sprites/forest_terrain_dirt.json';
 
-import Sprite from 'src/components/sprite/Sprite';
+import Sprite from '../../components/sprite/Sprite';
 
 export interface ILevelProps {
     gameState?: IGameStateState;
