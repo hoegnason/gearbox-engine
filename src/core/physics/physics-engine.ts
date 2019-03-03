@@ -50,8 +50,6 @@ export class PhysicsEngine {
         this.gravity = { x: 0, y: 1 };
 
         this.world = [];
-
-        this.lastTick = 0.001 * Date.now();
     }
 
     public addBody(body: IBody): void {
@@ -79,11 +77,7 @@ export class PhysicsEngine {
         });
     }
 
-    public tick(rerun = true) {
-
-        if (!rerun) {
-            return;
-        }
+    public tick() {
         
         const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
@@ -105,8 +99,6 @@ export class PhysicsEngine {
         if (null != this.update) {
             this.update();
         }
-
-        this.tick(false);        
     }
 
     private autoIncrement(): number {
@@ -117,7 +109,7 @@ export class PhysicsEngine {
 
     private applyVelocity(dynamicBodies: IBody[]) {
 
-        const now  = 0.001 * Date.now();
+        const now = 0.001 * Date.now();
 
         const tickSize = Math.abs(now - this.lastTick);
 
@@ -223,20 +215,22 @@ export class PhysicsEngine {
 
             if(collision.bodyA.dynamic){
                 if(!collision.bodyB.trigger){
-                    
                     if (collision.bodyA.velocity.y > 0){
                     
+                        if (collision.bodyA.velocity.y === 1 || collision.bodyA.velocity.y === 2) {
+                            collision.bodyA.velocity.y = 0;
+                        } else if (collision.bodyA.velocity.y <= 3) {
+                            collision.bodyA.velocity.y *= -0.01;
+                        } else {
+                            collision.bodyA.velocity.y *= -0.5;
+                        }
 
                             // collision.bodyA.y = collision.bodyA.y - (collision.bodyA.width-(collision.bodyB.y - collision.bodyA.y));
                             // collision.bodyA.velocity.y *= -0.5;
-
-                            collision.bodyA.velocity.y *= -0.15;
                         }
                     if (collision.bodyA.velocity.x !== 0){
                             // collision.bodyA.x = collision.bodyA.x - (collision.bodyA.width-(collision.bodyB.x - collision.bodyA.x));
-                            // collision.bodyA.velocity.x *= -0.5;
-
-                            collision.bodyA.velocity.x *= -0.15;
+                            collision.bodyA.velocity.x *= -0.5;
                         }
                 }
                 

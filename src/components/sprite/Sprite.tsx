@@ -38,7 +38,7 @@ export interface ISpriteOpts {
     height: number;
 }
 
-export default class Sprite extends React.PureComponent<ISpriteProps, ISpriteState> {
+export default class Sprite extends React.Component<ISpriteProps, ISpriteState> {
 
     public static propTypes = {
         height: PropTypes.number,
@@ -71,6 +71,15 @@ export default class Sprite extends React.PureComponent<ISpriteProps, ISpriteSta
     private subscription: GameLoopSubscription;
     private stop = false;
 
+    private initialized = false;
+
+    private prevAnimated? = false;
+    private prevScale = 0;
+    private prevWidth = 0;
+    private prevHeight = 0;
+    private prevX = 0;
+    private prevY = 0;
+
     public constructor(props: any) {
         super(props);
 
@@ -83,6 +92,35 @@ export default class Sprite extends React.PureComponent<ISpriteProps, ISpriteSta
             steps: [],
             tileID: 0
         };
+    }
+
+    public shouldComponentUpdate(nextProps: ISpriteProps, nextState: ISpriteState) {
+
+        if (!this.initialized) {
+            this.initialized = true;
+
+            return true;
+        }
+
+        if (this.prevScale !== this.context.scale) {
+
+            this.prevScale = this.context.scale;
+
+            return true;
+        }
+
+        if (this.prevAnimated === nextProps.animate && this.prevWidth === nextProps.width && this.prevHeight === nextProps.height && this.prevX === nextProps.x && this.prevY === nextProps.y) {
+
+            return false;
+        }
+
+        this.prevAnimated = nextProps.animate;
+        this.prevWidth = nextProps.width;
+        this.prevHeight = nextProps.height;
+        this.prevX = nextProps.x;
+        this.prevY = nextProps.y;
+
+        return true;
     }
 
     public componentDidMount() {

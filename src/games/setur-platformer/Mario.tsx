@@ -49,6 +49,8 @@ export class Mario extends React.Component<IMarioProps, {}> {
     private oldX = 0;
     private oldY = 0;
 
+    private initialized = false;
+
     constructor(props: any) {
         super(props);
 
@@ -122,6 +124,14 @@ export class Mario extends React.Component<IMarioProps, {}> {
     }
 
     public shouldComponentUpdate(nextProps: IMarioProps, nextState: {}) {
+
+        if (!this.initialized) {
+            
+            this.initialized = true;
+            
+            return true;
+        }
+
         
         if ((Math.floor(this.body.body.x) === this.oldX) && (Math.floor(this.body.body.y) === this.oldY)) {
             return false;
