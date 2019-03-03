@@ -144,6 +144,8 @@ export class PhysicsEngine {
 
             staticBodies.forEach((staticBody: IBody) => {
 
+                // Does not check dynamic vs dynamic ...
+                
                 dynamicBodies.forEach((dynamicBody: IBody) => {
                     const colided = this.collisionDection.rectOnRect(staticBody, dynamicBody);
 
@@ -304,15 +306,6 @@ export class PhysicsEngine {
                     }
                 }
             }
-
-
-
-            
-            // collision.bodyA.velocity.x = 0;
-            // collision.bodyA.velocity.y = 0;
-
-           // collision.bodyB.velocity.x = 0;
-           // collision.bodyB.velocity.y = 0;
             
 
             if (null != collision.bodyA.onCollision) {
