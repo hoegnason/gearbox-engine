@@ -14,4 +14,11 @@ describe('Vector', () => {
         
         expect(Vector.substract(vec1, vec2)).toEqual({x: -2, y: -1});
     });
+
+    it('should calculate the dot product of <2,1> and <4,2>', () => {
+        const vec1 = {x: 2, y: 1};
+        const vec2 = {x: 4, y: 2};
+        
+        expect(Vector.dot(vec1, vec2)).toEqual(10);
+    });
 });
