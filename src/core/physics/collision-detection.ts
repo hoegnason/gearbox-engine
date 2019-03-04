@@ -5,8 +5,8 @@ export interface IRect {
     y: number;
     width: number;
     height: number;
-    prevX: number;
-    prevY: number;
+    prevX?: number;
+    prevY?: number;
 }
 
 export class CollisionDection {
