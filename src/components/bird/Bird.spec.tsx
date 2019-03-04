@@ -6,6 +6,11 @@ import GameLoop from '../../core/game-loop/GameLoop';
 import { PhysicsEngine } from '../../core/physics/physics-engine';
 import { Bird } from './Bird';
 
+
+import GameState from '../GameState/GameState';
+
+// import { gameState as defaultProps } from '../GameState/DefaultProps';
+
 // import { Body } from '../body/Body';
 
 function timeout(ms: number) {
@@ -14,12 +19,27 @@ function timeout(ms: number) {
 
 describe('Body', async () => {
 
+    (Bird as any).prototype.resetGame = () => { /* */ };
+
+    (Bird as any).prototype.body = {
+        body: {
+            bodyID: 1,
+            bodyName: 'Bird',
+            colided: false,
+            dynamic: false,
+            height: 0,
+            velocity: { x: 0, y: 0 },
+            width: 0,
+            x: 0,
+            y: 0
+        }
+    }
+
     const dispatchKey = (key: string): void => {
         const keyboardEvent = new KeyboardEvent('keydown', { key });
         document.dispatchEvent(keyboardEvent);
     };
 
-    const Log = () => { /* */ };
     let loop: GameLoop
     let engine: PhysicsEngine;
     let wrapper: any;
@@ -35,7 +55,8 @@ describe('Body', async () => {
         loop = new GameLoop();
         engine = new PhysicsEngine();
 
-        wrapper = mount(<Bird />, { context: { engine, loop, Log, scale: 1, width: 1920, height: 1080 } });
+        wrapper = mount(<GameState><Bird /></GameState>, { context: { engine, loop, Log: (message: string) => { /* */ }, scale: 1, width: 1920, height: 1080 } });
+        wrapper = wrapper.find(Bird);
     });
 
     it('should render a <div /> and be unmounted', async () => {
@@ -49,6 +70,9 @@ describe('Body', async () => {
 
         // Number of divs: wrapper, "bird sprite", wrapper in Body and the debug div in body
         expect(wrapper.find('div').length).toBe(4);
+
+        // One for the wrapper and one for the "bird sprite"
+        // expect(wrapper.find('div').length).toBe(2);
     });
 
     it('should jump when the space key is pressed', () => {
@@ -111,6 +135,61 @@ describe('Body', async () => {
         dispatchKey('d');
         expect(togglePauseEscapeSpy).toBeCalled();
     });
+
+    it('should gameover when hitting the floor or a pylon', async () => {
+
+        const instance = wrapper.instance() as any;
+
+        instance.resetGame = () => { /* */ };
+
+        const body = {
+            bodyID: 1,
+            bodyName: 'Ground',
+            colided: false,
+            dynamic: false,
+            height: 0,
+            velocity: { x: 0, y: 0 },
+            width: 0,
+            x: 0,
+            y: 0
+        };
+
+        const scoreColider = {
+            bodyID: 99,
+            bodyName: 'ScoreColider',
+            colided: false,
+            dynamic: false,
+            height: 0,
+            velocity: { x: 0, y: 0 },
+            width: 0,
+            x: 0,
+            y: 0
+        };
+
+
+        instance.colided = false;
+        instance.onCollision(body);
+
+        await timeout(1500);
+
+        expect(instance.props.gameState.gameOver).toBe(true);
+
+        instance.colided = false;
+        instance.onCollision(scoreColider);
+
+        await timeout(1500);
+
+        expect(instance.props.gameState.score).toBe(1);
+    });
+
+    /*
+    it('should stop bird if in dev mode', () => {
+        
+        const instance = wrapper.instance() as any;
+
+        // instance.
+    });
+    */
 
     /*
     it('should have a Body component as a child', () => {

@@ -25,6 +25,13 @@ export default class Level extends React.Component<ILevelProps, {}> {
 
     public static defaultProps: ILevelProps = { gameState }
 
+    public componentDidMount() {
+        ((window as any).debug)= true;
+    }
+
+    public componentWillUnmount(){
+        ((window as any).debug)= false;
+    }
 
     public render() {
 
@@ -41,7 +48,6 @@ export default class Level extends React.Component<ILevelProps, {}> {
             width: '100%',
         };
 
-        /*
         const floorBackground: React.CSSProperties = {
             backgroundImage: 'url(./assets/sprites/GrassThinSprite.png)',
             backgroundPosition: `${Math.floor((this.context.scale * 500))}px 0px`,
@@ -53,13 +59,19 @@ export default class Level extends React.Component<ILevelProps, {}> {
             margin: '0 auto',
             position: 'absolute',
             width: '100%',
-        };*/
+        };
 
         return (
             <div>
                 <div style={stageBackground} />
-                <Body bodyName={'Ground'} dynamic={false} x={0} y={(576 - 64)} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                <div style={floorBackground} />
+                <Body bodyName={'Ceiling'} dynamic={false} trigger={false} prevX={0} prevY={0} x={0} y={0} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                <Body bodyName={'Wall2'} dynamic={false} trigger={false} prevX={1000} prevY={0} x={1000} y={0} width={64} height={1024} velocity={{ x: 0, y: 0 }} colided={false} />
+                <Body bodyName={'Ground'} dynamic={false} trigger={false} prevX={0} prevY={550} x={0} y={550} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                <Body bodyName={'Wall'} dynamic={false} trigger={false} prevX={0} prevY={0} x={0} y={0} width={64} height={1024} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         );
     }
+
+    
 }
