@@ -26,6 +26,7 @@ class GameSelection extends React.Component {
             color: 'black',
             fontFamily: 'arial, helvetica, sans-serif',
             fontSize: '14px',
+            height: '100%',
             margin: '20px',
             padding: '0'
         }
@@ -68,6 +69,7 @@ class GameSelection extends React.Component {
         return {
             color: '#111',
             fontSize: '1.25em',
+            marginLeft: '20px',
             textAlign: 'left'
         }
     }
@@ -75,7 +77,9 @@ class GameSelection extends React.Component {
     private getPStyle(): React.CSSProperties {
         return {
             lineHeight: '6px',
+            marginLeft: '20px',
             textAlign: 'left'
+
         }
     }
 
