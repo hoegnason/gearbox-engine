@@ -6,10 +6,10 @@ function timeout(ms: number) {
 }
 
 const loadSomeSounds = () => {
-  AudioManager.loadSoundFile("ping", "assets/sound/ping.ogg", false);
-  AudioManager.loadSoundFile("pong", "assets/sound/ping.ogg", false);
-  AudioManager.loadSoundFile("ding", "assets/sound/ping.ogg", false);
-  AudioManager.loadSoundFile("dong", "assets/sound/ping.ogg", false);
+  AudioManager.loadSoundFile("ping", "assets/sound/bird_chirp.ogg", false);
+  AudioManager.loadSoundFile("pong", "assets/sound/hit_pylon.ogg", false);
+  AudioManager.loadSoundFile("ding", "assets/sound/bird_chirp.ogg", false);
+  AudioManager.loadSoundFile("dong", "assets/sound/hit_pylon.ogg", false);
 };
 
 describe("AudioManager", () => {

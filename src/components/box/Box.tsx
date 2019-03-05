@@ -1,14 +1,16 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
+import { AudioManager } from '../../core/sound/AudioManager';
+
 import Body from '../body/Body';
-import {IGameStateState} from '../GameState/GameState';
+import { IGameStateState } from '../GameState/GameState';
 
 import { gameState } from '../GameState/DefaultProps';
 
 interface IBoxProps {
-    gameState: IGameStateState;
-  }
+  gameState: IGameStateState;
+}
 
 export class Box extends React.Component<IBoxProps, {}> {
 
@@ -27,9 +29,21 @@ export class Box extends React.Component<IBoxProps, {}> {
 
   public body: any;
 
-
   constructor(props: any) {
     super(props);
+
+  }
+
+  public componentDidMount() {
+
+    AudioManager.loadSoundFile('background_music', "assets/sound/arcade-loop.ogg", false);
+    AudioManager.playSound('background_music');
+    
+  }
+
+  public componentWillUnmount() {
+
+    AudioManager.stopSound('background_music');
 
   }
 
