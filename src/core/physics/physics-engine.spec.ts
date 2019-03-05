@@ -12,10 +12,12 @@ describe('Physics Engine', async () => {
   let engine: PhysicsEngine;
   let calledUpdate: any;
   let calledCollision: any;
+  let calledGround: any;
 
   beforeEach(() => {
     calledUpdate = jest.fn();
     calledCollision = jest.fn();
+    calledGround = jest.fn();
 
     engine = new PhysicsEngine();
 
@@ -39,6 +41,7 @@ describe('Physics Engine', async () => {
       colided: false,
       dynamic: false,
       height: 100,
+      onCollision: calledGround,
       prevX: 0,
       prevY: 1000,
       trigger: false,
@@ -167,6 +170,7 @@ describe('Physics Engine', async () => {
       colided: false,
       dynamic: false,
       height: 100,
+      onCollision: calledGround,
       prevX: 0,
       prevY: 1000,
       trigger: false,
@@ -304,6 +308,70 @@ describe('Physics Engine', async () => {
       x: 1000,
       y: 0
     });
+
+  });
+
+  it('Should keep body in place because of resting state', () => {
+
+    // Body with right velocity and hovering
+    engine.addBody({
+      bodyName: 'DynamicTestBody',
+      colided: false,
+      dynamic: true,
+      height: 50,
+      onCollision: calledCollision,
+      onUpdate: calledUpdate,
+      prevX: 250,
+      prevY: 950.3903682491778,
+      rest: true,
+      trigger: false,
+      velocity: { x: 0, y:0  },
+      width: 50,
+      x: 250,
+      y: 950.3903682491778
+    })
+
+
+    for (let ticks = 0; ticks < 100; ticks++) {
+      engine.tick();
+    };
+
+    // Collided with ground
+    expect(calledCollision).toHaveBeenCalledWith({
+      bodyID: 3,
+      bodyName: 'GroundBody',
+      colided: false,
+      dynamic: false,
+      height: 100,
+      onCollision: calledGround,
+      prevX: 0,
+      prevY: 1000,
+      trigger: false,
+      velocity: { x: 0, y: 0 },
+      width: 1000,
+      x: 0,
+      y: 1000
+    });
+
+    // Ground collided with dynamic body
+    expect(calledGround).toHaveBeenCalledWith({
+      bodyID: 6,
+      bodyName: 'DynamicTestBody',
+      colided: false,
+      dynamic: true,
+      height: 50,
+      onCollision: calledCollision,
+      onUpdate: calledUpdate,
+      prevX: 250,
+      prevY: 950.3903682491778,
+      rest: true,
+      shouldUpdate: true,
+      trigger: false,
+      velocity: { x: 0, y:0  },
+      width: 50,
+      x: 250,
+      y: 950.3903682491778
+    })
 
   });
 });
