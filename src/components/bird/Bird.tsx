@@ -71,11 +71,11 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('wing', "assets/sound/flapping_wing.ogg", false);
-    AudioManager.loadSoundFile('hit', "assets/sound/hit.ogg", false);
-    AudioManager.loadSoundFile('die', "assets/sound/hit.ogg", false);
-    AudioManager.loadSoundFile('point', "assets/sound/point.ogg", false);
-    AudioManager.loadSoundFile('game_over', "assets/sound/game_over.ogg", false);
+    AudioManager.loadSoundFile('wing', require('../../assets/sound/flapping_wings.ogg'), false);
+    AudioManager.loadSoundFile('hit', require('../../assets/sound/hit.ogg'), false);
+    AudioManager.loadSoundFile('die', require('../../assets/sound/hit.ogg'), false);
+    AudioManager.loadSoundFile('point', require('../../assets/sound/point.ogg'), false);
+    AudioManager.loadSoundFile('game_over', require('../../assets/sound/game_over.ogg'), false);
 
     // this.setGameOver(false);
 
