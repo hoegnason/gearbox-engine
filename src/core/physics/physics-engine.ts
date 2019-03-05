@@ -43,7 +43,7 @@ export class PhysicsEngine {
 
     private nextAutoIncrement = 1;
 
-    private lastTick = 0;
+    private lastTick = 0.001 * Date.now();
 
     constructor(options?: IPhysicsEngineOptions) {
         this.collisionDection = new CollisionDection();
@@ -123,9 +123,9 @@ export class PhysicsEngine {
             
             // Verlet Integration
             // body.velocity.x += (body.x - body.prevX)*0.0166; // Frame
-            body.velocity.x += (body.x - body.prevX) * tickSize;
+            body.velocity.x += (body.x - body.prevX!) * tickSize;
             body.prevX = body.x;
-            body.velocity.y += (body.y - body.prevY) * tickSize;
+            body.velocity.y += (body.y - body.prevY!) * tickSize;
             body.prevY = body.y;
 
             // shouldUpdate always true?
