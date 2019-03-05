@@ -6,22 +6,61 @@ import Box from './Box';
 
 import {PhysicsEngine} from '../../core/physics/physics-engine'
 
-/*
+
 function timeout(ms: any) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }*/
+  }
 
 describe('Box', () => {
 
+
+  (Box as any).prototype.body = {
+    body: {
+        bodyID: 1,
+        bodyName: 'Box',
+        colided: false,
+        dynamic: false,
+        height: 0,
+        velocity: { x: 0, y: 0 },
+        width: 0,
+        x: 0,
+        y: 0
+    }
+  }
+
   let engine: PhysicsEngine;
   let wrapper: any;
+
+  const dispatchKey = (key: string): void => {
+    const keyboardEvent = new KeyboardEvent('keydown', { key });
+    document.dispatchEvent(keyboardEvent);
+};
 
   beforeEach(() => {
 
     engine = new PhysicsEngine();
 
-    wrapper = mount(<Box />);
+    wrapper = mount(<Box />, { context: { engine, scale: 1, width: 1920, height: 1080 } });
   });
+
+  it('should render a <div /> and be unmounted', async () => {
+
+    timeout(250);
+
+    const instance = wrapper.instance() as Box;
+    instance.forceUpdate();
+
+    timeout(250);
+
+    // Number of divs: wrapper, 
+    expect(wrapper.find('div').length).toBe(4);
+
+    wrapper.unmount();
+
+    // One for the wrapper and one for the "bird sprite"
+    // expect(wrapper.find('div').length).toBe(2);
+  });
+
 
   it('should fall', async () => {
     
@@ -36,4 +75,21 @@ describe('Box', () => {
 
 
   });
+
+  
+  it('should jump when the space key is pressed', () => {
+
+    const instance = wrapper.instance() as any;
+
+    // Subscribe to the keyboard subject
+    instance.componentDidMount();
+
+    const jumpSpy = spyOn(instance, 'jump');
+
+    expect(jumpSpy).not.toBeCalled();
+
+    dispatchKey(' ');
+
+    expect(jumpSpy).toBeCalled();
+});
 });

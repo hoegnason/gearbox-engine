@@ -159,9 +159,9 @@ export class PhysicsEngine {
 
         if (null != dynamicBodies && null != staticBodies) {
 
+            // Check static vs dynamic collisions
             staticBodies.forEach((staticBody: IBody) => {
 
-                // Does not check dynamic vs dynamic ...
                 
                 dynamicBodies.forEach((dynamicBody: IBody) => {
                     const colided = this.collisionDection.rectOnRect(staticBody, dynamicBody);
@@ -171,6 +171,19 @@ export class PhysicsEngine {
                     }
                 });
             });
+
+            // Check dynamic vs dynamic collisions
+            for(let a = 0; a < dynamicBodies.length; a++){
+                for(let b = a; b < dynamicBodies.length; b++){
+                    if (dynamicBodies[a].bodyID! !== dynamicBodies[b].bodyID!){
+                        const colided = this.collisionDection.rectOnRect(dynamicBodies[a], dynamicBodies[b]);
+
+                        if (colided) {
+                            collisions.push({bodyA: dynamicBodies[a], bodyB: dynamicBodies[b]});
+                        }
+                    }
+                }
+            }
         }
 
         return collisions;
@@ -236,6 +249,13 @@ export class PhysicsEngine {
                             };
                             collision.bodyA.x -= 1 * correction.x;
                             collision.bodyA.y -= 1 * correction.y;
+
+                            if (collision.bodyB.dynamic){
+                                collision.bodyB.velocity.x += 1 / mass * impulse.x; //  A.velocity -= 1 / A.mass * impulse
+                                collision.bodyB.velocity.y += 1 / mass * impulse.y;
+                                collision.bodyB.x += 1 * correction.x;
+                                collision.bodyB.y += 1 * correction.y;
+                            }
                         }
                     }
 
@@ -263,6 +283,13 @@ export class PhysicsEngine {
                             };
                             collision.bodyA.x -= 1 * correction.x;
                             collision.bodyA.y -= 1 * correction.y;
+
+                            if (collision.bodyB.dynamic){
+                                collision.bodyB.velocity.x += 1 / mass * impulse.x; //  A.velocity -= 1 / A.mass * impulse
+                                collision.bodyB.velocity.y += 1 / mass * impulse.y;
+                                collision.bodyB.x += 1 * correction.x;
+                                collision.bodyB.y += 1 * correction.y;
+                            }
                         } 
                     }
 
@@ -292,6 +319,13 @@ export class PhysicsEngine {
                             };
                             collision.bodyA.x -= 1 * correction.x;
                             collision.bodyA.y -= 1 * correction.y;
+
+                            if (collision.bodyB.dynamic){
+                                collision.bodyB.velocity.x += 1 / mass * impulse.x; //  A.velocity -= 1 / A.mass * impulse
+                                collision.bodyB.velocity.y += 1 / mass * impulse.y;
+                                collision.bodyB.x += 1 * correction.x;
+                                collision.bodyB.y += 1 * correction.y;
+                            }
                         }
                     }
 
@@ -320,6 +354,13 @@ export class PhysicsEngine {
                             };
                             collision.bodyA.x -= 1 * correction.x;
                             collision.bodyA.y -= 1 * correction.y;
+
+                            if (collision.bodyB.dynamic){
+                                collision.bodyB.velocity.x += 1 / mass * impulse.x; //  A.velocity -= 1 / A.mass * impulse
+                                collision.bodyB.velocity.y += 1 / mass * impulse.y;
+                                collision.bodyB.x += 1 * correction.x;
+                                collision.bodyB.y += 1 * correction.y;
+                            }
                             
                         }
                     }
