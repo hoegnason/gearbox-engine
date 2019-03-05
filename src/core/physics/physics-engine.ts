@@ -180,15 +180,15 @@ export class PhysicsEngine {
 
         collisions.forEach((collision: IBodyCollision) => {
 
-            const playerBottom: number = (collision.bodyA.y + collision.bodyA.height);
-            const tilesBottom: number = collision.bodyB.y + collision.bodyB.height;
-            const playerRight: number = collision.bodyA.x + collision.bodyA.width;
-            const tilesRight: number = collision.bodyB.x + collision.bodyB.width;
+            const bodyABottom: number = (collision.bodyA.y + collision.bodyA.height);
+            const bodyBBottom: number = collision.bodyB.y + collision.bodyB.height;
+            const bodyARight: number = collision.bodyA.x + collision.bodyA.width;
+            const bodyBRight: number = collision.bodyB.x + collision.bodyB.width;
             
-            const bCollision: number = tilesBottom - collision.bodyA.y;
-            const tCollision: number = playerBottom - collision.bodyB.y;
-            const lCollision: number = playerRight - collision.bodyB.x;
-            const rCollision: number = tilesRight - collision.bodyA.x;
+            const bCollision: number = bodyBBottom - collision.bodyA.y;
+            const tCollision: number = bodyABottom - collision.bodyB.y;
+            const lCollision: number = bodyARight - collision.bodyB.x;
+            const rCollision: number = bodyBRight - collision.bodyA.x;
 
 
 
