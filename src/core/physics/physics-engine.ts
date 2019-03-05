@@ -326,10 +326,13 @@ export class PhysicsEngine {
                                 x:(Math.max( rCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.x), 
                                 y:(Math.max( rCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.y)
                             };
-                            collision.bodyA.x -= 1 * correction.x;
-                            collision.bodyA.y -= 1 * correction.y;
+                            if(!collision.bodyA.rest){
+                                collision.bodyA.x -= 1 * correction.x;
+                                collision.bodyA.y -= 1 * correction.y;
+                            }
+                            
 
-                            if (collision.bodyB.dynamic){
+                            if (collision.bodyB.dynamic && !collision.bodyB.rest){
                                 collision.bodyB.velocity.x += 1 / mass * impulse.x; //  A.velocity -= 1 / A.mass * impulse
                                 collision.bodyB.velocity.y += 1 / mass * impulse.y;
                                 collision.bodyB.x += 1 * correction.x;
@@ -364,7 +367,12 @@ export class PhysicsEngine {
                             collision.bodyA.x -= 1 * correction.x;
                             collision.bodyA.y -= 1 * correction.y;
 
-                            if (collision.bodyB.dynamic){
+                            if(!collision.bodyA.rest){
+                                collision.bodyA.x -= 1 * correction.x;
+                                collision.bodyA.y -= 1 * correction.y;
+                            }
+                            
+                            if (collision.bodyB.dynamic && !collision.bodyB.rest){
                                 collision.bodyB.velocity.x += 1 / mass * impulse.x; //  A.velocity -= 1 / A.mass * impulse
                                 collision.bodyB.velocity.y += 1 / mass * impulse.y;
                                 collision.bodyB.x += 1 * correction.x;

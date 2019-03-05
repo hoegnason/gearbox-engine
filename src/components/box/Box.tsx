@@ -50,6 +50,14 @@ export class Box extends React.Component<IBoxProps, {}> {
         this.jump();
       }
 
+      if ('ArrowLeft' === key) {
+        this.move(false);
+    }
+
+    if ('ArrowRight' === key) {
+        this.move(true);
+    }
+
     });
     
   }
@@ -84,6 +92,27 @@ export class Box extends React.Component<IBoxProps, {}> {
 
     return {};
   }
+
+  private move(right: boolean) {
+
+    if (right) {
+
+        if (this.body.body.velocity.x < 0) {
+            this.body.body.velocity.x = 0;
+        } else if (this.body.body.velocity.x <= 10) {
+            this.body.body.velocity.x = 10;
+        }
+    }
+    
+    if (!right) {
+
+        if (this.body.body.velocity.x > 0) {
+            this.body.body.velocity.x = 0;
+        } else if (this.body.body.velocity.x >= -10) {
+            this.body.body.velocity.x = -10;
+        }
+    }
+}
 
   private jump() {
 
