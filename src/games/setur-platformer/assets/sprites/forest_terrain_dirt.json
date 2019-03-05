@@ -1,0 +1,28 @@
+{
+    "name": "ForestTerrainDirt",
+    "width": 512,
+    "height": 128,
+    "sprite-sheet": [
+        {
+            "name": "ForestTerrainDirt_0",
+            "x": 0,
+            "y": 0,
+            "width": 128,
+            "height": 128
+        },
+        {
+            "name": "ForestTerrainDirt_1",
+            "x": 128,
+            "y": 0,
+            "width": 128,
+            "height": 128
+        },
+        {
+            "name": "ForestTerrainDirt_2",
+            "x": 256,
+            "y": 0,
+            "width": 128,
+            "height": 128
+        }
+    ]
+}

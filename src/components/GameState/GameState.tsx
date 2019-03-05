@@ -19,7 +19,9 @@ interface IGameStateProps {
 export class GameState extends React.Component<IGameStateProps, IGameStateState> {
 
     public static contextTypes = {
-        engine: PropTypes.object,
+        Log: PropTypes.func,
+        engine: PropTypes.object,       
+        height: PropTypes.number,
         loop: PropTypes.object,
         scale: PropTypes.number,
         width: PropTypes.number

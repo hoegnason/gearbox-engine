@@ -15,10 +15,31 @@ export class Loop extends React.Component<ILoopProps, {}> {
 
     private loop: GameLoop;
 
+    private initialized = false;
+    private childrenLenght = 0;
+
     constructor(props: any) {
         super(props);
 
         this.loop = new GameLoop();
+    }
+
+    // This should completly ignore ConsoleState
+    public shouldComponentUpdate(nextProps: ILoopProps, nextState: {}): boolean {
+
+        if (!this.initialized) {
+
+            this.initialized = true;
+            
+            return true;
+        }
+
+        if (null != nextProps && null != nextProps.children && nextProps.children.length !== this.childrenLenght) {
+
+            return true;
+        }
+
+        return false;
     }
 
     public componentDidMount() {

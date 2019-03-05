@@ -43,7 +43,7 @@ describe('GameState functionality', async () => {
     expect(gameState.updateState).not.toBeUndefined();
 
     const updateStateSpy = spyOn(gameState, 'updateState');
-    gameState.updateState();
+    gameState.updateState({x: 1});
     
     expect(updateStateSpy).toBeCalled();
   });

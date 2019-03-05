@@ -15,6 +15,11 @@ import { IGameStateState } from '../GameState/GameState';
 import { IBody } from '../../core/physics/physics-engine';
 
 import { gameState } from '../GameState/DefaultProps';
+import Sprite from '../sprite/Sprite';
+
+import BirdHero from '../../assets/sprites/BirdHero.png';
+
+import BirdHeroOpts from '../../assets/sprites/BirdHero.json';
 
 let scoreColiderID: number = 0;
 
@@ -46,8 +51,21 @@ export class Bird extends React.Component<IBirdProps, {}> {
   constructor(props: any) {
     super(props);
 
+    this.body = {
+      body: {
+        bodyID: 1,
+        bodyName: 'Bird',
+        colided: false,
+        dynamic: false,
+        height: 0,
+        velocity: { x: 0, y: 0 },
+        width: 0,
+        x: 0,
+        y: 0
+      }
+    };
+
     this.onCollision = this.onCollision.bind(this);
-    this.doUpdate = this.doUpdate.bind(this);
   }
 
 
@@ -94,9 +112,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public componentWillUnmount() {
 
-    if (null != this.keyboardSubscription) {
-      this.keyboardSubscription.unsubscribe();
-    }
+    this.keyboardSubscription.unsubscribe();
   }
 
   public render() {
@@ -115,18 +131,22 @@ export class Bird extends React.Component<IBirdProps, {}> {
       this.props.gameState.ready = true;
     }
 
+    const y = Math.floor(this.body.body.velocity.y * 1.5);
+
+    const attitude = Math.max(Math.min((y-15), 90), -20);
+
     return (
       <div>
-        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onUpdate={this.doUpdate} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} trigger={false} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} prevX={xOffset} prevY={yOffset} />
-        <div style={{ ...this.getStyles(), backgroundColor: 'red', width: Math.floor(25 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
+        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} trigger={false} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} prevX={xOffset} prevY={yOffset} />
+        <Sprite x={Math.floor(this.body.body.x)} y={Math.floor(this.body.body.y)} width={67} height={113} src={BirdHero} opts={BirdHeroOpts} steps={['BirdHero_1', 'BirdHero_0']} ticksPerFrame={15} rotate={attitude} animate={true} />
       </div>
     );
   }
 
   private jump() {
 
-    if(!this.props.gameState.ready) {
-      this.props.gameState.updateState!({ready: true});
+    if (!this.props.gameState.ready) {
+      this.props.gameState.updateState!({ ready: true });
     }
 
     if (!this.props.gameState.gameOver) {
@@ -177,13 +197,27 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
   }
 
-  private doUpdate(): void {
+  /*
+  private resetGame() {
+    setTimeout(() => {
+      this.body.body.y = 0;
+      this.body.body.x = Math.floor(((this.context.width / this.context.scale) * 0.2));
 
-    if (this.props.gameState.debug && null != this.body && null != this.body.body && null != this.context.height && null != this.context.scale) {
+      this.body.body.velocity.x = 0;
+      this.body.body.velocity.y = 0;
 
-      this.body.body.y = ((window as any).autoPilotY);
-    }
+      this.props.gameState.updateState!({
+        gameOver: false,
+        paused: false,
+        score: 0,
+        scrollSpeed: -5,
+        x: 0,
+      });
+
+      this.context.loop.start();
+    }, 1000);
   }
+  */
 
   private onCollision(bodyColidedWith: IBody): void {
 
@@ -206,46 +240,17 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
         AudioManager.playSound('hit');
 
-        this.context.loop.stop();
+        // this.context.loop.stop();
 
         this.props.gameState!.updateState!({ gameOver: true });
 
-        setTimeout(() => {
-          this.body.body.y = 0;
-          this.body.body.x = Math.floor(((this.context.width / this.context.scale) * 0.2));
-
-          this.body.body.velocity.x = 0;
-          this.body.body.velocity.y = 0;
-
-          this.props.gameState.updateState!({
-            gameOver: false,
-            paused: false,
-            score: 0,
-            scrollSpeed: -5,
-            x: 0,
-          });
-
-          this.context.loop.start();
-        }, 1000);
+        // this.resetGame();
       }
 
       setTimeout(() => {
         AudioManager.playSound('die');
       }, 1000);
     }
-  }
-
-  private getStyles(): React.CSSProperties {
-
-    if (null != this.body) {
-      return {
-        position: 'absolute',
-        transform: `translate(${Math.floor((this.body.body.x * this.context.scale))}px, ${Math.floor((this.body.body.y * this.context.scale))}px)`,
-        transformOrigin: 'left top',
-      };
-    }
-
-    return {};
   }
 }
 
