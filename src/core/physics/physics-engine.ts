@@ -89,10 +89,8 @@ export class PhysicsEngine {
 
         this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
 
-        const restingBodies = this.world.filter((body: IBody) => body.rest && body.dynamic);
-        this.sleepResting(restingBodies);
-        this.applyVelocity(dynamicBodies);
 
+        this.applyVelocity(dynamicBodies);
 
         
 
@@ -123,20 +121,27 @@ export class PhysicsEngine {
         dynamicBodies.forEach((body: IBody) => {
 
 
-            const res = Vector.add(body, body.velocity);
-            body.x = res.x;
-            body.y = res.y;
+            if(body.rest && (body.velocity.x > 1 ||body.velocity.y > 1 || body.velocity.x < -1 || body.velocity.y < -1)){
+                body.rest = false;
+            }
+            if(!body.rest){
+                const res = Vector.add(body, body.velocity);
+                body.x = res.x;
+                body.y = res.y;
+    
+    
+                
+                // Verlet Integration
+                // body.velocity.x += (body.x - body.prevX)*0.0166; // Frame
+                body.velocity.x += (body.x - body.prevX!) * tickSize;
+                body.prevX = body.x;
+                body.velocity.y += (body.y - body.prevY!) * tickSize;
+                body.prevY = body.y;
+    
+                // shouldUpdate always true?
+                body.shouldUpdate = true;
+            }
 
-            
-            // Verlet Integration
-            // body.velocity.x += (body.x - body.prevX)*0.0166; // Frame
-            body.velocity.x += (body.x - body.prevX!) * tickSize;
-            body.prevX = body.x;
-            body.velocity.y += (body.y - body.prevY!) * tickSize;
-            body.prevY = body.y;
-
-            // shouldUpdate always true?
-            body.shouldUpdate = true;
         })
 
         this.lastTick = now;
@@ -215,9 +220,9 @@ export class PhysicsEngine {
 
                     const percent = 0.2 // usually 20% to 80%
                     const slop = 0.1 // usually 0.01 to 0.1
-                    const mass = 5;
-                    const invMass = 0.2;
-                    const restitution = 1.8;
+                    const mass = 2.5;
+                    const invMass = 0.4;
+                    const restitution = 1.2;
         
                     let n: IVector;
                     let velAlongNormal;
@@ -247,10 +252,13 @@ export class PhysicsEngine {
                                 x:(Math.max( tCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.x),
                                 y:(Math.max( tCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.y)
                             };
-                            collision.bodyA.x -= 1 * correction.x;
-                            collision.bodyA.y -= 1 * correction.y;
+                            if(!collision.bodyA.rest){
+                                collision.bodyA.x -= 1 * correction.x;
+                                collision.bodyA.y -= 1 * correction.y;
+                            }
+                            
 
-                            if (collision.bodyB.dynamic){
+                            if (collision.bodyB.dynamic && !collision.bodyB.rest){
                                 collision.bodyB.velocity.x += 1 / mass * impulse.x; //  A.velocity -= 1 / A.mass * impulse
                                 collision.bodyB.velocity.y += 1 / mass * impulse.y;
                                 collision.bodyB.x += 1 * correction.x;
@@ -371,6 +379,15 @@ export class PhysicsEngine {
                     }else {
                         collision.bodyA.rest = false;
                     }
+                    if(collision.bodyB.dynamic){
+                        if (collision.bodyB.velocity.y < 0.9 && collision.bodyB.velocity.x < 0.9 &&
+                            collision.bodyB.velocity.y > -0.9 && collision.bodyB.velocity.x > -0.9){
+                            collision.bodyB.rest = true;
+                        }else {
+                            collision.bodyB.rest = false;
+                        }
+                    }
+                    
                     
                 }
             }
@@ -387,6 +404,7 @@ export class PhysicsEngine {
         });
     }
 
+    /*
     private sleepResting(restingBodies: IBody[]){
         restingBodies.forEach((body: IBody) => {
             body.x = body.prevX!;
@@ -394,5 +412,5 @@ export class PhysicsEngine {
             body.velocity.x = 0;
             body.velocity.y = 0;
         });
-    }
+    }*/
 }
