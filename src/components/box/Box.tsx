@@ -1,5 +1,8 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
+import { Subscription } from 'rxjs';
+
+import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
 
 import { AudioManager } from '../../core/sound/AudioManager';
 
@@ -29,6 +32,8 @@ export class Box extends React.Component<IBoxProps, {}> {
 
   public body: any;
 
+  private keyboardSubscription: Subscription;
+
   constructor(props: any) {
     super(props);
 
@@ -38,12 +43,21 @@ export class Box extends React.Component<IBoxProps, {}> {
 
     AudioManager.loadSoundFile('background_music', "assets/sound/arcade-loop.ogg", false);
     AudioManager.playSound('background_music');
+
+    this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
+
+      if (' ' === key) {
+        this.jump();
+      }
+
+    });
     
   }
 
   public componentWillUnmount() {
 
     AudioManager.stopSound('background_music');
+    this.keyboardSubscription.unsubscribe();
 
   }
 
@@ -69,6 +83,13 @@ export class Box extends React.Component<IBoxProps, {}> {
     }
 
     return {};
+  }
+
+  private jump() {
+
+    if (!this.props.gameState.gameOver) {
+      this.body.body.velocity.y = -10;
+    }
   }
 }
 

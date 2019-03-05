@@ -9,6 +9,7 @@ export interface IBody extends IRect {
     trigger: boolean;
     velocity: IVector;
     colided: boolean;
+    rest?: boolean;
     shouldUpdate?: boolean;
     onCollision?: (colidedWith: IBody) => void;
     onUpdate?: () => void;
@@ -43,7 +44,7 @@ export class PhysicsEngine {
 
     private nextAutoIncrement = 1;
 
-    private lastTick = 0;
+    private lastTick = 0.001 * Date.now();
 
     constructor(options?: IPhysicsEngineOptions) {
         this.collisionDection = new CollisionDection();
@@ -82,11 +83,17 @@ export class PhysicsEngine {
         const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
+
         this.applyGravity(dynamicBodies);
 
 
         this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
+
+        const restingBodies = this.world.filter((body: IBody) => body.rest && body.dynamic);
+        this.sleepResting(restingBodies);
         this.applyVelocity(dynamicBodies);
+
+
         
 
         dynamicBodies.forEach((body: IBody) => {
@@ -123,9 +130,9 @@ export class PhysicsEngine {
             
             // Verlet Integration
             // body.velocity.x += (body.x - body.prevX)*0.0166; // Frame
-            body.velocity.x += (body.x - body.prevX) * tickSize;
+            body.velocity.x += (body.x - body.prevX!) * tickSize;
             body.prevX = body.x;
-            body.velocity.y += (body.y - body.prevY) * tickSize;
+            body.velocity.y += (body.y - body.prevY!) * tickSize;
             body.prevY = body.y;
 
             // shouldUpdate always true?
@@ -188,6 +195,7 @@ export class PhysicsEngine {
 
             if(collision.bodyA.dynamic){
                 if(!collision.bodyB.trigger){
+
                     // Apply collision force (Currently weight has no affect)
 
                     const relativeVel = Vector.substract(collision.bodyB.velocity, collision.bodyA.velocity);
@@ -196,14 +204,14 @@ export class PhysicsEngine {
                     const slop = 0.1 // usually 0.01 to 0.1
                     const mass = 5;
                     const invMass = 0.2;
-                    const restitution = 1.7;
+                    const restitution = 1.8;
         
                     let n: IVector;
                     let velAlongNormal;
 
                     
                     
-                    // Top collision or Bottom collision
+                    // Top collision
                     if (tCollision < bCollision && tCollision < lCollision && tCollision < rCollision)
                     {                           
                         n = {x: 0, y: 1};
@@ -312,8 +320,17 @@ export class PhysicsEngine {
                             };
                             collision.bodyA.x -= 1 * correction.x;
                             collision.bodyA.y -= 1 * correction.y;
+                            
                         }
                     }
+
+                    if (collision.bodyA.velocity.y < 0.9 && collision.bodyA.velocity.x < 0.9 &&
+                        collision.bodyA.velocity.y > -0.9 && collision.bodyA.velocity.x > -0.9){
+                        collision.bodyA.rest = true;
+                    }else {
+                        collision.bodyA.rest = false;
+                    }
+                    
                 }
             }
             
@@ -326,6 +343,15 @@ export class PhysicsEngine {
             if (null != collision.bodyB.onCollision) {
                 collision.bodyB.onCollision(collision.bodyA);
             }
+        });
+    }
+
+    private sleepResting(restingBodies: IBody[]){
+        restingBodies.forEach((body: IBody) => {
+            body.x = body.prevX!;
+            body.y = body.prevY!;
+            body.velocity.x = 0;
+            body.velocity.y = 0;
         });
     }
 }
