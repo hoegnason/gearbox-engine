@@ -152,8 +152,9 @@ export class PhysicsEngine {
         dynamicBodies.forEach((body: IBody) => {
 
             const res = Vector.add(body.velocity, this.gravity);
-            body.velocity.x = res.x;
+            body.velocity.x = res.x * 0.95; // Slow down force
             body.velocity.y = res.y;
+
 
             body.shouldUpdate = true;
         });
@@ -218,7 +219,7 @@ export class PhysicsEngine {
 
                     const relativeVel = Vector.substract(collision.bodyB.velocity, collision.bodyA.velocity);
 
-                    const percent = 0.2 // usually 20% to 80%
+                    const percent = 0.8 // usually 20% to 80%
                     const slop = 0.1 // usually 0.01 to 0.1
                     const mass = 2.5;
                     const invMass = 0.4;

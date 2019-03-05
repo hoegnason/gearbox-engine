@@ -41,7 +41,7 @@ export class Box extends React.Component<IBoxProps, {}> {
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('background_music', "assets/sound/arcade-loop.ogg", false);
+    AudioManager.loadSoundFile('background_music', require('../../assets/sound/arcade-loop.ogg'), false);
     AudioManager.playSound('background_music');
 
     this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
