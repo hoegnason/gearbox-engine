@@ -279,13 +279,13 @@ describe('Physics Engine', async () => {
       height: 50,
       onCollision: calledCollision,
       onUpdate: calledUpdate,
-      prevX: 250,
-      prevY: 250,
+      prevX: 350,
+      prevY: 350,
       trigger: false,
-      velocity: { x: 10, y: -1 },
+      velocity: { x: 50, y: -2 },
       width: 50,
-      x: 250,
-      y: 250
+      x: 350,
+      y: 350
     })
 
 
@@ -296,6 +296,7 @@ describe('Physics Engine', async () => {
     // Collided with right wall
     expect(calledCollision).toHaveBeenCalledWith({
       bodyID: 5,
+
       bodyName: 'RightWallBody',
       colided: false,
       dynamic: false,
@@ -322,13 +323,13 @@ describe('Physics Engine', async () => {
       onCollision: calledCollision,
       onUpdate: calledUpdate,
       prevX: 250,
-      prevY: 950.3903682491778,
+      prevY: 952,
       rest: true,
       trigger: false,
       velocity: { x: 0, y:0  },
       width: 50,
       x: 250,
-      y: 950.3903682491778
+      y: 952
     })
 
 
@@ -363,14 +364,14 @@ describe('Physics Engine', async () => {
       onCollision: calledCollision,
       onUpdate: calledUpdate,
       prevX: 250,
-      prevY: 950.3903682491778,
+      prevY: 952,
       rest: true,
       shouldUpdate: true,
       trigger: false,
-      velocity: { x: 0, y:0  },
+      velocity: { x: 0, y:-0.09090909090909094  },
       width: 50,
       x: 250,
-      y: 950.3903682491778
+      y: 952
     })
 
   });
