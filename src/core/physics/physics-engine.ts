@@ -403,26 +403,26 @@ export class PhysicsEngine {
 
                             // Calculate impulse scalar
                             let j = -(1 + restitution) * velAlongNormal
-                            j /= 1 / mass + 1 / mass // j /= 1 / A.mass + 1 / B.mass
+                            j /= 1 / mass + 1 / mass
                             
                             // Apply impulse
                             const impulse: IVector = {x: j * n.x, y: j * n.y}
-                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+                            collision.bodyA.velocity.x -= (1 / mass * impulse.x);
                             collision.bodyA.velocity.y -= (1 / mass * impulse.y);
 
-                            // Vec2 correction = penetrationDepth / (A.inv_mass + B.inv_mass)) * percent * n
+                            
                             const correction: IVector = {
-                                x:(Math.max( tCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.x),
-                                y:(Math.max( tCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.y)
+                                x:( 0.0 / (invMass + invMass) * percent * n.x),
+                                y:( collision.bodyA.height / (invMass + invMass) * percent * n.y)
                             };
-                            if(!collision.bodyA.rest){
+                            
                                 collision.bodyA.x -= 1 * correction.x;
                                 collision.bodyA.y -= 1 * correction.y;
-                            }
+                            
                             
 
                             if (collision.bodyB.dynamic && !collision.bodyB.rest){
-                                collision.bodyB.velocity.x += (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+                                collision.bodyB.velocity.x += (1 / mass * impulse.x);
                                 collision.bodyB.velocity.y += (1 / mass * impulse.y);
                                 collision.bodyB.x += 1 * correction.x;
                                 collision.bodyB.y += 1 * correction.y;
