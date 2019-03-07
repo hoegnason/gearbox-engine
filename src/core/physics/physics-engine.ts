@@ -226,7 +226,7 @@ export class PhysicsEngine {
 
                     const relativeVel = Vector.substract(collision.bodyB.velocity, collision.bodyA.velocity);
 
-                    const percent = 0.2 // usually 20% to 80%
+                    const percent = 0.8 // usually 20% to 80%
                     const slop = 0.1 // usually 0.01 to 0.1
                     const mass = 2.5;
                     const invMass = 0.4;
@@ -400,33 +400,9 @@ export class PhysicsEngine {
                         
                         if (!(velAlongNormal > 0)){
 
-
-                            // Calculate impulse scalar
-                            let j = -(1 + restitution) * velAlongNormal
-                            j /= 1 / mass + 1 / mass
+                            collision.bodyA.velocity.y = -1;
+                            collision.bodyA.y = collision.bodyA.y+collision.bodyA.height;
                             
-                            // Apply impulse
-                            const impulse: IVector = {x: j * n.x, y: j * n.y}
-                            collision.bodyA.velocity.x -= (1 / mass * impulse.x);
-                            collision.bodyA.velocity.y -= (1 / mass * impulse.y);
-
-                            
-                            const correction: IVector = {
-                                x:( 0.0 / (invMass + invMass) * percent * n.x),
-                                y:( collision.bodyA.height / (invMass + invMass) * percent * n.y)
-                            };
-                            
-                                collision.bodyA.x -= 1 * correction.x;
-                                collision.bodyA.y -= 1 * correction.y;
-                            
-                            
-
-                            if (collision.bodyB.dynamic && !collision.bodyB.rest){
-                                collision.bodyB.velocity.x += (1 / mass * impulse.x);
-                                collision.bodyB.velocity.y += (1 / mass * impulse.y);
-                                collision.bodyB.x += 1 * correction.x;
-                                collision.bodyB.y += 1 * correction.y;
-                            }
                         }
                     }
 
