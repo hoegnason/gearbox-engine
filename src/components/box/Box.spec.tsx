@@ -40,7 +40,7 @@ describe('Box', () => {
 
     engine = new PhysicsEngine();
 
-    wrapper = mount(<Box />, { context: { engine, scale: 1, width: 1920, height: 1080 } });
+    wrapper = mount(<Box gameState = {{gameOver: false}} y={0} enabled={true}/>, { context: { engine, scale: 1, width: 1920, height: 1080 } });
   });
 
   it('should render a <div /> and be unmounted', async () => {

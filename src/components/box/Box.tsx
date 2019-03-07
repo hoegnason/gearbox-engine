@@ -4,18 +4,26 @@ import { Subscription } from 'rxjs';
 
 import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
 
-import { AudioManager } from '../../core/sound/AudioManager';
+// import { AudioManager } from '../../core/sound/AudioManager';
 
 import Body from '../body/Body';
-import { IGameStateState } from '../GameState/GameState';
+import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
-import { gameState } from '../GameState/DefaultProps';
+import {initGameState} from '../BoxGameState/DefaultProps'
 
-interface IBoxProps {
-  gameState: IGameStateState;
+
+export interface IBoxProps {
+  gameState: IBoxGameStateState;
+  y: number;
+  enabled: boolean;
+  addBox?: (y: number) => void;
 }
 
-export class Box extends React.Component<IBoxProps, {}> {
+interface IBoxState {
+  enabled: boolean;
+}
+
+export class Box extends React.Component<IBoxProps, IBoxState> {
 
   public static displayName = 'Box';
 
@@ -28,7 +36,7 @@ export class Box extends React.Component<IBoxProps, {}> {
     width: PropTypes.number
   };
 
-  public static defaultProps: IBoxProps = { gameState };
+  public static defaultProps: IBoxProps = { gameState: initGameState, y: -200, enabled: true  }
 
   public body: any;
 
@@ -36,18 +44,19 @@ export class Box extends React.Component<IBoxProps, {}> {
 
   constructor(props: any) {
     super(props);
-
   }
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('background_music', require('../../assets/sound/arcade-loop.ogg'), false);
-    AudioManager.playSound('background_music');
+    // AudioManager.loadSoundFile('background_music', require('../../assets/sound/arcade-loop.ogg'), false);
+    // AudioManager.playSound('background_music');
+    (window as any).debug = true;
 
+    this.context.Log("Component Mounted!")
     this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
 
       if (' ' === key) {
-        this.jump();
+        this.place();
       }
 
       if ('ArrowLeft' === key) {
@@ -62,18 +71,18 @@ export class Box extends React.Component<IBoxProps, {}> {
     
   }
 
+
   public componentWillUnmount() {
 
-    AudioManager.stopSound('background_music');
+    // AudioManager.stopSound('background_music');
     this.keyboardSubscription.unsubscribe();
 
   }
 
   public render() {
-
     return (
       <div>
-        <Body bodyName={'Box'} ref={b => { this.body = b; }} dynamic={true} trigger={false} prevX={250} prevY={250} x={250} y={250} width={500} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
+        <Body bodyName={'Box'} ref={b => { this.body = b; }} dynamic={this.props.enabled} trigger={false} prevX={250} prevY={this.props.y} x={250} y={this.props.y} width={500} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
         <div style={{ ...this.getStyles(), backgroundColor: 'green', width: Math.floor(500 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
       </div>
     );
@@ -114,10 +123,19 @@ export class Box extends React.Component<IBoxProps, {}> {
     }
 }
 
-  private jump() {
+  private place() {
 
-    if (!this.props.gameState.gameOver) {
-      this.body.body.velocity.y = -10;
+    if(null != this.props.gameState.updateState && this.props.enabled){
+      if (!this.props.gameState.gameOver && !this.props.gameState.paused) {
+        
+        this.context.Log("Stopped!")
+        if (null != this.props.addBox){
+          this.props.addBox(this.body.body.y);
+        }
+        this.body.body.dynamic = false;
+        
+        // this.props.gameState.updateState({ y: this.body.body.y, score: this.props.gameState.score!++ });
+      }
     }
   }
 }
