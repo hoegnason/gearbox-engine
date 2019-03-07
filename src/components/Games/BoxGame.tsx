@@ -2,7 +2,7 @@
 import * as React from 'react';
 import '../../App.css';
 
-import Box from '../box/Box';
+import BoxDropper from '../BoxDropper/BoxDropper';
 import BoxGameState from '../BoxGameState/BoxGameState';
 import BoxLevel from '../BoxLevel/BoxLevel';
 import ConsoleState from '../Console/ConsoleState';
@@ -31,8 +31,8 @@ class BoxGame extends React.Component {
                     <World>
                         <ConsoleState>
                             <BoxGameState>
+                                <BoxDropper />
                                 <BoxLevel />
-                                <Box />
                             </BoxGameState>
                         </ConsoleState>
                     </World>

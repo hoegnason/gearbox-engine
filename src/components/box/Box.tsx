@@ -11,6 +11,8 @@ import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
 import {initGameState} from '../BoxGameState/DefaultProps'
 
+// import { IBody } from '../../core/physics/physics-engine';
+
 
 export interface IBoxProps {
   gameState: IBoxGameStateState;
@@ -36,7 +38,7 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
     width: PropTypes.number
   };
 
-  public static defaultProps: IBoxProps = { gameState: initGameState, y: -200, enabled: true  }
+  public static defaultProps: IBoxProps = { gameState: initGameState, y: 0, enabled: true  }
 
   public body: any;
 
@@ -82,7 +84,7 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
   public render() {
     return (
       <div>
-        <Body bodyName={'Box'} ref={b => { this.body = b; }} dynamic={this.props.enabled} trigger={false} prevX={250} prevY={this.props.y} x={250} y={this.props.y} width={500} height={25} velocity={{ x: 0, y: 0 }} colided={false} />
+        <Body bodyName={'Box'} ref={b => { this.body = b; }} dynamic={this.props.enabled} trigger={false} prevX={250} prevY={this.props.y} x={250} y={this.props.y} width={500} height={25} velocity={{ x: 0, y: -8 }} colided={false}  />
         <div style={{ ...this.getStyles(), backgroundColor: 'green', width: Math.floor(500 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
       </div>
     );
@@ -138,6 +140,17 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
       }
     }
   }
+/*
+  private onCollision(bodyColidedWith: IBody): void {
+
+    if ('Box' === bodyColidedWith.bodyName || 'Floor' === bodyColidedWith.bodyName) {
+
+      
+      this.props.gameState!.updateState!({ gameOver: true });
+
+      
+    }
+  }*/
 }
 
 export default Box;
