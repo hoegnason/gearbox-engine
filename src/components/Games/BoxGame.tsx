@@ -5,6 +5,7 @@ import '../../App.css';
 import BoxDropper from '../BoxDropper/BoxDropper';
 import BoxGameState from '../BoxGameState/BoxGameState';
 import BoxLevel from '../BoxLevel/BoxLevel';
+import {BoxUI} from '../BoxUI/BoxUI';
 import ConsoleState from '../Console/ConsoleState';
 import Loop from '../loop/Loop'
 import MediaLayer from '../MediaLayer/MediaLayer'
@@ -33,6 +34,7 @@ class BoxGame extends React.Component {
                             <BoxGameState>
                                 <BoxDropper />
                                 <BoxLevel />
+                                <BoxUI />
                             </BoxGameState>
                         </ConsoleState>
                     </World>

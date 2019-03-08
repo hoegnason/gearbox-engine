@@ -1,6 +1,6 @@
 import { IBoxGameStateState } from './BoxGameState';
 
-export const initGameState = {
+export const gameState = {
     gameOver: false,
     paused: false,
     ready: false,

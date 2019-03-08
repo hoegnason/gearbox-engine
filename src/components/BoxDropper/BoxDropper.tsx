@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Box} from '../box/Box';
 import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
-import {initGameState} from '../BoxGameState/DefaultProps'
+import {gameState} from '../BoxGameState/DefaultProps'
 
 interface IBoxDropperProps {
     gameState: IBoxGameStateState;
@@ -17,7 +17,7 @@ export class BoxDropper extends React.Component<IBoxDropperProps, {}> {
         width: PropTypes.number
     };
 
-    public static defaultProps: IBoxDropperProps = { gameState: initGameState }
+    public static defaultProps: IBoxDropperProps = { gameState }
 
     private staticBoxes: number[] = [];
 
@@ -35,7 +35,7 @@ export class BoxDropper extends React.Component<IBoxDropperProps, {}> {
         return (
             <div>
                 {this.staticBoxes.map((box: number, index: number) => <Box key={index} gameState={this.props.gameState} y={box} enabled={false} />)}
-                <Box gameState={this.props.gameState} addBox={this.addBox}/>
+                <Box key={1} gameState={this.props.gameState} addBox={this.addBox}/>
             </div>
         )
     }

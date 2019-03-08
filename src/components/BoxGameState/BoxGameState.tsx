@@ -50,7 +50,7 @@ export class GameState extends React.Component<IBoxGameStateProps, IBoxGameState
     }
 
     public loop(): void {
-        this.updateState({ paused: false });
+        this.updateState({ ready: false });
     }
 
     // This should completly ignore ConsoleState
