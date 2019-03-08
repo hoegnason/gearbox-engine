@@ -23,4 +23,7 @@ Now you can start the game with the command
 ```
 npm start
 ```
-
+To run the unit tests run the command 
+```
+npm test
+```
