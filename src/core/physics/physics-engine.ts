@@ -57,63 +57,45 @@ export class PhysicsEngine {
     public addBody(body: IBody): void {
 
         body.bodyID = this.autoIncrement();
-        
+
         this.world.push(body);
     }
 
     public removeBody(body: IBody): void {
 
-
-        // tslint:disable-next-line
-        // console.log('Removing body', body);
-
         this.world.filter((targetBody: IBody, index: number) => {
 
             if (JSON.stringify(body) === JSON.stringify(targetBody)) {
-
-                // tslint:disable-next-line
-                // console.log('Found body', body, targetBody);
-
                 this.world.splice(index, 1);
             }
         });
     }
 
     public tick() {
-        
 
+        // Calculate Frame
         const now = 0.001 * Date.now();
-
         this.tickSize = Math.abs(now - this.lastTick);
-
         this.lastTick = now;
 
-            const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
-            const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
-    
-    
-            this.applyGravity(dynamicBodies);
-    
-    
-            this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
-    
-    
-            this.applyVelocity(dynamicBodies);
-    
-            
-    
-            dynamicBodies.forEach((body: IBody) => {
-                if (null != body.shouldUpdate && body.shouldUpdate && null != body.onUpdate) {
-                    body.onUpdate();
-                }
-            })
-    
-    
-            if (null != this.update) {
-                this.update();
-            }
-        
+        const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
+        const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
+        this.applyGravity(dynamicBodies);
+        this.resolveCollisions(this.checkCollisions(staticBodies, dynamicBodies));
+        this.applyVelocity(dynamicBodies);
+
+        // Call overwritten onUpdate function if it exists
+        dynamicBodies.forEach((body: IBody) => {
+            if (null != body.shouldUpdate && body.shouldUpdate && null != body.onUpdate) {
+                body.onUpdate();
+            }
+        })
+
+
+        if (null != this.update) {
+            this.update();
+        }
     }
 
     private autoIncrement(): number {
@@ -128,30 +110,27 @@ export class PhysicsEngine {
         dynamicBodies.forEach((body: IBody) => {
 
 
-            if(body.rest && (body.velocity.x > 1 ||body.velocity.y > 1 || body.velocity.x < -1 || body.velocity.y < -1)){
+            if (body.rest && (body.velocity.x > 1 || body.velocity.y > 1 || body.velocity.x < -1 || body.velocity.y < -1)) {
                 body.rest = false;
             }
-            if(!body.rest){
+            if (!body.rest) {
                 const res = Vector.add(body, body.velocity);
                 body.x = res.x;
                 body.y = res.y;
-    
-    
-                
+
                 // Verlet Integration
-                // body.velocity.x += (body.x - body.prevX)*0.0166; // Frame
                 body.velocity.x += (body.x - body.prevX!) * this.tickSize;
                 body.prevX = body.x;
                 body.velocity.y += (body.y - body.prevY!) * this.tickSize;
                 body.prevY = body.y;
-    
-                // shouldUpdate always true?
+
+
                 body.shouldUpdate = true;
             }
 
         })
 
-        
+
     }
 
     private applyGravity(dynamicBodies: IBody[]) {
@@ -175,7 +154,7 @@ export class PhysicsEngine {
             // Check static vs dynamic collisions
             staticBodies.forEach((staticBody: IBody) => {
 
-                
+
                 dynamicBodies.forEach((dynamicBody: IBody) => {
                     const colided = this.collisionDection.rectOnRect(staticBody, dynamicBody);
 
@@ -186,13 +165,13 @@ export class PhysicsEngine {
             });
 
             // Check dynamic vs dynamic collisions
-            for(let a = 0; a < dynamicBodies.length; a++){
-                for(let b = a; b < dynamicBodies.length; b++){
-                    if (dynamicBodies[a].bodyID! !== dynamicBodies[b].bodyID!){
+            for (let a = 0; a < dynamicBodies.length; a++) {
+                for (let b = a; b < dynamicBodies.length; b++) {
+                    if (dynamicBodies[a].bodyID! !== dynamicBodies[b].bodyID!) {
                         const colided = this.collisionDection.rectOnRect(dynamicBodies[a], dynamicBodies[b]);
 
                         if (colided) {
-                            collisions.push({bodyA: dynamicBodies[a], bodyB: dynamicBodies[b]});
+                            collisions.push({ bodyA: dynamicBodies[a], bodyB: dynamicBodies[b] });
                         }
                     }
                 }
@@ -210,7 +189,8 @@ export class PhysicsEngine {
             const bodyBBottom: number = collision.bodyB.y + collision.bodyB.height;
             const bodyARight: number = collision.bodyA.x + collision.bodyA.width;
             const bodyBRight: number = collision.bodyB.x + collision.bodyB.width;
-            
+
+            // Collision depth
             const bCollision: number = bodyBBottom - collision.bodyA.y;
             const tCollision: number = bodyABottom - collision.bodyB.y;
             const lCollision: number = bodyARight - collision.bodyB.x;
@@ -218,56 +198,55 @@ export class PhysicsEngine {
 
 
 
-
-            if(collision.bodyA.dynamic){
-                if(!collision.bodyB.trigger){
-
-                    // Apply collision force (Currently weight has no affect)
+            // Static and trigger bodies not affected
+            if (collision.bodyA.dynamic) {
+                if (!collision.bodyB.trigger) {
 
                     const relativeVel = Vector.substract(collision.bodyB.velocity, collision.bodyA.velocity);
 
-                    const percent = 0.8 // usually 20% to 80%
-                    const slop = 0.1 // usually 0.01 to 0.1
-                    const mass = 2.5;
-                    const invMass = 0.4;
-                    const restitution = 1.2;
-        
+                    // Default values for all Bodies
+                    const percent = 0.8         // How much penetration is allowed
+                    const slop = 0.1            // How much positional correctness 
+                    const mass = 2.5;           // Weight
+                    const invMass = 0.4;        
+                    const restitution = 1.2;    // Bounciness
+
                     let n: IVector;
                     let velAlongNormal;
 
-                    
-                    
+
+
                     // Top collision
-                    if (tCollision < bCollision && tCollision < lCollision && tCollision < rCollision)
-                    {                           
-                        n = {x: 0, y: 1};
-                        velAlongNormal = Vector.dot( relativeVel, n );
-                        
-                        if (!(velAlongNormal > 0)){
+                    if (tCollision < bCollision && tCollision < lCollision && tCollision < rCollision) {
+                        n = { x: 0, y: 1 };
+                        velAlongNormal = Vector.dot(relativeVel, n);
+
+                        if (!(velAlongNormal > 0)) {
 
 
-                            // Calculate impulse scalar
+                            // Impulse scalar is affected by restituition and mass of Body 
                             let j = -(1 + restitution) * velAlongNormal
-                            j /= 1 / mass + 1 / mass // j /= 1 / A.mass + 1 / B.mass
-                            
-                            // Apply impulse
-                            const impulse: IVector = {x: j * n.x, y: j * n.y}
-                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+                            j /= 1 / mass + 1 / mass 
+
+                            // Impulse upward
+                            const impulse: IVector = { x: j * n.x, y: j * n.y }
+                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); 
                             collision.bodyA.velocity.y -= (1 / mass * impulse.y);
 
-                            // Vec2 correction = penetrationDepth / (A.inv_mass + B.inv_mass)) * percent * n
+                            
+                            // Correct position if too deep inside of body
                             const correction: IVector = {
-                                x:(Math.max( tCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.x),
-                                y:(Math.max( tCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.y)
+                                x: (Math.max(tCollision - slop, 0.0) / (invMass + invMass) * percent * n.x),
+                                y: (Math.max(tCollision - slop, 0.0) / (invMass + invMass) * percent * n.y)
                             };
-                            if(!collision.bodyA.rest){
+                            if (!collision.bodyA.rest) {
                                 collision.bodyA.x -= 1 * correction.x;
                                 collision.bodyA.y -= 1 * correction.y;
                             }
-                            
 
-                            if (collision.bodyB.dynamic && !collision.bodyB.rest){
-                                collision.bodyB.velocity.x += (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+
+                            if (collision.bodyB.dynamic && !collision.bodyB.rest) {
+                                collision.bodyB.velocity.x += (1 / mass * impulse.x);
                                 collision.bodyB.velocity.y += (1 / mass * impulse.y);
                                 collision.bodyB.x += 1 * correction.x;
                                 collision.bodyB.y += 1 * correction.y;
@@ -276,71 +255,71 @@ export class PhysicsEngine {
                     }
 
                     // Bottom collision
-                    if (bCollision < tCollision && bCollision < lCollision && bCollision < rCollision){
-                        n = {x: 0, y: -1};
-                        velAlongNormal = Vector.dot( relativeVel, n );
-                        
-                        if (!(velAlongNormal > 0)){
+                    if (bCollision < tCollision && bCollision < lCollision && bCollision < rCollision) {
+                        n = { x: 0, y: -1 };
+                        velAlongNormal = Vector.dot(relativeVel, n);
+
+                        if (!(velAlongNormal > 0)) {
 
 
-                            // Calculate impulse scalar
+                            // Impulse scalar is affected by restituition and mass of Body 
                             let j = -(1 + restitution) * velAlongNormal
-                            j /= 1 / mass + 1 / mass // j /= 1 / A.mass + 1 / B.mass
-                            
-                            // Apply impulse
-                            const impulse: IVector = {x: j * n.x, y: j * n.y}
-                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+                            j /= 1 / mass + 1 / mass 
+
+                            // Impulse downwards
+                            const impulse: IVector = { x: j * n.x, y: j * n.y }
+                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); 
                             collision.bodyA.velocity.y -= (1 / mass * impulse.y);
 
-                            // Vec2 correction = penetrationDepth / (A.inv_mass + B.inv_mass)) * percent * n
+                            
+                            // Correct position if too deep inside of body
                             const correction: IVector = {
-                                x:(Math.max( bCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.x),
-                                y:(Math.max( bCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.y)
+                                x: (Math.max(bCollision - slop, 0.0) / (invMass + invMass) * percent * n.x),
+                                y: (Math.max(bCollision - slop, 0.0) / (invMass + invMass) * percent * n.y)
                             };
                             collision.bodyA.x -= 1 * correction.x;
                             collision.bodyA.y -= 1 * correction.y;
 
-                            if (collision.bodyB.dynamic){
-                                collision.bodyB.velocity.x += (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+                            if (collision.bodyB.dynamic) {
+                                collision.bodyB.velocity.x += (1 / mass * impulse.x); 
                                 collision.bodyB.velocity.y += (1 / mass * impulse.y);
                                 collision.bodyB.x += 1 * correction.x;
                                 collision.bodyB.y += 1 * correction.y;
                             }
-                        } 
+                        }
                     }
 
                     // Right collision
-                    if (rCollision < lCollision && rCollision < tCollision && rCollision < bCollision)
-                    {
-                        n = {x: -1, y: 0};
-                        velAlongNormal = Vector.dot( relativeVel, n );
+                    if (rCollision < lCollision && rCollision < tCollision && rCollision < bCollision) {
+                        n = { x: -1, y: 0 };
+                        velAlongNormal = Vector.dot(relativeVel, n);
 
-                        if (!(velAlongNormal > 0)){
+                        if (!(velAlongNormal > 0)) {
 
 
-                            // Calculate impulse scalar
+                            // Impulse scalar is affected by restituition and mass of Body 
                             let j = -(1 + restitution) * velAlongNormal
-                            j /= 1 / mass + 1 / mass // j /= 1 / A.mass + 1 / B.mass
-                            
-                            // Apply impulse
-                            const impulse: IVector = {x: j * n.x, y: j * n.y}
-                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+                            j /= 1 / mass + 1 / mass 
+
+                            // Impulse to the right
+                            const impulse: IVector = { x: j * n.x, y: j * n.y }
+                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); 
                             collision.bodyA.velocity.y -= (1 / mass * impulse.y);
 
-                            // Vec2 correction = penetrationDepth / (A.inv_mass + B.inv_mass)) * percent * n
                             
+                            // Correct position if too deep inside of body
                             const correction: IVector = {
-                                x:(Math.max( rCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.x), 
-                                y:(Math.max( rCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.y)
+                                x: (Math.max(rCollision - slop, 0.0) / (invMass + invMass) * percent * n.x),
+                                y: (Math.max(rCollision - slop, 0.0) / (invMass + invMass) * percent * n.y)
                             };
-                            if(!collision.bodyA.rest){
+                            if (!collision.bodyA.rest) {
                                 collision.bodyA.x -= 1 * correction.x;
                                 collision.bodyA.y -= 1 * correction.y;
                             }
-                            
 
-                            if (collision.bodyB.dynamic && !collision.bodyB.rest){
-                                collision.bodyB.velocity.x += (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+
+                            if (collision.bodyB.dynamic && !collision.bodyB.rest) {
+                                collision.bodyB.velocity.x += (1 / mass * impulse.x);
                                 collision.bodyB.velocity.y += (1 / mass * impulse.y);
                                 collision.bodyB.x += 1 * correction.x;
                                 collision.bodyB.y += 1 * correction.y;
@@ -349,83 +328,84 @@ export class PhysicsEngine {
                     }
 
                     // Left collision
-                    if (lCollision < rCollision && lCollision < tCollision && lCollision < bCollision){
-                        n = {x: 1, y: 0};
-                        velAlongNormal = Vector.dot( relativeVel, n );
+                    if (lCollision < rCollision && lCollision < tCollision && lCollision < bCollision) {
+                        n = { x: 1, y: 0 };
+                        velAlongNormal = Vector.dot(relativeVel, n);
 
-                        if (!(velAlongNormal > 0)){
+                        if (!(velAlongNormal > 0)) {
 
 
-                            // Calculate impulse scalar
+                            // Impulse scalar is affected by restituition and mass of Body 
                             let j = -(1 + restitution) * velAlongNormal
-                            j /= 1 / mass + 1 / mass // j /= 1 / A.mass + 1 / B.mass
-                            
-                            // Apply impulse
-                            const impulse: IVector = {x: j * n.x, y: j * n.y}
-                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+                            j /= 1 / mass + 1 / mass 
+
+                            // Impulse to the left
+                            const impulse: IVector = { x: j * n.x, y: j * n.y }
+                            collision.bodyA.velocity.x -= (1 / mass * impulse.x); 
                             collision.bodyA.velocity.y -= (1 / mass * impulse.y);
 
-                            // Vec2 correction = penetrationDepth / (A.inv_mass + B.inv_mass)) * percent * n
                             
+                            // Correct position if too deep inside of body
                             const correction: IVector = {
-                                x:(Math.max( lCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.x), 
-                                y:(Math.max( lCollision - slop, 0.0 ) / (invMass + invMass) * percent * n.y)
+                                x: (Math.max(lCollision - slop, 0.0) / (invMass + invMass) * percent * n.x),
+                                y: (Math.max(lCollision - slop, 0.0) / (invMass + invMass) * percent * n.y)
                             };
                             collision.bodyA.x -= 1 * correction.x;
                             collision.bodyA.y -= 1 * correction.y;
 
-                            if(!collision.bodyA.rest){
+                            if (!collision.bodyA.rest) {
                                 collision.bodyA.x -= 1 * correction.x;
                                 collision.bodyA.y -= 1 * correction.y;
                             }
-                            
-                            if (collision.bodyB.dynamic && !collision.bodyB.rest){
-                                collision.bodyB.velocity.x += (1 / mass * impulse.x); //  A.velocity -= 1 / A.mass * impulse
+
+                            if (collision.bodyB.dynamic && !collision.bodyB.rest) {
+                                collision.bodyB.velocity.x += (1 / mass * impulse.x);
                                 collision.bodyB.velocity.y += (1 / mass * impulse.y);
                                 collision.bodyB.x += 1 * correction.x;
                                 collision.bodyB.y += 1 * correction.y;
                             }
-                            
+
                         }
                     }
 
-                    
-                    // Inside collision
-                    if(!(tCollision < bCollision && tCollision < lCollision && tCollision < rCollision) &&
-                    !(bCollision < tCollision && bCollision < lCollision && bCollision < rCollision) &&
-                    !(rCollision < lCollision && rCollision < tCollision && rCollision < bCollision) &&
-                    !(lCollision < rCollision && lCollision < tCollision && lCollision < bCollision)){
-                        n = {x: 0, y: 1};
-                        velAlongNormal = Vector.dot( relativeVel, n );
-                        
-                        if (!(velAlongNormal > 0)){
+
+                    // Push body up if inside collision
+                    if (!(tCollision < bCollision && tCollision < lCollision && tCollision < rCollision) &&
+                        !(bCollision < tCollision && bCollision < lCollision && bCollision < rCollision) &&
+                        !(rCollision < lCollision && rCollision < tCollision && rCollision < bCollision) &&
+                        !(lCollision < rCollision && lCollision < tCollision && lCollision < bCollision)) {
+                        n = { x: 0, y: 1 };
+                        velAlongNormal = Vector.dot(relativeVel, n);
+
+                        if (!(velAlongNormal > 0)) {
 
                             collision.bodyA.velocity.y = -1;
-                            collision.bodyA.y = collision.bodyA.y+collision.bodyA.height;
-                            
+                            collision.bodyA.y = collision.bodyA.y + collision.bodyA.height;
+
                         }
                     }
 
                     // Detect resting
                     if (collision.bodyA.velocity.y < 0.9 && collision.bodyA.velocity.x < 0.9 &&
-                        collision.bodyA.velocity.y > -0.9 && collision.bodyA.velocity.x > -0.9){
+                        collision.bodyA.velocity.y > -0.9 && collision.bodyA.velocity.x > -0.9) {
                         collision.bodyA.rest = true;
-                    }else {
+                    } else {
                         collision.bodyA.rest = false;
                     }
-                    if(collision.bodyB.dynamic){
+                    if (collision.bodyB.dynamic) {
                         if (collision.bodyB.velocity.y < 0.9 && collision.bodyB.velocity.x < 0.9 &&
-                            collision.bodyB.velocity.y > -0.9 && collision.bodyB.velocity.x > -0.9){
+                            collision.bodyB.velocity.y > -0.9 && collision.bodyB.velocity.x > -0.9) {
                             collision.bodyB.rest = true;
-                        }else {
+                        } else {
                             collision.bodyB.rest = false;
                         }
                     }
-                    
-                    
+
+
                 }
             }
-            
+
+            // Call overwritten onCollision function if it exists
 
             if (null != collision.bodyA.onCollision) {
 
@@ -437,14 +417,4 @@ export class PhysicsEngine {
             }
         });
     }
-
-    /*
-    private sleepResting(restingBodies: IBody[]){
-        restingBodies.forEach((body: IBody) => {
-            body.x = body.prevX!;
-            body.y = body.prevY!;
-            body.velocity.x = 0;
-            body.velocity.y = 0;
-        });
-    }*/
 }

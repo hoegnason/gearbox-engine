@@ -13,6 +13,7 @@ interface IBoxDropperProps {
 export class BoxDropper extends React.Component<IBoxDropperProps, {}> {
 
     public static contextTypes = {
+        loop: PropTypes.object,
         scale: PropTypes.number,
         width: PropTypes.number
     };
@@ -25,11 +26,20 @@ export class BoxDropper extends React.Component<IBoxDropperProps, {}> {
         super(props);
 
         this.addBox = this.addBox.bind(this);
-        // this.staticBoxes = this.generateBoxes();
+    }
+
+    public componentDidMount(){
+        this.props.gameState.score! += 1;
+    }
+
+    public componentWillReceiveProps(nextProps: IBoxDropperProps){
+        if (nextProps.gameState.gameOver === true){
+            this.context.loop.stop();
+            this.staticBoxes = [];
+        }
     }
 
 
-    // MovePipes: flutt Pipe og Body component frá App og inn her
     public render() {
 
         return (
