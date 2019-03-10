@@ -11,17 +11,6 @@ import Loop from '../loop/Loop'
 import MediaLayer from '../MediaLayer/MediaLayer'
 import World from '../World/World'
 
-
-
-/*
-interface IFlappyBirdProps {
-
-}
-
-interface IFlappyBirdState {
-
-}*/
-
 class BoxGame extends React.Component {
 
     public render() {
