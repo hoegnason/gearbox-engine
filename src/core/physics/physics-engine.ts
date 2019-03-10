@@ -1,4 +1,3 @@
-import * as PropTypes from 'prop-types';
 import { CollisionDection, IRect } from './collision-detection';
 import { IVector, Vector } from './vector';
 
@@ -30,10 +29,6 @@ export interface IBodyCollision {
 }
 
 export class PhysicsEngine {
-
-    public static contextTypes = {
-        Log: PropTypes.func
-    };
 
     public update?: () => void = undefined;
 
