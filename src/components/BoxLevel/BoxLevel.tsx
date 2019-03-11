@@ -1,14 +1,14 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { IGameStateState } from '../GameState/GameState';
+import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
 import { gameState } from '../GameState/DefaultProps';
 
 import { Body } from '../body/Body';
 
 export interface ILevelProps {
-    gameState?: IGameStateState;
+    gameState?: IBoxGameStateState;
 }
 
 export interface ILevelContext {
@@ -24,14 +24,6 @@ export default class Level extends React.Component<ILevelProps, {}> {
     };
 
     public static defaultProps: ILevelProps = { gameState }
-
-    public componentDidMount() {
-        ((window as any).debug)= true;
-    }
-
-    public componentWillUnmount(){
-        ((window as any).debug)= false;
-    }
 
     public render() {
 
@@ -65,9 +57,8 @@ export default class Level extends React.Component<ILevelProps, {}> {
             <div>
                 <div style={stageBackground} />
                 <div style={floorBackground} />
-                <Body bodyName={'Ceiling'} dynamic={false} trigger={false} prevX={0} prevY={0} x={0} y={0} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
                 <Body bodyName={'Wall2'} dynamic={false} trigger={false} prevX={1000} prevY={0} x={1000} y={0} width={64} height={1024} velocity={{ x: 0, y: 0 }} colided={false} />
-                <Body bodyName={'Ground'} dynamic={false} trigger={false} prevX={0} prevY={550} x={0} y={550} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
+                <Body bodyName={'Floor'} dynamic={false} trigger={false} prevX={0} prevY={550} x={0} y={550} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
                 <Body bodyName={'Wall'} dynamic={false} trigger={false} prevX={0} prevY={0} x={0} y={0} width={64} height={1024} velocity={{ x: 0, y: 0 }} colided={false} />
             </div>
         );
