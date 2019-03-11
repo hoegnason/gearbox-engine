@@ -71,11 +71,11 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('wing', "assets/sound/flapping_wing.ogg", false);
-    AudioManager.loadSoundFile('hit', "assets/sound/hit.ogg", false);
-    AudioManager.loadSoundFile('die', "assets/sound/hit.ogg", false);
-    AudioManager.loadSoundFile('point', "assets/sound/point.ogg", false);
-    AudioManager.loadSoundFile('game_over', "assets/sound/game_over.ogg", false);
+    AudioManager.loadSoundFile('wing', require('../../assets/sound/flapping_wings.ogg'), false);
+    AudioManager.loadSoundFile('hit', require('../../assets/sound/hit.ogg'), false);
+    AudioManager.loadSoundFile('die', require('../../assets/sound/hit.ogg'), false);
+    AudioManager.loadSoundFile('point', require('../../assets/sound/point.ogg'), false);
+    AudioManager.loadSoundFile('game_over', require('../../assets/sound/game_over.ogg'), false);
 
     // this.setGameOver(false);
 
@@ -134,12 +134,36 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
     const y = Math.floor(this.body.body.velocity.y * 1.5);
 
-    const attitude = Math.max(Math.min((y-15), 90), -20);
+    const attitude = Math.max(Math.min((y - 15), 90), -20);
 
     return (
       <div>
-        <Body bodyName={'Bird'} ref={b => { this.body = b; }} onCollision={this.onCollision} dynamic={this.props.gameState.ready!} trigger={false} x={xOffset} y={yOffset} width={25} height={25} velocity={{ x: 0, y: 0 }} colided={false} prevX={xOffset} prevY={yOffset} />
-        <Sprite x={Math.floor(this.body.body.x)} y={Math.floor(this.body.body.y)} width={67} height={113} src={BirdHero} opts={BirdHeroOpts} steps={['BirdHero_1', 'BirdHero_0']} ticksPerFrame={15} rotate={attitude} animate={true} />
+        <Body
+          bodyName={'Bird'}
+          ref={b => { this.body = b; }}
+          onCollision={this.onCollision}
+          dynamic={this.props.gameState.ready!}
+          trigger={false}
+          x={xOffset}
+          y={yOffset}
+          width={25}
+          height={25}
+          velocity={{ x: 0, y: 0 }}
+          colided={false}
+          prevX={xOffset}
+          prevY={yOffset}
+        />
+        <Sprite
+          x={Math.floor(this.body.body.x)}
+          y={Math.floor(this.body.body.y)}
+          width={67}
+          height={113}
+          src={BirdHero}
+          opts={BirdHeroOpts}
+          steps={['BirdHero_1', 'BirdHero_0']}
+          ticksPerFrame={15}
+          rotate={attitude}
+          animate={true} />
       </div>
     );
   }

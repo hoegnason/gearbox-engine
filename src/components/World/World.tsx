@@ -34,17 +34,11 @@ export default class World extends React.Component<IWorldProps, {}> {
     private subscription: GameLoopSubscription;
     private engine: any;
 
-    // private lastTime = 0;
-
     constructor(props: any) {
         super(props);
 
         this.engine = new PhysicsEngine();
         this.loop = this.loop.bind(this);
-
-        this.state = {
-            messages: []
-        }
     }
 
     public componentWillReceiveProps(nextProps: IWorldProps) {
@@ -60,7 +54,6 @@ export default class World extends React.Component<IWorldProps, {}> {
     }
 
     public componentWillUnmount() {
-
         this.subscription.unsubscribe();
     }
 
@@ -87,19 +80,6 @@ export default class World extends React.Component<IWorldProps, {}> {
     }
 
     private loop() {
-
-        /*
-        // 60 frames per sec!
-        const currTime = 1 * Date.now();
-
-        if ((lastLoop + 1000 / 60) < currTime) {
-
-            this.engine.tick();
-
-            lastLoop = currTime;
-        }
-        */
-
         this.engine.tick();
     }
 }
