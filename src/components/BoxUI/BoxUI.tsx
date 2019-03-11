@@ -43,7 +43,6 @@ export class BoxUI extends React.Component<IBoxUIProps, {}> {
 
         return (
             <div style={this.getWrappedStyle()}>
-                {this.props.gameState.paused && this.getPauseElement()}
                 {this.props.gameState.gameOver && this.getGameOverElement()}
                 {this.getScoreElement()}
             </div>);
@@ -84,13 +83,6 @@ export class BoxUI extends React.Component<IBoxUIProps, {}> {
                 {this.props.gameState.score && this.props.gameState.score}
             </ScaledText>
         );
-    }
-
-    private getPauseElement(): React.ReactElement {
-        return (
-            <ScaledText style={{
-                ...this.getTextStyle(), backgroundColor: 'rgba(0, 0, 0, 0.3)', borderRadius: '25px', fontSize: '96px', left: '50%', padding: '20px', position: 'absolute', top: '25%', transform: 'translate(-50%, -50%)',
-            }}>Paused</ScaledText>)
     }
 
     private getGameOverElement(): React.ReactElement {

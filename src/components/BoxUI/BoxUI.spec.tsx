@@ -27,7 +27,20 @@ describe('BoxUI', async () => {
         
         const wrapper = mount(<BoxUI gameState={gameState} />, { context })
 
-        // One div for the wrapper div and one div for readyElement and one for scoreElement
         expect(wrapper.find('div').length).toBe(3);
     });
+
+    it('should try to update', () => {
+        
+        const gameState = {...defaultProps};
+        
+        const wrapper = mount(<BoxUI gameState={gameState} />, { context })
+
+        wrapper.setProps({gameState:{gameOver: true, paused: true, score: 2, ready: true}});
+
+        wrapper.setProps({gameState: {gameOver: false, paused: false, score: 3, ready: false}});
+
+        expect(wrapper.find('div').length).toBe(2);
+    });
+
 });
