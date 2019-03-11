@@ -104,6 +104,7 @@ export class PhysicsEngine {
         dynamicBodies.forEach((body: IBody) => {
 
 
+            // Changes in velocity will bring Body out of rest
             if (body.rest && (body.velocity.x > 1 || body.velocity.y > 1 || body.velocity.x < -1 || body.velocity.y < -1)) {
                 body.rest = false;
             }
@@ -112,8 +113,7 @@ export class PhysicsEngine {
                 body.x = res.x;
                 body.y = res.y;
 
-                // Verlet Integration
-                
+                // Verlet Integration    
                 body.velocity.x += (body.x - body.prevX!) * this.tickSize;
                 body.prevX = body.x;
                 body.velocity.y += (body.y - body.prevY!) * this.tickSize;
@@ -380,7 +380,7 @@ export class PhysicsEngine {
                         }
                     }
 
-                    // Detect resting
+                    // Detect resting (Low velocity after impact results in resting)
                     if (collision.bodyA.velocity.y < 0.9 && collision.bodyA.velocity.x < 0.9 &&
                         collision.bodyA.velocity.y > -0.9 && collision.bodyA.velocity.x > -0.9) {
                         collision.bodyA.rest = true;
