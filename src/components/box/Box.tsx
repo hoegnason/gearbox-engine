@@ -69,14 +69,6 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
         }
       }
 
-      if ('ArrowLeft' === key) {
-        this.move(false);
-      }
-
-      if ('ArrowRight' === key) {
-        this.move(true);
-      }
-
     });
 
   }
@@ -118,27 +110,6 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
     return {};
   }
 
-  private move(right: boolean) {
-
-    if (right) {
-
-      if (this.body.body.velocity.x < 0) {
-        this.body.body.velocity.x = 0;
-      } else if (this.body.body.velocity.x <= 10) {
-        this.body.body.velocity.x = 10;
-      }
-    }
-
-    if (!right) {
-
-      if (this.body.body.velocity.x > 0) {
-        this.body.body.velocity.x = 0;
-      } else if (this.body.body.velocity.x >= -10) {
-        this.body.body.velocity.x = -10;
-      }
-    }
-  }
-
   private onCollision(bodyColidedWith: IBody): void {
 
     if ('Box' === bodyColidedWith.bodyName || 'Floor' === bodyColidedWith.bodyName) {
@@ -155,18 +126,12 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
   private place() {
 
     if (null != this.props.gameState.updateState && this.props.enabled) {
-      if (!this.props.gameState.gameOver && !this.props.gameState.paused) {
-
         this.context.Log("Stopped!")
         if (null != this.props.addBox && !this.props.gameState.gameOver) {
-          if (this.props.gameState.score != null) {
-            this.props.gameState.updateState({ score: this.props.gameState.score + 1 });
-          }
-
+          this.props.gameState.updateState({ score: this.props.gameState.score! + 1 });
           this.props.addBox(this.body.body.y);
         }
         this.body.body.dynamic = false;
-      }
     }
   }
 

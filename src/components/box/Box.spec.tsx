@@ -30,6 +30,7 @@ describe('Box', () => {
 
   let engine: PhysicsEngine;
   let wrapper: any;
+  let mockAddBox: any;
 
   const dispatchKey = (key: string): void => {
     const keyboardEvent = new KeyboardEvent('keydown', { key });
@@ -38,9 +39,10 @@ describe('Box', () => {
 
   beforeEach(() => {
 
+    mockAddBox = jest.fn();
     engine = new PhysicsEngine();
 
-    wrapper = mount(<Box gameState = {{gameOver: false}} y={0} enabled={true}/>, { context: { engine, Log: jest.fn(), scale: 1, width: 1920, height: 1080 } });
+    wrapper = mount(<Box gameState = {{gameOver: false, paused: false, score: 0}} y={0} enabled={true} addBox={mockAddBox}/>, { context: { engine, Log: jest.fn(), scale: 1, width: 1920, height: 1080 } });
   });
 
   it('should render a <div /> and be unmounted', async () => {
@@ -62,34 +64,38 @@ describe('Box', () => {
   });
 
 
-  it('should fall', async () => {
-    
-    const wrapperBox = wrapper.instance() as Box;
-
-    expect(wrapperBox.body.body).not.toBeNull();
-
-    // const oldY = wrapperBox.body.body.y;
-    // Unfinished
-    
-    engine.tick();
-
-
-  });
-
   
-  it('should be placed when the space key is pressed', () => {
+  it('should be reset when the space key is pressed', () => {
 
-    const instance = wrapper.instance() as any;
+    const wrapperGameOver = mount(<Box gameState = {{gameOver: true}} y={0} enabled={true} addBox={mockAddBox}/>, { context: { engine, Log: jest.fn(), scale: 1, width: 1920, height: 1080, loop: {start: jest.fn(), stop: jest.fn()} } });
+  
+    const instance = wrapperGameOver.instance() as any;
 
     // Subscribe to the keyboard subject
     instance.componentDidMount();
 
-    const placeSpy = spyOn(instance, 'place');
+    const resetSpy = spyOn(instance, 'resetGame');
 
-    expect(placeSpy).not.toBeCalled();
+    expect(resetSpy).not.toBeCalled();
 
     dispatchKey(' ');
 
-    expect(placeSpy).toBeCalled();
+    expect(resetSpy).toBeCalled();
+});
+
+it('should be placed when the space key is pressed', () => {
+
+  const instance = wrapper.instance() as any;
+
+  // Subscribe to the keyboard subject
+  instance.componentDidMount();
+
+  const placeSpy = spyOn(instance, 'place');
+
+  expect(placeSpy).not.toBeCalled();
+
+  dispatchKey(' ');
+
+  expect(placeSpy).toBeCalled();
 });
 });

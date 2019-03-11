@@ -1,15 +1,16 @@
+
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import { PhysicsEngine } from '../../core/physics/physics-engine';
+import BoxGameState from './BoxGameState';
 import { gameState as defaultProps } from './DefaultProps';
-import GameState from './GameState';
 
 function timeout(ms: any) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
-describe('GameState functionality', async () => {
+describe('BoxGameState functionality', async () => {
 
   let engine: PhysicsEngine;
   let Client: any;
@@ -24,14 +25,14 @@ describe('GameState functionality', async () => {
       const test = props.updateState instanceof Function;
       expect(test).toBe(true);
 
-      props.updateState({ x: 1 });
+      props.updateState({ gameOver: true });
 
 
 
       return <div>This is a test!</div>
     }
 
-    wrapper = shallow(<GameState><Client /></GameState>, { context: { engine } });
+    wrapper = shallow(<BoxGameState><Client /></BoxGameState>, { context: { engine } });
   });
 
 
@@ -43,7 +44,7 @@ describe('GameState functionality', async () => {
     expect(gameState.updateState).not.toBeUndefined();
 
     const updateStateSpy = spyOn(gameState, 'updateState');
-    gameState.updateState({x: 1});
+    gameState.updateState({gameOver: true});
     
     expect(updateStateSpy).toBeCalled();
   });
@@ -51,26 +52,24 @@ describe('GameState functionality', async () => {
   it("Should pass updateState to children", async () => {
 
     const wrappedFunc = (wrapper.instance() as any);
-    const wrappedGameState = (wrapper.instance() as GameState);
+    const wrappedGameState = (wrapper.instance() as BoxGameState);
 
-    expect(wrappedGameState.state.x).toBe(0);
+    expect(wrappedGameState.state.gameOver).toBe(false);
 
     const spy = jest.spyOn(wrappedFunc, 'updateState');
 
     await timeout(250);
 
-    wrappedFunc.updateState({ x: 1 });
+    wrappedFunc.updateState({ gameOver: true });
 
     // Check that the ticks variable is greater than 0 to check if the loop works correctly
     expect(spy).toHaveBeenCalled();
-
-    expect(wrappedGameState.state.x).toBe(1);
 
   });
 
   it("Should not update the component except when the number of children is changed", async () => {
 
-    const instance = (wrapper.instance() as GameState);
+    const instance = (wrapper.instance() as BoxGameState);
 
     const props = {children: undefined};
 
@@ -86,29 +85,13 @@ describe('GameState functionality', async () => {
     expect(shouldUpdateNewChildren).toBe(true);
   });
 
-  it("Should update x on loop", async () => {
-
-    const instance = wrapper.instance();
-
-    const oldX = instance.state.x;
-
-    timeout(250);
-    engine.tick();
-
-    expect(instance.state.x).not.toBe(oldX);
-  });
-
   it("Should retrieve DefaultProps", async () => {
 
     const props = {defaultProps};
-
-    expect(props.defaultProps.debug).toBe(false);
     expect(props.defaultProps.gameOver).toBe(false);
     expect(props.defaultProps.paused).toBe(false);
     expect(props.defaultProps.ready).toBe(false);
     expect(props.defaultProps.score).toBe(0);
-    expect(props.defaultProps.scrollSpeed).toBe(0);
-    expect(props.defaultProps.x).toBe(0);
     props.defaultProps.updateState(props.defaultProps);
   });
 
