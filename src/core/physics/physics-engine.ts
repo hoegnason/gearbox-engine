@@ -30,6 +30,8 @@ export interface IBodyCollision {
 
 export class PhysicsEngine {
 
+    public update?: () => void = undefined;
+
     private world: IBody[];
 
     private collisionDection: CollisionDection;
@@ -79,6 +81,11 @@ export class PhysicsEngine {
                 body.onUpdate();
             }
         })
+
+
+        if (null != this.update) {
+            this.update();
+        }
     }
 
     private autoIncrement(): number {
