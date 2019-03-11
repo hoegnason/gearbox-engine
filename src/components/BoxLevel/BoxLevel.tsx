@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
-import { gameState } from '../GameState/DefaultProps';
+// import { gameState } from '../GameState/DefaultProps';
 
 import { Body } from '../body/Body';
 
@@ -23,7 +23,7 @@ export default class Level extends React.Component<ILevelProps, {}> {
         scale: PropTypes.number
     };
 
-    public static defaultProps: ILevelProps = { gameState }
+    // public static defaultProps: ILevelProps = { gameState }
 
     public render() {
 

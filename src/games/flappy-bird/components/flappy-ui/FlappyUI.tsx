@@ -3,7 +3,8 @@ import * as React from 'react';
 import { IGameStateState } from '../GameState/GameState';
 
 import { gameState } from '../GameState/DefaultProps';
-import { ScaledText } from '../ScaledText/ScaledText';
+
+import { ScaledText } from '../../../../components/ScaledText/ScaledText';
 
 interface IFlappyUIProps {
     gameState: IGameStateState;

@@ -1,16 +1,20 @@
 
 import * as React from 'react';
-import '../../App.css';
+import '../../../App.css';
 
-import Loop from '../loop/Loop'
-import MediaLayer from '../MediaLayer/MediaLayer'
-import World from '../World/World'
+import Loop from '../../../components/loop/Loop'
+import MediaLayer from '../../../components/MediaLayer/MediaLayer'
+import World from '../../../components/World/World'
 
-import { Bird } from '../bird/Bird';
-import ConsoleState from '../Console/ConsoleState';
-import { FlappyUI } from '../flappy-ui/FlappyUI';
-import GameState from '../GameState/GameState';
-import { Level } from '../Level';
+import { Bird } from './bird/Bird';
+
+import ConsoleState from '../../../components/Console/ConsoleState';
+
+import { FlappyUI } from './flappy-ui/FlappyUI';
+
+import GameState from './GameState/GameState';
+
+import { Level } from './level/Level';
 
 class FlappyBird extends React.Component {
 
