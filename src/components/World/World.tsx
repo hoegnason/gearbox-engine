@@ -52,7 +52,6 @@ export default class World extends React.Component<IWorldProps, {}> {
     }
 
     public componentWillUnmount() {
-
         this.subscription.unsubscribe();
     }
 
