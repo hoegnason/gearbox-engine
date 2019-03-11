@@ -52,6 +52,7 @@ export class Body extends React.Component<IBodyProps, {}> {
     }
 
     public componentWillReceiveProps(props: IBodyProps) {
+        // Add to body only once
         if (null != props && !this.initialized) {
             this.initialized = true;
 
