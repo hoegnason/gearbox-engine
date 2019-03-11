@@ -68,11 +68,6 @@ export class PhysicsEngine {
 
     public tick() {
 
-        // Calculate Frame
-        const now = 0.001 * Date.now();
-        this.tickSize = Math.abs(now - this.lastTick);
-        this.lastTick = now;
-
         const staticBodies = this.world.filter((body: IBody) => !body.dynamic);
         const dynamicBodies = this.world.filter((body: IBody) => body.dynamic);
 
@@ -101,6 +96,10 @@ export class PhysicsEngine {
 
     private applyVelocity(dynamicBodies: IBody[]) {
 
+        // Calculate milliseconds that have passed
+        const now = 0.001 * Date.now();
+        this.tickSize = Math.abs(now - this.lastTick);
+        this.lastTick = now;
 
         dynamicBodies.forEach((body: IBody) => {
 
@@ -114,6 +113,7 @@ export class PhysicsEngine {
                 body.y = res.y;
 
                 // Verlet Integration
+                
                 body.velocity.x += (body.x - body.prevX!) * this.tickSize;
                 body.prevX = body.x;
                 body.velocity.y += (body.y - body.prevY!) * this.tickSize;
