@@ -4,9 +4,9 @@ import * as React from 'react';
 import { Level } from './Level';
 
 
-import GameLoop from '../core/game-loop/GameLoop';
+import GameLoop from '../../../../core/game-loop/GameLoop';
 
-import { gameState } from './GameState/DefaultProps';
+import { gameState } from '../GameState/DefaultProps';
 // import { IGameStateState } from './GameState/GameState';
 
 function timeout(ms: number) {

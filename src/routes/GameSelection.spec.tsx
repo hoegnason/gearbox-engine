@@ -6,7 +6,7 @@ import {MemoryRouter } from 'react-router';
 import App from '../App'
 
 import BoxGame from '../components/Games/BoxGame';
-import FlappyBird from '../components/Games/FlappyBird'
+import FlappyBird from '../games/flappy-bird/components/FlappyBird'
 import GameSelection from './GameSelection';
 
 

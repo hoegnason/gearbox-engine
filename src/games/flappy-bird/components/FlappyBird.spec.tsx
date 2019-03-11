@@ -4,9 +4,11 @@ import * as React from 'react';
 import FlappyBird from './FlappyBird';
 
 
-import Bird from '../bird/Bird';
-import GameState from '../GameState/GameState';
-import {Level} from '../Level';
+import Bird from './bird/Bird';
+
+import GameState from './GameState/GameState';
+
+import {Level} from './level/Level';
 
 
 

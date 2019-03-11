@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import { PhysicsEngine } from '../../core/physics/physics-engine';
+import { PhysicsEngine } from '../../../../core/physics/physics-engine';
 import { gameState as defaultProps } from './DefaultProps';
 import GameState from './GameState';
 
