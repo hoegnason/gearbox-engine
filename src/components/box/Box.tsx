@@ -92,7 +92,13 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
   public render() {
     return (
       <div>
-        <Body bodyName={'Box'} ref={b => { this.body = b; }} dynamic={this.props.enabled} trigger={false} prevX={250} prevY={this.props.y} x={250} y={this.props.y} width={500} height={60} velocity={{ x: 0, y: -8 }} colided={false} onCollision={this.onCollision} />
+        <Body bodyName={'Box'} ref={b => { this.body = b; }}
+              dynamic={this.props.enabled} trigger={false} 
+              prevX={250} prevY={this.props.y}
+              x={250} y={this.props.y} 
+              width={500} height={60} 
+              velocity={{ x: 0, y: -8 }}
+              colided={false} onCollision={this.onCollision} />
         <div style={{ ...this.getStyles(), backgroundColor: 'green', width: Math.floor(500 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
       </div>
     );

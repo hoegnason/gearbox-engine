@@ -1,11 +1,4 @@
-// import {render} from 'react-testing-library'
-
 import { PhysicsEngine } from '../../core/physics/physics-engine';
-
-/*
-function timeout(ms: any) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}*/
 
 describe('Physics Engine', async () => {
 
@@ -314,7 +307,6 @@ describe('Physics Engine', async () => {
 
   it('Should keep body in place because of resting state', () => {
 
-    // Body with right velocity and hovering
     engine.addBody({
       bodyName: 'DynamicTestBody',
       colided: false,
@@ -374,5 +366,166 @@ describe('Physics Engine', async () => {
       y: 952
     })
 
+  });
+  
+  it('Should top and bottom collide with dynamic body', () => {
+
+    const upperCollision = jest.fn();
+    const lowerCollision = jest.fn();
+
+    engine.addBody({
+      bodyName: 'UpperDynamicBody',
+      colided: false,
+      dynamic: true,
+      height: 50,
+      onCollision: upperCollision,
+      onUpdate: calledUpdate,
+      prevX: 250,
+      prevY: 952,
+      rest: true,
+      trigger: false,
+      velocity: { x: 0, y:0  },
+      width: 50,
+      x: 250,
+      y: 952
+    })
+
+    engine.addBody({
+      bodyName: 'LowerDynamicBody',
+      colided: false,
+      dynamic: true,
+      height: 50,
+      onCollision: lowerCollision,
+      onUpdate: calledUpdate,
+      prevX: 250,
+      prevY: 652,
+      rest: true,
+      trigger: false,
+      velocity: { x: 0, y:0  },
+      width: 50,
+      x: 250,
+      y: 652
+    })
+
+
+    for (let ticks = 0; ticks < 100; ticks++) {
+      engine.tick();
+    };
+
+    // Collided Upper Body
+    expect(lowerCollision).toHaveBeenCalledWith({
+      bodyID: 6,
+      bodyName: 'UpperDynamicBody',
+      colided: false,
+      dynamic: true,
+      height: 50,
+      onCollision: upperCollision,
+      onUpdate: calledUpdate,
+      prevX: 250,
+      prevY: 952.029292929293,
+      rest: true,
+      shouldUpdate: true,
+      trigger: false,
+      velocity: { x: 0, y:-0.29292929292929326  },
+      width: 50,
+      x: 250,
+      y: 950.1
+    });
+  });
+
+  it('Should collide with left and right of dynamic bodies', () => {
+
+    const leftCollision = jest.fn();
+    const rightCollision = jest.fn();
+
+    engine.addBody({
+      bodyName: 'LeftDynamicBody',
+      colided: false,
+      dynamic: true,
+      height: 50,
+      onCollision: leftCollision,
+      onUpdate: calledUpdate,
+      prevX: 300,
+      prevY: 600,
+      rest: true,
+      trigger: false,
+      velocity: { x: 1, y:0  },
+      width: 50,
+      x: 300,
+      y: 500
+    })
+
+    engine.addBody({
+      bodyName: 'RightDynamicBody',
+      colided: false,
+      dynamic: true,
+      height: 50,
+      onCollision: rightCollision,
+      onUpdate: calledUpdate,
+      prevX: 340,
+      prevY: 600,
+      rest: true,
+      trigger: false,
+      velocity: { x: -1, y:0  },
+      width: 50,
+      x: 340,
+      y: 500
+    })
+
+
+    for (let ticks = 0; ticks < 100; ticks++) {
+      engine.tick();
+    };
+
+    // Collided right Body
+    expect(rightCollision).toHaveBeenCalled();
+  });
+
+  it('Should push a body inside another body upward', () => {
+
+    const insideCollision = jest.fn();
+    const outsideCollision = jest.fn();
+
+    engine.addBody({
+      bodyName: 'SmallDynamicBody',
+      colided: false,
+      dynamic: true,
+      height: 50,
+      onCollision: insideCollision,
+      onUpdate: calledUpdate,
+      prevX: 400,
+      prevY: 600,
+      rest: true,
+      trigger: false,
+      velocity: { x: 0, y:0  },
+      width: 50,
+      x: 400,
+      y: 600
+    })
+
+    engine.addBody({
+      bodyName: 'LargeDynamicBody',
+      colided: false,
+      dynamic: true,
+      height: 200,
+      onCollision: outsideCollision,
+      onUpdate: calledUpdate,
+      prevX: 350,
+      prevY: 550,
+      rest: true,
+      trigger: false,
+      velocity: { x: 0, y:0  },
+      width: 200,
+      x: 350,
+      y: 550
+    })
+
+
+    for (let ticks = 0; ticks < 100; ticks++) {
+      engine.tick();
+    };
+
+    // Collided inside body
+    expect(outsideCollision).toHaveBeenCalled();
   });
 });

@@ -40,7 +40,7 @@ describe('Box', () => {
 
     engine = new PhysicsEngine();
 
-    wrapper = mount(<Box gameState = {{gameOver: false}} y={0} enabled={true}/>, { context: { engine, scale: 1, width: 1920, height: 1080 } });
+    wrapper = mount(<Box gameState = {{gameOver: false}} y={0} enabled={true}/>, { context: { engine, Log: jest.fn(), scale: 1, width: 1920, height: 1080 } });
   });
 
   it('should render a <div /> and be unmounted', async () => {
@@ -77,19 +77,19 @@ describe('Box', () => {
   });
 
   
-  it('should jump when the space key is pressed', () => {
+  it('should be placed when the space key is pressed', () => {
 
     const instance = wrapper.instance() as any;
 
     // Subscribe to the keyboard subject
     instance.componentDidMount();
 
-    const jumpSpy = spyOn(instance, 'jump');
+    const placeSpy = spyOn(instance, 'place');
 
-    expect(jumpSpy).not.toBeCalled();
+    expect(placeSpy).not.toBeCalled();
 
     dispatchKey(' ');
 
-    expect(jumpSpy).toBeCalled();
+    expect(placeSpy).toBeCalled();
 });
 });
