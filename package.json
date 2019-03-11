@@ -19,6 +19,7 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
+    "deploy": "gh-pages -d build",
     "test": "jest --config jestconfig.json",
     "eject": "react-scripts-ts eject"
   },
@@ -36,6 +37,7 @@
     "@types/react-dom": "^16.0.11",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.8.0",
+    "gh-pages": "^2.0.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.1.0",
     "jest-transform-css": "^2.0.0",
