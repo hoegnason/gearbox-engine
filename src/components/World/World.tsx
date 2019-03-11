@@ -10,8 +10,6 @@ interface IWorldProps {
     gravity: object;
 }
 
-// let lastLoop = 0;
-
 export default class World extends React.Component<IWorldProps, {}> {
 
     public static defaultProps = {

@@ -42,6 +42,9 @@ export class Loop extends React.Component<ILoopProps, {}> {
         return false;
     }
 
+    /*
+        loop starts before being passed down to children
+    */
     public componentDidMount() {
         this.loop.start();
     }

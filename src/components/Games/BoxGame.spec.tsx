@@ -4,18 +4,15 @@ import * as React from 'react';
 import BoxGame from './BoxGame';
 
 
-import Box from '../box/Box';
+import BoxDropper from '../BoxDropper/BoxDropper';
+import BoxGameState from '../BoxGameState/BoxGameState';
 import BoxLevel from '../BoxLevel/BoxLevel';
-import GameState from '../GameState/GameState';
-
-
-
 
 describe('BoxGame', () => {
   it('should render <BoxGame />', () => {
     const wrapper = shallow(<BoxGame />);
-    expect(wrapper.find(GameState).length).toBe(1);
+    expect(wrapper.find(BoxGameState).length).toBe(1);
     expect(wrapper.find(BoxLevel).length).toBe(1);
-    expect(wrapper.find(Box).length).toBe(1);
+    expect(wrapper.find(BoxDropper).length).toBe(1);
   });
 });

@@ -53,6 +53,9 @@ export class GameLoop {
         this.subscribers.splice((id - 1), 1);
     }
 
+    /*
+        loop calls itself indefinitely by requesting this loop function over and over again
+    */
     private loop() {
         this.subscribers.forEach((callback: GameLoopObserverFunction) => {
             callback.call(undefined);
