@@ -14,7 +14,6 @@ class GameSelection extends React.Component {
                 <h3 style={this.getH3Style()}>Games</h3>
                 <p style={this.getPStyle()}><Link style={this.getLinkStyle()} to='/flappybird'>FlappyBird</Link></p>
                 <p style={this.getPStyle()}><Link style={this.getLinkStyle()} to='/boxgame'>Box Game</Link></p>
-                <p style={this.getPStyle()}><Link style={this.getLinkStyle()} to='/setur_platformer'>Setur Platformer</Link></p>
             </div>
 
         );
