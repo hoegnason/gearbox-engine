@@ -2,8 +2,9 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
+import { ScaledText } from '../../../../components/ScaledText/ScaledText';
 import { gameState } from '../BoxGameState/DefaultProps';
-import { ScaledText } from '../ScaledText/ScaledText';
+
 
 interface IBoxUIProps {
     gameState: IBoxGameStateState;

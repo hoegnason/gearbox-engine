@@ -4,9 +4,9 @@ import * as React from 'react';
 import BoxGame from './BoxGame';
 
 
-import BoxDropper from '../BoxDropper/BoxDropper';
-import BoxGameState from '../BoxGameState/BoxGameState';
-import BoxLevel from '../BoxLevel/BoxLevel';
+import BoxDropper from './BoxDropper/BoxDropper';
+import BoxGameState from './BoxGameState/BoxGameState';
+import BoxLevel from './BoxLevel/BoxLevel';
 
 describe('BoxGame', () => {
   it('should render <BoxGame />', () => {

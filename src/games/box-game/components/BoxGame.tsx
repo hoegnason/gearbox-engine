@@ -1,15 +1,16 @@
 
 import * as React from 'react';
-import '../../App.css';
+import '../../../App.css';
 
-import BoxDropper from '../BoxDropper/BoxDropper';
-import BoxGameState from '../BoxGameState/BoxGameState';
-import BoxLevel from '../BoxLevel/BoxLevel';
-import {BoxUI} from '../BoxUI/BoxUI';
-import ConsoleState from '../Console/ConsoleState';
-import Loop from '../loop/Loop'
-import MediaLayer from '../MediaLayer/MediaLayer'
-import World from '../World/World'
+import BoxDropper from './BoxDropper/BoxDropper';
+import BoxGameState from './BoxGameState/BoxGameState';
+import BoxLevel from './BoxLevel/BoxLevel';
+import {BoxUI} from './BoxUI/BoxUI';
+
+import ConsoleState from '../../../components/Console/ConsoleState';
+import Loop from '../../../components/loop/Loop'
+import MediaLayer from '../../../components/MediaLayer/MediaLayer'
+import World from '../../../components/World/World'
 
 class BoxGame extends React.Component {
 

@@ -6,7 +6,7 @@ import * as React from 'react';
 
 import Box from './Box';
 
-import {PhysicsEngine} from '../../core/physics/physics-engine'
+import {PhysicsEngine} from '../../../../core/physics/physics-engine'
 
 
 function timeout(ms: any) {

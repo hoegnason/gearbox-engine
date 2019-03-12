@@ -2,8 +2,9 @@ import * as React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css';
 
-import BoxGame from './components/Games/BoxGame'
-import FlappyBird from './components/Games/FlappyBird';
+import FlappyBird from './components/Games/FlappyBird'
+import BoxGame from './games/box-game/components/BoxGame'
+
 import SeturPlatformer from './components/Games/SeturPlatformer';
 import GameSelection from './routes/GameSelection';
 
