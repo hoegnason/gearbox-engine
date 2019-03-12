@@ -19,8 +19,7 @@ export class Console extends React.Component<IConsoleProps, {}> {
     constructor(props: any) {
         super(props);
     };
-
-    // tslint:disable-line  
+ 
     public render() {
         const consoleStyle: React.CSSProperties = {
             alignContent: 'left',
@@ -36,8 +35,10 @@ export class Console extends React.Component<IConsoleProps, {}> {
             width: '20%'
         }
 
+        
         const ConsoleArray = [...this.props.messages];
 
+        // Show the latest messages first
         ConsoleArray.reverse();
 
         const showConsole = ConsoleArray.map((message: IMessage, key: number) => {

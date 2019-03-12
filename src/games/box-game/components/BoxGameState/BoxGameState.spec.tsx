@@ -20,6 +20,7 @@ describe('BoxGameState functionality', async () => {
 
     engine = new PhysicsEngine();
 
+    // Component to retreive updateState as props
     Client = (props: any, context: any) => {
 
       const test = props.updateState instanceof Function;
@@ -62,7 +63,6 @@ describe('BoxGameState functionality', async () => {
 
     wrappedFunc.updateState({ gameOver: true });
 
-    // Check that the ticks variable is greater than 0 to check if the loop works correctly
     expect(spy).toHaveBeenCalled();
 
   });

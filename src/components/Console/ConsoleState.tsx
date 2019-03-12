@@ -24,7 +24,7 @@ export default class ConsoleState extends React.Component<{}, IConsoleState> {
     }
 
     public componentDidMount() {
-        this.Log('Flappy Bird (Team Gearbox Engine build #103)');
+        this.Log('Flappy Bird (Team Gearbox Engine build #247)');
     }
 
     public getChildContext() {

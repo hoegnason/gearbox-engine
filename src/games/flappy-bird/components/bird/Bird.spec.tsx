@@ -1,5 +1,4 @@
 import { mount } from 'enzyme';
-// import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
 import GameLoop from '../../../../core/game-loop/GameLoop';
@@ -8,10 +7,6 @@ import { Bird } from './Bird';
 
 
 import GameState from '../GameState/GameState';
-
-// import { gameState as defaultProps } from '../GameState/DefaultProps';
-
-// import { Body } from '../body/Body';
 
 function timeout(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -70,9 +65,6 @@ describe('Body', async () => {
 
         // Number of divs: wrapper, "bird sprite", wrapper in Body and the debug div in body
         expect(wrapper.find('div').length).toBe(4);
-
-        // One for the wrapper and one for the "bird sprite"
-        // expect(wrapper.find('div').length).toBe(2);
     });
 
     it('should jump when the space key is pressed', () => {
@@ -181,20 +173,4 @@ describe('Body', async () => {
 
         expect(instance.props.gameState.score).toBe(1);
     });
-
-    /*
-    it('should stop bird if in dev mode', () => {
-        
-        const instance = wrapper.instance() as any;
-
-        // instance.
-    });
-    */
-
-    /*
-    it('should have a Body component as a child', () => {
-
-        expect(wrapper.find(Body).length).toBe(1);
-    });
-    */
 });

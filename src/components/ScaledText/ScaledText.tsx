@@ -59,9 +59,7 @@ export class ScaledText extends React.Component<IScaledTextProps, {}> {
         
 
         return returns;
-
-        // return Object.assign({}, ...Object.keys(style).map((property: string | number) => String(style[property]).endsWith('px') ? this.scale(style[property]) : style[property]));
-    }
+}
 
     private scale(scalar: any): number {
         return Math.floor((Number(scalar) * this.context.scale));

@@ -42,13 +42,6 @@ export class GameLoop {
     }
 
     private unsubscribe(id: number): void {
-
-        /* TODO: Add some checks!
-         * 
-         * if (null == id || isNaN(id) || id < 0) {
-         *     throw new Error(`(Unable to unsubscribe) Illigal argument: ${id} expexted a legal {number}`);
-         * }
-         */
         
         this.subscribers.splice((id - 1), 1);
     }

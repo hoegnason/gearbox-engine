@@ -17,10 +17,6 @@ export class SoundEffect {
     this._player.loop = value;
   }
 
-  // TODO: check if it should be a Promise (public play(): Promise<void>)
-  // https://www.youtube.com/watch?v=s6SH72uAn3Q (/Mats 09-02-2019)
-  // https://www.youtube.com/watch?v=DgxTkd43VZ0 (/Mats 09-02-2019)
-
   public play(): void {
     if (!this._player.paused) {
       this.stop();

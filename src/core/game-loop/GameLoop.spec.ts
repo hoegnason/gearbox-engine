@@ -52,14 +52,6 @@ describe('game loop', () => {
 
     test('Stop game loop before staring', async () => {
 
-
-        // Covers this section in stop()
-
-        // if (!this.loopID) {
-        //     window.cancelAnimationFrame(Number(this.loopID));
-        //     this.loopID = null;
-        // }
-
         gameLoop.stop();
     });
 });

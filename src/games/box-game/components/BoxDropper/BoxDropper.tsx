@@ -33,6 +33,8 @@ export class BoxDropper extends React.Component<IBoxDropperProps, {}> {
     }
 
     public componentWillReceiveProps(nextProps: IBoxDropperProps){
+
+        // Clear boxes to make ready for new game
         if (nextProps.gameState.gameOver === true){
             this.context.loop.stop();
             this.staticBoxes = [];

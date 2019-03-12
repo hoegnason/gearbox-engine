@@ -91,11 +91,3 @@ class GameSelection extends React.Component {
 }
 
 export default GameSelection;
-
-/*
-
-p {
-
-}
-
-*/

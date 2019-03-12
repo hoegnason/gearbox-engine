@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme';
-// import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import World from './World';
 
@@ -35,7 +34,7 @@ describe('World', async () => {
     expect(spyComponentWillUnmount).toHaveBeenCalled();
   });
 
-  it('should render a <div /> and be unmounted', async () => {
+  it('should set gravity', async () => {
 
     const gameLoop = new GameLoop();
 

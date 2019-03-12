@@ -10,6 +10,7 @@ import GameSelection from './routes/GameSelection';
 
 class App extends React.Component {
 
+  // Renders Game Selection screen by default. GameSelection contains links to game paths.
   public render() {
 
     return (

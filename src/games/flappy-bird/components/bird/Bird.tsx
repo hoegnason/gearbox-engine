@@ -79,8 +79,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
     AudioManager.loadSoundFile('point', require('../../../../assets/sound/point.ogg'), false);
     AudioManager.loadSoundFile('game_over', require('../../../../assets/sound/game_over.ogg'), false);
 
-    // this.setGameOver(false);
-
     this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
 
       if (' ' === key) {
@@ -99,8 +97,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
         if (null != this.props.gameState && null != this.props.gameState.updateState && null != this.props.gameState.scrollSpeed) {
           this.props.gameState.updateState({ scrollSpeed: this.props.gameState.scrollSpeed + 10 });
 
-          // tslint:disable-next-line:no-console
-          console.log('scrollSpeed: ', this.props.gameState.scrollSpeed);
+          this.context.Log('scrollSpeed: ' + this.props.gameState.scrollSpeed);
         }
       }
 
@@ -127,6 +124,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
       this.body.body.velocity.y = 0;
     }
 
+    // Scale with screen
     const xOffset = Math.floor(((this.context.width / this.context.scale) * 0.2));
     const yOffset = Math.floor((this.context.height / this.context.scale) * 0.25);
 
@@ -224,28 +222,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
     }
   }
 
-  /*
-  private resetGame() {
-    setTimeout(() => {
-      this.body.body.y = 0;
-      this.body.body.x = Math.floor(((this.context.width / this.context.scale) * 0.2));
-
-      this.body.body.velocity.x = 0;
-      this.body.body.velocity.y = 0;
-
-      this.props.gameState.updateState!({
-        gameOver: false,
-        paused: false,
-        score: 0,
-        scrollSpeed: -5,
-        x: 0,
-      });
-
-      this.context.loop.start();
-    }, 1000);
-  }*/
-  
-
   private onCollision(bodyColidedWith: IBody): void {
 
     // Score trigger increases score
@@ -269,11 +245,8 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
         AudioManager.playSound('hit');
 
-        // this.context.loop.stop();
-
         this.props.gameState!.updateState!({ gameOver: true });
 
-        // this.resetGame();
       }
     }
   }
