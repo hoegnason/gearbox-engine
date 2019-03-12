@@ -13,6 +13,8 @@ You can find the most recent version of this guide [here](https://github.com/fac
 Want to see the Gearbox engine in action?
 
 Take a look at [these games!](https://hoegnason.github.io/gearbox-engine/#/)
+
+This game engine is heavily inspired by [react-game-kit](https://github.com/FormidableLabs/react-game-kit) by FormidableLabs and [react-native-game-engine](https://github.com/bberak/react-native-game-engine) by bberak.
 # Instructions
 
 *Welcome to the Gearbox Engine!*
