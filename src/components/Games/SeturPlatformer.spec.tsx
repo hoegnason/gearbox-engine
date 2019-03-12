@@ -1,9 +1,9 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
+import GameState from '../../games/flappy-bird/components/GameState/GameState';
 import {Level} from '../../games/setur-platformer/Level';
 import {Mario} from '../../games/setur-platformer/Mario';
-import GameState from '../GameState/GameState';
 import SeturPlatformer from './SeturPlatformer';
 
 
