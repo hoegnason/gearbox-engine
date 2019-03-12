@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 
 
-import Body from '../body/Body';
+import Body from '../../../../components/body/Body';
 import Pipe from './Pipe';
 
 

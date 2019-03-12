@@ -1,9 +1,9 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { IGameStateState } from '../../components/GameState/GameState';
+import { IGameStateState } from '../flappy-bird/components/GameState/GameState';
 
-import { gameState } from '../../components/GameState/DefaultProps';
+import { gameState } from '../flappy-bird/components/GameState/DefaultProps';
 
 import { Body } from '../../components/body/Body';
 

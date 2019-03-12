@@ -2,24 +2,26 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Subscription } from 'rxjs';
 
-import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
+import { createKeyboardObservable } from '../../../../core/hid/keyboardSubject';
 
-import { AudioManager } from '../../core/sound/AudioManager';
+import { AudioManager } from '../../../../core/sound/AudioManager';
 
-import GameLoop from '../../core/game-loop/GameLoop';
-import Body from '../body/Body';
+import GameLoop from '../../../../core/game-loop/GameLoop';
+
+import Body from '../../../../components/body/Body';
 
 
 import { IGameStateState } from '../GameState/GameState';
 
-import { IBody } from '../../core/physics/physics-engine';
+import { IBody } from '../../../../core/physics/physics-engine';
 
 import { gameState } from '../GameState/DefaultProps';
-import Sprite from '../sprite/Sprite';
 
-import BirdHero from '../../assets/sprites/BirdHero.png';
+import Sprite from '../../../../components/sprite/Sprite';
 
-import BirdHeroOpts from '../../assets/sprites/BirdHero.json';
+import BirdHero from '../../../../assets/sprites/BirdHero.png';
+
+import BirdHeroOpts from '../../../../assets/sprites/BirdHero.json';
 
 let scoreColiderID: number = 0;
 
@@ -71,11 +73,11 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
   public componentDidMount() {
 
-    AudioManager.loadSoundFile('wing', require('../../assets/sound/flapping_wings.ogg'), false);
-    AudioManager.loadSoundFile('hit', require('../../assets/sound/hit.ogg'), false);
-    AudioManager.loadSoundFile('die', require('../../assets/sound/hit.ogg'), false);
-    AudioManager.loadSoundFile('point', require('../../assets/sound/point.ogg'), false);
-    AudioManager.loadSoundFile('game_over', require('../../assets/sound/game_over.ogg'), false);
+    AudioManager.loadSoundFile('wing', require('../../../../assets/sound/flapping_wings.ogg'), false);
+    AudioManager.loadSoundFile('hit', require('../../../../assets/sound/hit.ogg'), false);
+    AudioManager.loadSoundFile('die', require('../../../../assets/sound/hit.ogg'), false);
+    AudioManager.loadSoundFile('point', require('../../../../assets/sound/point.ogg'), false);
+    AudioManager.loadSoundFile('game_over', require('../../../../assets/sound/game_over.ogg'), false);
 
     // this.setGameOver(false);
 

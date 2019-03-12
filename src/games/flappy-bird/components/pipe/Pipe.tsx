@@ -1,10 +1,10 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import Body from '../body/Body';
-import Sprite from '../sprite/Sprite';
+import Body from '../../../../components/body/Body';
+import Sprite from '../../../../components/sprite/Sprite';
 
-import croppedColumn from '../../assets/sprites/CroppedColumn.png';
-import croppedColumnReversed from '../../assets/sprites/CroppedColumnReversed.png';
+import croppedColumn from '../../../../assets/sprites/CroppedColumn.png';
+import croppedColumnReversed from '../../../../assets/sprites/CroppedColumnReversed.png';
 
 export interface IPipeProps {
     x: number;

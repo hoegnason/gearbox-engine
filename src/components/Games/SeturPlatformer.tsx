@@ -9,7 +9,7 @@ import World from '../World/World'
 // import GameEngine from '../../core/GameEngine/GameEngine'
 
 
-import GameState from '../GameState/GameState';
+import GameState from '../../games/flappy-bird/components/GameState/GameState';
 
 // import Pipe from './components/pipe/Pipe';
 

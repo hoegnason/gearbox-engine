@@ -7,9 +7,10 @@ import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
 import Body from '../../components/body/Body';
 
 
-import { IGameStateState } from '../../components/GameState/GameState';
+import { IGameStateState } from '../flappy-bird/components/GameState/GameState';
 
-import { gameState } from '../../components/GameState/DefaultProps';
+import { gameState } from '../flappy-bird/components/GameState/DefaultProps';
+
 import Sprite from '../../components/sprite/Sprite';
 
 import BirdHero from '../../assets/sprites/BirdHero.png';

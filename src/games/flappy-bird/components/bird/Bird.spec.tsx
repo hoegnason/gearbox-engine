@@ -2,8 +2,8 @@ import { mount } from 'enzyme';
 // import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import GameLoop from '../../core/game-loop/GameLoop';
-import { PhysicsEngine } from '../../core/physics/physics-engine';
+import GameLoop from '../../../../core/game-loop/GameLoop';
+import { PhysicsEngine } from '../../../../core/physics/physics-engine';
 import { Bird } from './Bird';
 
 

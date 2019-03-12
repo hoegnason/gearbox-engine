@@ -1,13 +1,13 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import PipeGenerator from './PipeGenerator/PipeGenerator';
+import PipeGenerator from '../PipeGenerator/PipeGenerator';
 
-import { IGameStateState } from './GameState/GameState';
+import { IGameStateState } from '../GameState/GameState';
 
-import { gameState } from './GameState/DefaultProps';
+import { gameState } from '../GameState/DefaultProps';
 
-import { Body } from './body/Body';
+import { Body } from '../../../../components/body/Body';
 
 export interface ILevelProps {
     gameState?: IGameStateState;

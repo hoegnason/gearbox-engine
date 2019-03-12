@@ -2,10 +2,11 @@ import * as React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css';
 
-import FlappyBird from './components/Games/FlappyBird'
 import BoxGame from './games/box-game/components/BoxGame'
+import FlappyBird from './games/flappy-bird/components/FlappyBird';
 
 import SeturPlatformer from './components/Games/SeturPlatformer';
+
 import GameSelection from './routes/GameSelection';
 
 
