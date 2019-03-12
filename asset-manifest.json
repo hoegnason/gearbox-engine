@@ -1,13 +1,12 @@
 {
   "main.css": "static/css/main.8172b611.css",
   "main.css.map": "static/css/main.8172b611.css.map",
-  "main.js": "static/js/main.22f89482.js",
-  "main.js.map": "static/js/main.22f89482.js.map",
+  "main.js": "static/js/main.7ede095b.js",
+  "main.js.map": "static/js/main.7ede095b.js.map",
   "static/media/BirdHero.png": "static/media/BirdHero.3ff1f549.png",
   "static/media/CroppedColumn.png": "static/media/CroppedColumn.26d76808.png",
   "static/media/CroppedColumnReversed.png": "static/media/CroppedColumnReversed.38c7f2cd.png",
   "static/media/flapping_wings.ogg": "static/media/flapping_wings.d293f757.ogg",
-  "static/media/forest_terrain_dirt.png": "static/media/forest_terrain_dirt.05b67f2b.png",
   "static/media/game_over.ogg": "static/media/game_over.045b6569.ogg",
   "static/media/hit.ogg": "static/media/hit.7214df07.ogg",
   "static/media/point.ogg": "static/media/point.dca83ebe.ogg"
