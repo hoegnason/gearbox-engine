@@ -13,7 +13,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
 
 *Welcome to the Gearbox Engine!*
 
-To get the engine follow these instructions:
+To get the engine, follow these instructions:
 
 Clone the repository
 ```
