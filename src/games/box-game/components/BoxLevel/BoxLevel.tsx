@@ -3,27 +3,27 @@ import * as React from 'react';
 
 import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
-// import { gameState } from '../GameState/DefaultProps';
+import { gameState } from '../BoxGameState/DefaultProps';
 
-import { Body } from '../body/Body';
+import { Body } from '../../../../components/body/Body';
 
-export interface ILevelProps {
+export interface IBoxLevelProps {
     gameState?: IBoxGameStateState;
 }
 
-export interface ILevelContext {
+export interface IBoxLevelContext {
     scale: number;
     loop: object;
 }
 
-export default class Level extends React.Component<ILevelProps, {}> {
+export default class BoxLevel extends React.Component<IBoxLevelProps, {}> {
 
 
     public static contextTypes = {
         scale: PropTypes.number
     };
 
-    // public static defaultProps: ILevelProps = { gameState }
+    public static defaultProps: IBoxLevelProps = { gameState }
 
     public render() {
 
