@@ -243,11 +243,12 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
       this.context.loop.start();
     }, 1000);
-  }
-  */
+  }*/
+  
 
   private onCollision(bodyColidedWith: IBody): void {
 
+    // Score trigger increases score
     if ('ScoreColider' === bodyColidedWith.bodyName && scoreColiderID !== bodyColidedWith.bodyID) {
 
       scoreColiderID = bodyColidedWith.bodyID || 0;
@@ -259,6 +260,7 @@ export class Bird extends React.Component<IBirdProps, {}> {
       AudioManager.playSound('point');
     }
 
+    // Ground or Pipe static bodies end the game
     if ('Ground' === bodyColidedWith.bodyName || 'Pipe' === bodyColidedWith.bodyName) {
 
       if (!this.colided) {
@@ -273,10 +275,6 @@ export class Bird extends React.Component<IBirdProps, {}> {
 
         // this.resetGame();
       }
-
-      setTimeout(() => {
-        // AudioManager.playSound('hit');
-      }, 1000);
     }
   }
 }

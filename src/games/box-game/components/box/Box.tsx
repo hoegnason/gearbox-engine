@@ -2,16 +2,16 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Subscription } from 'rxjs';
 
-import { createKeyboardObservable } from '../../core/hid/keyboardSubject';
+import { createKeyboardObservable } from '../../../../core/hid/keyboardSubject';
 
 // import { AudioManager } from '../../core/sound/AudioManager';
 
-import Body from '../body/Body';
+import Body from '../../../../components/body/Body';
 import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
 import { gameState } from '../BoxGameState/DefaultProps'
 
-import { IBody } from '../../core/physics/physics-engine';
+import { IBody } from '../../../../core/physics/physics-engine'
 
 
 export interface IBoxProps {
