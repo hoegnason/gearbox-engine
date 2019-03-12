@@ -49,35 +49,6 @@ export class BoxUI extends React.Component<IBoxUIProps, {}> {
             </div>);
     }
 
-    /*
-    private getReadyElement(): React.ReactElement {
-        return (
-            <ScaledText style={{
-                ...this.getTextStyle(),
-                borderRadius: '25px', color: 'gold', fontSize: '24px', left: '20%', position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
-                // tslint:disable-next-line:object-literal-sort-keys
-                WebkitTextStrokeColor: 'black',
-                WebkitTextFillColor: 'gold',
-                WebkitTextStrokeWidth: '2px '
-            }}>Get Ready</ScaledText>)
-    }*/
-
-    /*
-    private getDebugElement(): React.ReactElement {
-        return (
-            <ScaledText style={{
-                ...this.getTextStyle(), backgroundColor: 'rgba(0, 0, 0, 0.3)', borderRadius: '25px', fontSize: '24px', left: '50%', padding: '20px', position: 'absolute', top: '20%', transform: 'translate(-50%, -50%)',
-            }}>Debug Mode!<p
-                style={{
-                    color: 'gold',
-                    fontSize: '18px',
-                    // tslint:disable-next-line:object-literal-sort-keys
-                    WebkitTextFillColor: 'gold',
-                    WebkitTextStrokeColor: 'black',
-                    WebkitTextStrokeWidth: '2px '
-                }}>Auto Pilot Activated!</p></ScaledText>)
-    }*/
-
     private getScoreElement(): React.ReactElement {
         return (
             <ScaledText style={{ ...this.getTextStyle(), fontSize: '40px', position: 'absolute', left: '50%', top: '7%', transform: 'translate(-50%, -50%)' }}>

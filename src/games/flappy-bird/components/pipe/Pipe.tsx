@@ -11,13 +11,6 @@ export interface IPipeProps {
     y: number;
 }
 
-// 576
-
-/*
-const minY = 100;
-const maxY = (576 - 100);
-*/
-
 const max = 576;
 const scoreZone = 176;
 
@@ -47,15 +40,11 @@ class Pipe extends React.Component<IPipeProps, {}> {
     public render() {
 
         const yTop = (max - scoreZone) * this.props.y;
-        // const yButtom = (max - scoreZone) * (1 - this.props.y);
 
         const pipeTopY = 0;
         const pipeTopHeight = yTop;
 
-        // const pipeButtomY = 400;
         const pipeWidth = 90
-
-        // const scoreColiderY = ((pipeTopY + pipeButtomY) / 2);
 
         const scoreColiderY = (pipeTopY + pipeTopHeight);
 

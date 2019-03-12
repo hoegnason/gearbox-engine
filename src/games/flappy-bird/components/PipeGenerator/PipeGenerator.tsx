@@ -42,7 +42,6 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
         return false;
     }
 
-    // MovePipes: flutt Pipe og Body component frá App og inn her
     public render() {
 
         const pipeOffset = pipeOffsetX + this.props.gameState!.x!;
@@ -60,12 +59,6 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
     }
 
     private findNearestPipe(): void {
-
-        /*
-        if (null != this.props[this.props.gameState.score!]) {
-            (window as any).autoPilotY = Math.floor(((closePipes[0].y * (576 - 176)) + (176 / 2)));
-        }
-        */
 
         const closePipes = this.pipes.filter((pipe) => this.inViewOfCamera).filter((targetPipe: IPipeProps) => {
 
@@ -94,7 +87,6 @@ export class PipeGenerator extends React.Component<IPipeGeneratorProps, {}> {
     }
 
     private inViewOfCamera(x: number) {
-        // return (x > 0 && x < (this.context.width / this.context.scale));
         return (x > -900 && x < ((this.context.width / this.context.scale) + 900));
     }
 

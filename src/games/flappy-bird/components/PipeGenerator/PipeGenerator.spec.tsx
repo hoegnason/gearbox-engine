@@ -10,7 +10,6 @@ function timeout(ms: number) {
 }
 
 jest.mock('../pipe/Pipe');
-// let childContainerProps: any;
 
 
 PipeGenerator.contextTypes = {

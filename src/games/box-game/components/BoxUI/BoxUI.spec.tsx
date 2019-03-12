@@ -16,7 +16,7 @@ describe('BoxUI', async () => {
 
         const wrapper = mount(<BoxUI gameState={gameState} />, { context });
 
-        // One div for the wrapper div and one div for readyElement and one for scoreElement
+        // One div for the wrapper div  and one for scoreElement
         expect(wrapper.find('div').length).toBe(2);
     });
 

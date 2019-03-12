@@ -1,7 +1,5 @@
 import { CollisionDection, IRect } from './collision-detection';
 
-
-
 test('adds 1 + 2 to equal 3', () => {
     const collisionDection = new CollisionDection();
 

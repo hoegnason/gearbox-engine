@@ -13,7 +13,7 @@ interface IBoxGameStateProps {
     children?: any;
 }
 
-export class GameState extends React.Component<IBoxGameStateProps, IBoxGameStateState> {
+export class BoxGameState extends React.Component<IBoxGameStateProps, IBoxGameStateState> {
 
     public static contextTypes = {
         Log: PropTypes.func,
@@ -91,4 +91,4 @@ export class GameState extends React.Component<IBoxGameStateProps, IBoxGameState
     }
 }
 
-export default GameState;
+export default BoxGameState;

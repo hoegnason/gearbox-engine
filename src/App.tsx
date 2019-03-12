@@ -5,13 +5,12 @@ import './App.css';
 import BoxGame from './games/box-game/components/BoxGame'
 import FlappyBird from './games/flappy-bird/components/FlappyBird';
 
-import SeturPlatformer from './games/setur-platformer/SeturPlatformer';
-
 import GameSelection from './routes/GameSelection';
 
 
 class App extends React.Component {
 
+  // Renders Game Selection screen by default. GameSelection contains links to game paths.
   public render() {
 
     return (
@@ -24,7 +23,6 @@ class App extends React.Component {
             <Route exact={true} path='/' component={GameSelection} />
             <Route path='/flappybird' component={FlappyBird} />
             <Route path='/boxgame' component={BoxGame} />
-            <Route path='/setur_platformer' component={SeturPlatformer} />
           </Switch>
         </Router>
       </div>

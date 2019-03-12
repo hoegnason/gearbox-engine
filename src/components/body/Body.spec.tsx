@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme';
-// import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
 import { PhysicsEngine } from '../../core/physics/physics-engine';

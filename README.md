@@ -9,6 +9,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+# Gearbox Engine #
+Want to see the Gearbox engine in action?
+
+Take a look at [these games!](https://hoegnason.github.io/gearbox-engine/#/)
 # Instructions
 
 *Welcome to the Gearbox Engine!*
@@ -149,7 +153,7 @@ AudioManager.playSound('game_over');
 ```
 
 ## KeyboardSubject ##
-To read the keyboard for input, your entity can subscribe to 
+To read the keyboard for input, your entity can subscribe to the keyboard observer
 ```
     this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
 
@@ -180,6 +184,11 @@ And add a string as parameter:
 
 ```
 this.context.Log('This is a console message!');
+```
+
+Note, that to be able to see the messages you have to enable debug mode:
+```
+(window as any).debug = true;
 ```
 
 

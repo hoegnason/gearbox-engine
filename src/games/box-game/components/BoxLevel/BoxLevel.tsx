@@ -42,7 +42,7 @@ export default class BoxLevel extends React.Component<IBoxLevelProps, {}> {
 
         const floorBackground: React.CSSProperties = {
             backgroundImage: 'url(./assets/sprites/GrassThinSprite.png)',
-            backgroundPosition: `${Math.floor((this.context.scale * 500))}px 0px`,
+            backgroundPosition: `${Math.floor((this.context.scale * 500))}px 20px`,
             backgroundRepeat: 'repeat-x',
             backgroundSize: 'auto 100%',
             bottom: 0,
@@ -57,10 +57,8 @@ export default class BoxLevel extends React.Component<IBoxLevelProps, {}> {
             <div>
                 <div style={stageBackground} />
                 <div style={floorBackground} />
-                <Body bodyName={'Wall2'} dynamic={false} trigger={false} prevX={1000} prevY={0} x={1000} y={0} width={64} height={1024} velocity={{ x: 0, y: 0 }} colided={false} />
                 <Body bodyName={'Floor'} dynamic={false} trigger={false} prevX={0} prevY={550} x={0} y={550} width={1024} height={64} velocity={{ x: 0, y: 0 }} colided={false} />
-                <Body bodyName={'Wall'} dynamic={false} trigger={false} prevX={0} prevY={0} x={0} y={0} width={64} height={1024} velocity={{ x: 0, y: 0 }} colided={false} />
-            </div>
+           </div>
         );
     }
 

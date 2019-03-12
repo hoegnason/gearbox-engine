@@ -7,7 +7,6 @@ import BoxDropper from './BoxDropper';
 
 
 jest.mock('../box/Box');
-// let childContainerProps: any;
 
 
 BoxDropper.contextTypes = {

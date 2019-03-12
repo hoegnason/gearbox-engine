@@ -22,8 +22,8 @@ class BoxGame extends React.Component {
                     <World>
                         <ConsoleState>
                             <BoxGameState>
-                                <BoxDropper />
                                 <BoxLevel />
+                                <BoxDropper />
                                 <BoxUI />
                             </BoxGameState>
                         </ConsoleState>

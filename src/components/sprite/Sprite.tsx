@@ -125,9 +125,6 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
 
     public componentDidMount() {
 
-        // tslint:disable-next-line:no-console
-        // console.log('this.props.animate: ', this.props.animate);
-
         if (null != this.props.animate && this.props.animate) {
             this.subscription = (this.context.loop as GameLoop).subscribe(this.animate);
         }
@@ -141,9 +138,6 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
     }
 
     public render() {
-
-        // tslint:disable-next-line:no-console
-        // console.log('spriteTile: ', this.state.tileID);
 
         return (
             <div style={this.getWrapperStyles()}>
@@ -166,23 +160,14 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
 
     private animate(): void {
 
-        // tslint:disable-next-line:no-console
-        // console.log(this.props.ticksPerFrame, this.tick);
-
         if (!this.state.finished) {
 
             if (!this.stop && null != this.props.ticksPerFrame && this.tick === this.props.ticksPerFrame) {
                 this.stop = true;
 
-                // tslint:disable-next-line:no-console
-                // console.log('Should animate!', this.state.tileID);
-
                 if (null != this.props.opts && null != this.props.opts['sprite-sheet'] && this.props.steps) {
 
                     const nextStep = (this.state.currentStep + 1) % this.props.steps.length;
-
-                    // tslint:disable-next-line:no-console
-                    // console.log('nextStep:', nextStep, nextTile);
 
                     this.tick = 0;
 
@@ -215,10 +200,6 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
                 top: this.scale(this.props.y),
                 transform: rotate,
                 transformOrigin: 'top left',
-                /*
-                transform: `translate(${Math.floor((this.props.x * this.context.scale))}px, ${Math.floor((this.props.y * this.context.scale))}px)`,
-                transformOrigin: 'left top',
-                */
                 width: this.scale(tile.width),
             }
         }
@@ -231,10 +212,6 @@ export default class Sprite extends React.Component<ISpriteProps, ISpriteState> 
             top: this.scale(this.props.y),
             transform: rotate,
             transformOrigin: 'top left',
-            /*
-            transform: `translate(${Math.floor((this.props.x * this.context.scale))}px, ${Math.floor((this.props.y * this.context.scale))}px)`,
-            transformOrigin: 'left top',
-            */
             width: this.scale(this.props.width),
         };
     }

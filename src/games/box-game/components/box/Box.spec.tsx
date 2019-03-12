@@ -68,13 +68,10 @@ describe('Box', () => {
 
     timeout(250);
 
-    // Number of divs: wrapper, 
+    // Number of divs: wrapper, body wrapper, body div, style div
     expect(wrapper.find('div').length).toBe(4);
 
     wrapper.unmount();
-
-    // One for the wrapper and one for the "bird sprite"
-    // expect(wrapper.find('div').length).toBe(2);
   });
 
 
