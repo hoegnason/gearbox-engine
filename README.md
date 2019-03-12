@@ -186,6 +186,11 @@ And add a string as parameter:
 this.context.Log('This is a console message!');
 ```
 
+Note, that to be able to see the messages you have to enable debug mode:
+```
+(window as any).debug = true;
+```
+
 
 
 
