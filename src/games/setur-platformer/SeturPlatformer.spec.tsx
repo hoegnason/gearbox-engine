@@ -7,7 +7,7 @@ import {Mario} from './Mario';
 import SeturPlatformer from './SeturPlatformer';
 
 
-
+// Skal hetta slettast?
 
 describe('SeturPlatformer', () => {
   it('should render <SeturPlatformer />', () => {
