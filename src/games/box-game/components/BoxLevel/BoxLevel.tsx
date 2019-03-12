@@ -42,7 +42,7 @@ export default class BoxLevel extends React.Component<IBoxLevelProps, {}> {
 
         const floorBackground: React.CSSProperties = {
             backgroundImage: 'url(./assets/sprites/GrassThinSprite.png)',
-            backgroundPosition: `${Math.floor((this.context.scale * 500))}px 0px`,
+            backgroundPosition: `${Math.floor((this.context.scale * 500))}px 20px`,
             backgroundRepeat: 'repeat-x',
             backgroundSize: 'auto 100%',
             bottom: 0,

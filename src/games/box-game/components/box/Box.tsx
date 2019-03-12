@@ -4,8 +4,6 @@ import { Subscription } from 'rxjs';
 
 import { createKeyboardObservable } from '../../../../core/hid/keyboardSubject';
 
-// import { AudioManager } from '../../core/sound/AudioManager';
-
 import Body from '../../../../components/body/Body';
 import { IBoxGameStateState } from '../BoxGameState/BoxGameState';
 
@@ -51,7 +49,6 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
   }
 
   public componentDidMount() {
-    (window as any).debug = true;
 
     this.keyboardSubscription = createKeyboardObservable({ touchKey: ' ' }).subscribe((key: string) => {
 
@@ -84,7 +81,7 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
               width={500} height={60} 
               velocity={{ x: 0, y: -8 }}
               colided={false} onCollision={this.onCollision} />
-        <div style={{ ...this.getStyles(), backgroundColor: 'green', width: Math.floor(500 * this.context.scale), height: Math.floor(25 * this.context.scale) }} />
+        <div style={{ ...this.getStyles(), backgroundColor: 'green', width: Math.floor(500 * this.context.scale), height: Math.floor(60 * this.context.scale) }} />
       </div>
     );
   }
@@ -111,8 +108,6 @@ export class Box extends React.Component<IBoxProps, IBoxState> {
         this.context.Log("Crashed! GameOver!");
         this.props.gameState.updateState({ gameOver: true });
       }
-
-
     }
   }
 
