@@ -3,21 +3,22 @@ import * as React from 'react';
 import '../../App.css';
 
 
-import Loop from '../loop/Loop'
-import MediaLayer from '../MediaLayer/MediaLayer'
-import World from '../World/World'
+import Loop from '../../components/loop/Loop'
+import MediaLayer from '../../components/MediaLayer/MediaLayer'
+import World from '../../components/World/World'
 // import GameEngine from '../../core/GameEngine/GameEngine'
 
 
-import GameState from '../../games/flappy-bird/components/GameState/GameState';
+import GameState from '../flappy-bird/components/GameState/GameState';
 
 // import Pipe from './components/pipe/Pipe';
 
-import { Level } from '../../games/setur-platformer/Level';
-import ConsoleState from '../Console/ConsoleState';
+import ConsoleState from '../../components/Console/ConsoleState';
+import { Level } from './Level';
 
 
-import Mario from '../../games/setur-platformer/Mario';
+
+import Mario from './Mario';
 
 
 class SeturPlatformer extends React.Component {

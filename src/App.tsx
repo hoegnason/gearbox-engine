@@ -5,7 +5,7 @@ import './App.css';
 import BoxGame from './games/box-game/components/BoxGame'
 import FlappyBird from './games/flappy-bird/components/FlappyBird';
 
-import SeturPlatformer from './components/Games/SeturPlatformer';
+import SeturPlatformer from './games/setur-platformer/SeturPlatformer';
 
 import GameSelection from './routes/GameSelection';
 
