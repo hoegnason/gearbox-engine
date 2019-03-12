@@ -27,3 +27,35 @@ To run the unit tests run the command
 ```
 npm test
 ```
+
+## Implementing the Game Engine ##
+
+To use the game engine simply import the following components: Loop, MediaLayer, World, and ConsoleState.
+
+If you are building your game inside the demo 'games' folder, then it should look something like this:
+```
+import ConsoleState from '../../../components/Console/ConsoleState';
+import Loop from '../../../components/loop/Loop'
+import MediaLayer from '../../../components/MediaLayer/MediaLayer'
+import World from '../../../components/World/World'
+```
+Then, of course, import any components that you have built for the game and nest them all together:
+```
+class MyGame extends React.Component {
+
+    public render() {
+
+        return (
+            <Loop>
+                <MediaLayer}>
+                    <World>
+                        <ConsoleState>
+                             // Your game goes here
+                        </ConsoleState>
+                    </World>
+                </MediaLayer>
+            </Loop>
+        );
+    }
+}
+```
